@@ -16,4 +16,8 @@ Route::middleware(['auth', 'verified', 'admin', 'prevent-back-history'])->group(
     Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('admin.settings.update');
 });
 
+Route::middleware(['auth', 'verified', 'user', 'prevent-back-history'])->group(function () {
+    Route::get('/user/dashboard', [\App\Http\Controllers\User\DashboardController::class, 'index'])->name('user.dashboard');
+});
+
 require __DIR__.'/auth.php';

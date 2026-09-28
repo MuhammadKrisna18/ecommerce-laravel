@@ -31,7 +31,7 @@ class RegistrationTest extends TestCase
             'nickname' => 'Krisna',
             'role' => 'user',
         ]);
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect(route('user.dashboard', absolute: false));
     }
 
     public function test_registration_fails_when_nickname_already_taken_case_insensitively(): void
@@ -43,7 +43,7 @@ class RegistrationTest extends TestCase
             'email' => 'krisna1@example.com',
             'password' => 'password123',
         ]);
-        $firstResponse->assertRedirect(route('dashboard', absolute: false));
+        $firstResponse->assertRedirect(route('user.dashboard', absolute: false));
 
         // Logout pengguna pertama agar request kedua tidak terhalang middleware 'guest'
         $this->post('/logout');

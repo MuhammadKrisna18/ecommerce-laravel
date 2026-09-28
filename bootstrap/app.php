@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'admin' => \App\Http\Middleware\IsAdmin::class,
+            'user' => \App\Http\Middleware\IsUser::class,
             'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
         ]);
     })
