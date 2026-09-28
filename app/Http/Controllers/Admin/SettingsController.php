@@ -3,21 +3,27 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Settings\UpdateSettingsAction;
+use App\DTOs\UpdateSettingsDTO;
 use App\Http\Controllers\Controller;
-use App\Services\SettingService;
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\UpdateSettingsRequest;
+use App\Services\Contracts\SettingServiceInterface;
 use Inertia\Inertia;
+use Inertia\Response;
+use Illuminate\Http\RedirectResponse;
 
 class SettingsController extends Controller
 {
-    protected SettingService $settingService;
+    protected SettingServiceInterface $settingService;
 
-    public function __construct(SettingService $settingService)
+    public function __construct(SettingServiceInterface $settingService)
     {
         $this->settingService = $settingService;
     }
 
-    public function index()
+    /**
+     * Display the settings management view.
+     */
+    public function index(): Response
     {
         $settings = $this->settingService->getAllSettings();
 
@@ -26,17 +32,16 @@ class SettingsController extends Controller
         ]);
     }
 
-    public function update(Request $request, UpdateSettingsAction $updateSettingsAction)
-    {
-        $validated = $request->validate([
-            'store_name' => 'nullable|string|max:255',
-            'store_description' => 'nullable|string|max:1000',
-            'contact_email' => 'nullable|email|max:255',
-            'contact_phone' => 'nullable|string|max:20',
-            'app_language' => 'nullable|string|in:id,en,es',
-        ]);
+    /**
+     * Update application settings.
+     */
+    public function update(
+        UpdateSettingsRequest $request, 
+        UpdateSettingsAction $updateSettingsAction
+    ): RedirectResponse {
+        $dto = UpdateSettingsDTO::fromArray($request->validated());
 
-        if ($updateSettingsAction->execute($validated)) {
+        if ($updateSettingsAction->execute($dto)) {
             return redirect()->back()->with('success', 'Pengaturan berhasil disimpan.');
         }
 

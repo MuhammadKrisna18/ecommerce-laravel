@@ -5,14 +5,14 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Services\SettingService;
+use App\Services\Contracts\SettingServiceInterface;
 use Illuminate\Support\Facades\App;
 
 class SetAppLocale
 {
-    protected SettingService $settingService;
+    protected SettingServiceInterface $settingService;
 
-    public function __construct(SettingService $settingService)
+    public function __construct(SettingServiceInterface $settingService)
     {
         $this->settingService = $settingService;
     }
@@ -24,7 +24,7 @@ class SetAppLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Try to get language from settings, default to config('app.locale')
+        // Try to get language from settings via interface, default to config('app.locale')
         $language = $this->settingService->getSetting('app_language', config('app.locale'));
         
         App::setLocale($language);

@@ -2,39 +2,23 @@
 
 namespace App\Actions\Settings;
 
-use App\Repositories\SettingRepository;
-use App\Services\SettingService;
-use Illuminate\Support\Facades\DB;
+use App\DTOs\UpdateSettingsDTO;
+use App\Services\Contracts\SettingServiceInterface;
 
 class UpdateSettingsAction
 {
-    protected SettingRepository $settingRepository;
-    protected SettingService $settingService;
+    protected SettingServiceInterface $settingService;
 
-    public function __construct(SettingRepository $settingRepository, SettingService $settingService)
+    public function __construct(SettingServiceInterface $settingService)
     {
-        $this->settingRepository = $settingRepository;
         $this->settingService = $settingService;
     }
 
-    public function execute(array $settingsData): bool
+    /**
+     * Execute the update action using structured DTO.
+     */
+    public function execute(UpdateSettingsDTO $dto): bool
     {
-        DB::beginTransaction();
-
-        try {
-            foreach ($settingsData as $key => $value) {
-                $this->settingRepository->updateOrCreate($key, $value);
-            }
-            
-            DB::commit();
-            
-            // Clear cache so the new settings take effect immediately
-            $this->settingService->clearCache();
-            
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return false;
-        }
+        return $this->settingService->saveSettings($dto->toFilteredArray());
     }
 }
