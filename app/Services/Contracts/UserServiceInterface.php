@@ -8,4 +8,8 @@ use App\Models\User;
 interface UserServiceInterface
 {
     public function registerUser(RegisterUserDTO $dto): User;
+
+    public function getUserList(string $role = 'user'): array;
+
+    public function getDashboardStats(): array;
 }

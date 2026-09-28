@@ -33,4 +33,32 @@ class RegistrationTest extends TestCase
         ]);
         $response->assertRedirect(route('dashboard', absolute: false));
     }
+
+    public function test_registration_fails_when_nickname_already_taken_case_insensitively(): void
+    {
+        // Pengguna pertama mendaftar dengan nama panggilan 'Krisna'
+        $firstResponse = $this->post('/register', [
+            'name' => 'Muhammad Krisna',
+            'nickname' => 'Krisna',
+            'email' => 'krisna1@example.com',
+            'password' => 'password123',
+        ]);
+        $firstResponse->assertRedirect(route('dashboard', absolute: false));
+
+        // Logout pengguna pertama agar request kedua tidak terhalang middleware 'guest'
+        $this->post('/logout');
+
+        // Pengguna kedua mendaftar dengan variasi huruf besar/kecil 'kRiSNA'
+        $response = $this->post('/register', [
+            'name' => 'Krisna Lain',
+            'nickname' => 'kRiSNA',
+            'email' => 'krisna2@example.com',
+            'password' => 'password123',
+        ]);
+
+        $response->assertSessionHasErrors(['nickname']);
+        $this->assertDatabaseMissing('users', [
+            'email' => 'krisna2@example.com',
+        ]);
+    }
 }

@@ -30,4 +30,30 @@ class UserService implements UserServiceInterface
 
         return $user;
     }
+
+    public function getUserList(string $role = 'user'): array
+    {
+        $users = $this->userRepository->getUsersByRole($role);
+
+        return $users->map(fn (User $user) => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'nickname' => $user->nickname,
+            'email' => $user->email,
+            'role' => $user->role instanceof \App\Enums\UserRole ? $user->role->value : $user->role,
+            'created_at' => $user->created_at?->translatedFormat('d M Y, H:i') ?? '-',
+        ])->toArray();
+    }
+
+    public function getDashboardStats(): array
+    {
+        $totalUsers = $this->userRepository->countByRole('user');
+        $totalAdmins = $this->userRepository->countByRole('admin');
+
+        return [
+            'total_users' => $totalUsers,
+            'total_admins' => $totalAdmins,
+            'total_accounts' => $totalUsers + $totalAdmins,
+        ];
+    }
 }

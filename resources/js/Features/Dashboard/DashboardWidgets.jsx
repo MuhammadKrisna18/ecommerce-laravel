@@ -2,22 +2,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Com
 import { motion } from 'framer-motion';
 import { 
     Users, 
-    ShoppingBag, 
-    DollarSign, 
-    TrendingUp, 
     ShieldCheck, 
-    Activity, 
-    Clock, 
     Sparkles, 
-    Layers,
-    ArrowUpRight,
-    Server,
-    Database
+    Server, 
+    Database, 
+    UserCheck, 
+    Mail, 
+    Calendar,
+    AtSign
 } from 'lucide-react';
 import { useTranslation } from '@/Hooks/useTranslation';
 import { usePage } from '@inertiajs/react';
 
-export function DashboardWidgets() {
+export function DashboardWidgets({ users = [], stats = {} }) {
     const { t } = useTranslation();
     const { auth } = usePage().props;
 
@@ -34,46 +31,25 @@ export function DashboardWidgets() {
         show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }
     };
 
-    const stats = [
+    const statCards = [
         {
-            title: t('Total Pengguna'),
-            value: '1.240',
-            trend: '+12.5%',
-            isPositive: true,
+            title: t('Total Pengguna User'),
+            value: stats.total_users ?? users.length ?? 0,
             icon: Users,
-            description: t('Pengguna aktif bulan ini')
+            description: t('Akun terdaftar dengan role User')
         },
         {
-            title: t('Total Pesanan'),
-            value: '3.820',
-            trend: '+8.2%',
-            isPositive: true,
-            icon: ShoppingBag,
-            description: t('Transaksi sukses')
+            title: t('Total Admin'),
+            value: stats.total_admins ?? 1,
+            icon: ShieldCheck,
+            description: t('Pengelola sistem')
         },
         {
-            title: t('Total Pendapatan'),
-            value: 'Rp 148.500.000',
-            trend: '+15.4%',
-            isPositive: true,
-            icon: DollarSign,
-            description: t('Akumulasi pendapatan kotor')
+            title: t('Total Keseluruhan Akun'),
+            value: stats.total_accounts ?? ((stats.total_users ?? 0) + (stats.total_admins ?? 1)),
+            icon: UserCheck,
+            description: t('Basis data pengguna terintegrasi')
         },
-        {
-            title: t('Tingkat Konversi'),
-            value: '4.8%',
-            trend: '+0.6%',
-            isPositive: true,
-            icon: TrendingUp,
-            description: t('Rasio checkout berhasil')
-        },
-    ];
-
-    const quickActivities = [
-        { id: 1, title: 'Sistem Autentikasi Berhasil Diperbarui', type: 'Security', time: 'Baru saja', status: 'Sukses' },
-        { id: 2, title: 'Cache Pengaturan Aplikasi Direset', type: 'System', time: '10 menit lalu', status: 'Optimal' },
-        { id: 3, title: 'Pemeriksaan Integritas Database & Sesi', type: 'Database', time: '1 jam lalu', status: 'Normal' },
-        { id: 4, title: 'Admin login terverifikasi via Session Guard', type: 'Auth', time: 'Hari ini', status: 'Aman' },
     ];
 
     return (
@@ -83,10 +59,9 @@ export function DashboardWidgets() {
             animate="show"
             className="space-y-8"
         >
-            {/* Welcome Premium Hero Banner */}
+            {/* Welcome Hero Banner */}
             <motion.div variants={itemVariants}>
                 <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#160d0f] via-[#100a0b] to-[#0a0708] border border-red-900/30 p-8 shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
-                    {/* Glowing Orbs in Banner */}
                     <div className="absolute top-0 right-0 w-80 h-80 bg-red-700/15 rounded-full blur-[100px] pointer-events-none" />
                     <div className="absolute -bottom-10 right-32 w-60 h-60 bg-rose-900/20 rounded-full blur-[90px] pointer-events-none" />
 
@@ -100,32 +75,31 @@ export function DashboardWidgets() {
                                 Selamat Datang Kembali, <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-white">{auth.user.name}</span>
                             </h1>
                             <p className="text-sm text-zinc-400 leading-relaxed">
-                                Panel kontrol ini dikonfigurasi dengan arsitektur Repository-Service-Action dan sistem proteksi sesi ketat. Pantau performa bisnis dan operasional toko secara real-time.
+                                Panel kontrol terhubung langsung secara real-time dengan backend database. Pantau daftar akun pengguna yang telah terdaftar di sistem.
                             </p>
                         </div>
 
-                        {/* Quick Server Health Badge */}
                         <div className="flex flex-wrap lg:flex-col items-start gap-2.5 bg-black/40 border border-red-950/50 p-4 rounded-2xl backdrop-blur-sm shrink-0">
                             <div className="flex items-center gap-2 text-xs text-zinc-300">
                                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                                <span>Security: <strong>RBAC + Session Expired</strong></span>
+                                <span>Role: <strong className="uppercase">{auth.user.role}</strong></span>
                             </div>
                             <div className="flex items-center gap-2 text-xs text-zinc-300">
                                 <Server className="w-4 h-4 text-rose-400" />
-                                <span>Stack: <strong>Laravel 12 + Inertia React</strong></span>
+                                <span>Data: <strong>Real-time Database</strong></span>
                             </div>
                             <div className="flex items-center gap-2 text-xs text-zinc-300">
                                 <Database className="w-4 h-4 text-amber-400" />
-                                <span>Cache: <strong>Redis / Database Ready</strong></span>
+                                <span>Repository: <strong>UserService Active</strong></span>
                             </div>
                         </div>
                     </div>
                 </div>
             </motion.div>
 
-            {/* Stat Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                {stats.map((stat, i) => (
+            {/* Stat Cards Grid (Real Data) */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                {statCards.map((stat, i) => (
                     <motion.div 
                         key={i} 
                         variants={itemVariants} 
@@ -142,12 +116,8 @@ export function DashboardWidgets() {
                             </CardHeader>
                             <CardContent className="space-y-1">
                                 <div className="text-2xl font-bold text-white tracking-tight">{stat.value}</div>
-                                <div className="flex items-center gap-1.5 text-xs">
-                                    <span className="text-emerald-400 font-semibold flex items-center">
-                                        {stat.trend}
-                                        <ArrowUpRight className="w-3 h-3" />
-                                    </span>
-                                    <span className="text-zinc-500">{stat.description}</span>
+                                <div className="text-xs text-zinc-500">
+                                    {stat.description}
                                 </div>
                             </CardContent>
                         </Card>
@@ -155,90 +125,101 @@ export function DashboardWidgets() {
                 ))}
             </div>
 
-            {/* Bottom Section: Activity & Architectural Architecture Overview */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Recent Activities */}
-                <motion.div variants={itemVariants} className="lg:col-span-2">
-                    <Card className="bg-[#0e0a0b]/80 border-red-950/40 backdrop-blur-sm h-full">
-                        <CardHeader className="border-b border-red-950/30 pb-4">
-                            <div className="flex items-center justify-between">
-                                <div className="space-y-1">
-                                    <CardTitle className="text-base font-semibold text-white flex items-center gap-2">
-                                        <Activity className="w-4 h-4 text-rose-400" />
-                                        Log Aktivitas & Audit Keamanan
-                                    </CardTitle>
-                                    <CardDescription className="text-xs text-zinc-400">
-                                        Pencatatan event operasional dan pengawasan status sistem
-                                    </CardDescription>
+            {/* User List Table */}
+            <motion.div variants={itemVariants}>
+                <Card className="bg-[#0e0a0b]/80 border-red-950/40 backdrop-blur-sm shadow-[0_4px_20px_rgba(0,0,0,0.3)]">
+                    <CardHeader className="border-b border-red-950/30 pb-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div className="space-y-1">
+                                <CardTitle className="text-base font-semibold text-white flex items-center gap-2">
+                                    <Users className="w-4 h-4 text-rose-400" />
+                                    {t('Daftar User')}
+                                </CardTitle>
+                                <CardDescription className="text-xs text-zinc-400">
+                                    Data pengguna terdaftar dalam sistem (Role: User)
+                                </CardDescription>
+                            </div>
+                            <span className="self-start sm:self-auto px-3 py-1 text-xs font-medium rounded-full bg-red-950/60 text-rose-300 border border-red-800/40">
+                                Total: {users.length} User
+                            </span>
+                        </div>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                        {users.length === 0 ? (
+                            <div className="py-12 px-4 text-center">
+                                <div className="w-12 h-12 mx-auto rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 mb-3">
+                                    <Users className="w-6 h-6" />
                                 </div>
-                                <span className="px-2.5 py-1 text-[11px] font-medium rounded-full bg-emerald-950/60 text-emerald-300 border border-emerald-800/40">
-                                    Live Monitor
-                                </span>
-                            </div>
-                        </CardHeader>
-                        <CardContent className="pt-4 space-y-3">
-                            {quickActivities.map((act) => (
-                                <div 
-                                    key={act.id} 
-                                    className="flex items-center justify-between p-3.5 rounded-xl bg-zinc-950/60 border border-zinc-900 hover:border-red-950/50 transition-colors"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]" />
-                                        <div>
-                                            <p className="text-sm font-medium text-zinc-200">{act.title}</p>
-                                            <div className="flex items-center gap-2 mt-0.5 text-xs text-zinc-500">
-                                                <span className="text-rose-400/90">{act.type}</span>
-                                                <span>•</span>
-                                                <span className="flex items-center gap-1">
-                                                    <Clock className="w-3 h-3" /> {act.time}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span className="text-xs font-semibold px-2 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-800">
-                                        {act.status}
-                                    </span>
-                                </div>
-                            ))}
-                        </CardContent>
-                    </Card>
-                </motion.div>
-
-                {/* Architecture Highlights Card */}
-                <motion.div variants={itemVariants}>
-                    <Card className="bg-[#0e0a0b]/80 border-red-950/40 backdrop-blur-sm h-full flex flex-col justify-between">
-                        <CardHeader className="border-b border-red-950/30 pb-4">
-                            <CardTitle className="text-base font-semibold text-white flex items-center gap-2">
-                                <Layers className="w-4 h-4 text-rose-400" />
-                                Pondasi Arsitektur
-                            </CardTitle>
-                            <CardDescription className="text-xs text-zinc-400">
-                                Standar enterprise yang diterapkan pada aplikasi ini
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pt-4 space-y-3.5">
-                            <div className="p-3 rounded-xl bg-red-950/20 border border-red-900/30 space-y-1">
-                                <h4 className="text-xs font-semibold text-rose-300">Action Layer & DTOs</h4>
-                                <p className="text-xs text-zinc-400">
-                                    Pemisahan logika bisnis dalam Single Responsibility Action untuk skalabilitas tinggi.
+                                <h3 className="text-sm font-medium text-zinc-200">Belum Ada Akun User Terdaftar</h3>
+                                <p className="text-xs text-zinc-500 mt-1 max-w-sm mx-auto">
+                                    Pengguna yang mendaftar melalui halaman registrasi akun User akan muncul secara otomatis pada tabel ini.
                                 </p>
                             </div>
-                            <div className="p-3 rounded-xl bg-red-950/20 border border-red-900/30 space-y-1">
-                                <h4 className="text-xs font-semibold text-rose-300">Repository & Cache Service</h4>
-                                <p className="text-xs text-zinc-400">
-                                    Abstraksi database dengan optimasi caching transparan untuk query berulang.
-                                </p>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left text-sm">
+                                    <thead>
+                                        <tr className="border-b border-zinc-900 bg-zinc-950/50 text-[11px] uppercase tracking-wider text-zinc-400">
+                                            <th className="py-3 px-6 font-semibold">No</th>
+                                            <th className="py-3 px-6 font-semibold">{t('Nama Lengkap')}</th>
+                                            <th className="py-3 px-6 font-semibold">{t('Email')}</th>
+                                            <th className="py-3 px-6 font-semibold">{t('Role')}</th>
+                                            <th className="py-3 px-6 font-semibold">{t('Terdaftar Pada')}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-zinc-900/60">
+                                        {users.map((user, index) => (
+                                            <tr 
+                                                key={user.id}
+                                                className="hover:bg-red-950/10 transition-colors group"
+                                            >
+                                                <td className="py-4 px-6 text-zinc-500 text-xs">
+                                                    {index + 1}
+                                                </td>
+                                                <td className="py-4 px-6">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 rounded-full bg-red-950/60 border border-red-900/50 flex items-center justify-center text-rose-300 font-semibold text-xs shrink-0">
+                                                            {user.name.charAt(0).toUpperCase()}
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-medium text-white group-hover:text-rose-300 transition-colors">
+                                                                {user.name}
+                                                            </p>
+                                                            {user.nickname && (
+                                                                <p className="text-xs text-zinc-500 flex items-center gap-1">
+                                                                    <AtSign className="w-3 h-3 text-zinc-600" />
+                                                                    {user.nickname}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="py-4 px-6">
+                                                    <span className="text-zinc-300 flex items-center gap-1.5 text-xs sm:text-sm">
+                                                        <Mail className="w-3.5 h-3.5 text-zinc-500" />
+                                                        {user.email}
+                                                    </span>
+                                                </td>
+                                                <td className="py-4 px-6">
+                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-red-950/60 text-rose-300 border border-red-800/40 capitalize">
+                                                        {user.role}
+                                                    </span>
+                                                </td>
+                                                <td className="py-4 px-6 text-xs text-zinc-400">
+                                                    <span className="flex items-center gap-1.5">
+                                                        <Calendar className="w-3.5 h-3.5 text-zinc-600" />
+                                                        {user.created_at}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
-                            <div className="p-3 rounded-xl bg-red-950/20 border border-red-900/30 space-y-1">
-                                <h4 className="text-xs font-semibold text-rose-300">Session Guard & Anti-Back Trap</h4>
-                                <p className="text-xs text-zinc-400">
-                                    Pembersihan riwayat browser dan invalidasi sesi langsung saat logout.
-                                </p>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </motion.div>
-            </div>
+                        )}
+                    </CardContent>
+                </Card>
+            </motion.div>
         </motion.div>
     );
 }

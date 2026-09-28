@@ -4,7 +4,7 @@ import { DashboardWidgets } from '@/Features/Dashboard/DashboardWidgets';
 
 import { useTranslation } from '@/Hooks/useTranslation';
 
-export default function Dashboard() {
+export default function Dashboard({ users = [], stats = {} }) {
     const { t } = useTranslation();
 
     return (
@@ -19,7 +19,7 @@ export default function Dashboard() {
             }
         >
             <Head title={t('Dashboard Admin')} />
-            <DashboardWidgets />
+            <DashboardWidgets users={users} stats={stats} />
         </AdminLayout>
     );
 }
