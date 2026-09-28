@@ -22,7 +22,7 @@ Platform E-Commerce modern berbasis **Laravel 12**, **Inertia.js**, dan **React*
 ## ✨ 3. Fitur-Fitur yang Ada Sekarang
 
 ### 🛡️ Autentikasi & Keamanan (Security)
-- **Role-Based Access Control (RBAC)**: Pembatasan akses berbasis peran (`admin`), memblokir akses rute privat dari pengguna yang tidak memiliki wewenang.
+- **Role-Based Access Control (RBAC)**: Pembatasan akses berbasis peran (`UserRole::ADMIN`), memblokir akses rute privat dari pengguna non-admin.
 - **Sesi Expired Otomatis saat Logout**: Ketika tombol logout diklik, sesi langsung dihancurkan (`invalidate`), token CSRF diregenerasi, dan sesi lama tidak dapat digunakan kembali.
 - **Pencegahan Riwayat Browser (Anti Back-History Cache)**: Penerapan header anti-cache (`Cache-Control: no-cache, no-store, must-revalidate`) serta pembersihan client router state (`window.location.replace`), sehingga user yang sudah logout tidak dapat kembali melihat data dashboard saat menekan tombol *Back* pada peramban (Chrome/Edge/Firefox).
 - **Halaman Login Interaktif**: Dilengkapi fitur *Show/Hide Password*, *Remember Me*, *Rate Limiting* / proteksi throttle, dan animasi *micro-interaction*.
@@ -41,50 +41,90 @@ Platform E-Commerce modern berbasis **Laravel 12**, **Inertia.js**, dan **React*
 
 ## 🏛️ 4. Arsitektur yang Dipakai
 
-Aplikasi ini mengadopsi pola **Layered Architecture** tingkat lanjut (Enterprise Pattern) di atas ekosistem Laravel & React:
+Aplikasi ini mengadopsi pola **Layered Architecture** tingkat lanjut (Enterprise Pattern) yang mematuhi prinsip **SOLID** (terutama **SRP** & **DIP**):
 
 ```
 [ Frontend: React + Inertia.js ]
             │  (HTTP / JSON State)
             ▼
-[ Controller Layer ] (Web/Admin/Auth)
+[ Controller Layer ] (e.g. SettingsController)
             │
-            ├──────────────► [ DTO (Data Transfer Objects) ]
+            ├──────────────► [ FormRequest (SRP Validation) ] & [ DTO Layer ]
             ▼
-[ Action Layer ] (Single Responsibility: e.g. UpdateSettingsAction)
-            │
-            ├──────────────► [ Service Layer & Cache ] (e.g. SettingService)
-            ▼
-[ Repository Layer ] (e.g. SettingRepository -> BaseRepository)
+[ Action Layer ] (Single Responsibility: UpdateSettingsAction)
             │
             ▼
-[ Eloquent Models & Database (MySQL / PostgreSQL / SQLite) ]
+[ Service Contract / DIP Interface ] (SettingServiceInterface)
+            │
+            ▼
+[ Service & Cache Layer ] (SettingService)
+            │
+            ▼
+[ Repository Contract / DIP Interface ] (SettingRepositoryInterface)
+            │
+            ▼
+[ Repository Layer ] (SettingRepository -> BaseRepository)
+            │
+            ▼
+[ Eloquent Models & Database ]
 ```
 
-### Penjelasan Lapisan Arsitektur:
+### Penjelasan Lapisan Arsitektur & Prinsip yang Diterapkan:
 
 1. **Frontend Layer (Inertia.js + React + Tailwind CSS + Framer Motion)**:
    - Menghilangkan kebutuhan untuk membangun API RESTful manual dengan tetap mempertahankan keuntungan SPA (tanpa reload halaman penuh).
    - Desain modular berbasis komponen (`Components/ui`, `Features`, `Layouts`).
 
 2. **Controller Layer (`app/Http/Controllers`)**:
-   - Berperan ramping (*thin controller*) hanya untuk menerima HTTP request, memanggil validasi Form Request, dan mendelegasikan tugas ke Action / Service.
+   - Berperan ramping (*thin controller*) hanya untuk menerima HTTP request, mendelegasikan validasi ke FormRequest, dan memanggil Action.
 
-3. **Action Layer (`app/Actions`)**:
-   - Menerapkan prinsip *Single Responsibility Principle (SRP)*. Tiap operasi bisnis utama (misalnya `UpdateSettingsAction`) dibungkus dalam satu class Action dengan manajemen transaksi database (`DB::beginTransaction`).
+3. **Form Request & DTO Layer (`app/Http/Requests` & `app/DTOs`)**:
+   - Mematuhi **Single Responsibility Principle (SRP)**: Validasi dan otorisasi diisolasi penuh di Form Request.
+   - Data hasil validasi dipetakan ke dalam Data Transfer Object bertipe (`UpdateSettingsDTO`) untuk transportasi data yang bersih dan aman.
 
-4. **Service & Cache Layer (`app/Services`)**:
-   - Menangani orkestrasi logika bisnis tingkat menengah dan strategi caching (misal `SettingService`) untuk memastikan performa database tetap optimal.
+4. **Action Layer (`app/Actions`)**:
+   - Satu class Action merepresentasikan satu skenario bisnis tunggal (*Single Responsibility*).
 
-5. **Repository Layer (`app/Repositories`)**:
-   - Mengabstraksi logika akses data Eloquent melalui antarmuka (`RepositoryInterface` dan `BaseRepository`), memudahkan unit testing dan decoupling langsung terhadap database engine.
+5. **Dependency Inversion Principle (DIP)**:
+   - Lapisan tingkat atas tidak bergantung pada modul konkret, melainkan pada abstraksi kontrak:
+     - `SettingServiceInterface` diikat (*bound*) ke `SettingService`.
+     - `SettingRepositoryInterface` diikat (*bound*) ke `SettingRepository`.
+   - Seluruh registrasi binding terpusat di `AppServiceProvider`.
 
-6. **DTO Layer (`app/DTOs`)**:
-   - Menyediakan struktur transfer data yang terdefinisi dengan tipe data yang jelas antara Controller dan Action.
+6. **Eliminasi Hardcode (Clean Code)**:
+   - Nilai peran menggunakan PHP Enum (`App\Enums\UserRole`).
+   - Kode bahasa menggunakan PHP Enum (`App\Enums\AppLocale`).
+   - Kunci pengaturan menggunakan constant class (`App\Constants\SettingKey`).
+   - Seluruh pesan notifikasi dan status menggunakan fungsi lokalisasi `__('...')`.
 
 ---
 
-## 🚀 Panduan Menjalankan Proyek
+## 🧪 5. Pengujian Kualitas (Testing with EP & BVA)
+
+Aplikasi dilengkapi unit testing dan feature testing berbasis teknik rekayasa perangkat lunak standar industri:
+
+- **Equivalence Partitioning (EP)**:
+  - Pembagian partisi data input ke dalam kelas valid dan invalid (misalnya partisi email sah vs email cacat, partisi locale valid `id, en, es` vs partisi ilegal `fr, jp, 123`).
+  - Pencegahan *mass-assignment* pada DTO (pengabaian properti asing).
+- **Boundary Value Analysis (BVA)**:
+  - Pengujian titik batas ekstrem pada aturan validasi:
+    - Nama Toko: Batas $N=255$ karakter (Valid) vs $N+1=256$ karakter (Invalid).
+    - Deskripsi Toko: Batas $N=1000$ karakter (Valid) vs $N+1=1001$ karakter (Invalid).
+    - Telepon: Batas $N=20$ karakter (Valid) vs $N+1=21$ karakter (Invalid).
+    - Password: Batas panjang 0 (Invalid) vs panjang 1 (Valid).
+
+### Menjalankan Testing
+```bash
+# Menjalankan seluruh pengujian unit (EP & BVA)
+php artisan test tests/Unit
+
+# Menjalankan seluruh test suite aplikasi
+php artisan test
+```
+
+---
+
+## 🚀 6. Panduan Menjalankan Proyek
 
 ### Prasyarat
 - PHP >= 8.2
