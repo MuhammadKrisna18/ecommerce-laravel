@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     LayoutDashboard, 
@@ -71,15 +71,20 @@ export default function AdminLayout({ header, children }) {
                             <span className="text-xs text-muted-foreground truncate">{auth.user.email}</span>
                         </div>
                     </div>
-                    <Link
-                        href={route('logout')}
-                        method="post"
-                        as="button"
+                    <button
+                        type="button"
+                        onClick={() => {
+                            router.post(route('logout'), {}, {
+                                onFinish: () => {
+                                    window.location.replace(route('login'));
+                                },
+                            });
+                        }}
                         className="w-full mt-4 flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 rounded-md hover:bg-red-50 transition-colors"
                     >
                         <LogOut className="w-4 h-4 mr-2" />
                         {t('Logout')}
-                    </Link>
+                    </button>
                 </div>
             </motion.aside>
 
@@ -130,15 +135,20 @@ export default function AdminLayout({ header, children }) {
                             ))}
                         </nav>
                         <div className="p-4 border-t">
-                            <Link
-                                href={route('logout')}
-                                method="post"
-                                as="button"
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    router.post(route('logout'), {}, {
+                                        onFinish: () => {
+                                            window.location.replace(route('login'));
+                                        },
+                                    });
+                                }}
                                 className="w-full flex items-center justify-center px-3 py-2 text-sm font-medium text-red-600 rounded-md hover:bg-red-50"
                             >
                                 <LogOut className="w-5 h-5 mr-3" />
                                 {t('Logout')}
-                            </Link>
+                            </button>
                         </div>
                     </motion.aside>
                 )}
