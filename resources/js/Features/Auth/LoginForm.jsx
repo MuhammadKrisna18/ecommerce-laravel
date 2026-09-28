@@ -6,7 +6,7 @@ import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 
-export function LoginForm({ status, canResetPassword }) {
+export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
     const [showPassword, setShowPassword] = useState(false);
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -185,9 +185,19 @@ export function LoginForm({ status, canResetPassword }) {
                     </motion.div>
                 </form>
 
-                {/* Footer security badge */}
-                <div className="mt-8 pt-6 border-t border-zinc-800/60 text-center">
-                    <p className="text-xs text-zinc-500 flex items-center justify-center gap-1.5">
+                {/* Footer link to Register */}
+                <div className="mt-6 pt-5 border-t border-zinc-800/60 text-center">
+                    <p className="text-xs text-zinc-400">
+                        Belum punya akun?{' '}
+                        <button
+                            type="button"
+                            onClick={onSwitchToRegister}
+                            className="text-rose-400 hover:text-rose-300 font-medium hover:underline transition-colors focus:outline-none"
+                        >
+                            Daftar Akun User
+                        </button>
+                    </p>
+                    <p className="text-[11px] text-zinc-500 flex items-center justify-center gap-1.5 mt-3">
                         <Lock className="w-3 h-3 text-red-500/70" />
                         Autentikasi Terenkripsi & Proteksi Sesi Aktif
                     </p>
