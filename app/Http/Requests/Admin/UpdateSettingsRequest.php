@@ -2,34 +2,38 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Constants\SettingKey;
+use App\Enums\AppLocale;
+use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateSettingsRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() && $this->user()->role === 'admin';
+        return $this->user() && $this->user()->role === UserRole::ADMIN->value;
     }
 
     public function rules(): array
     {
         return [
-            'store_name' => ['nullable', 'string', 'max:255'],
-            'store_description' => ['nullable', 'string', 'max:1000'],
-            'contact_email' => ['nullable', 'email', 'max:255'],
-            'contact_phone' => ['nullable', 'string', 'max:20'],
-            'app_language' => ['nullable', 'string', 'in:id,en,es'],
+            SettingKey::STORE_NAME => ['nullable', 'string', 'max:255'],
+            SettingKey::STORE_DESCRIPTION => ['nullable', 'string', 'max:1000'],
+            SettingKey::CONTACT_EMAIL => ['nullable', 'email', 'max:255'],
+            SettingKey::CONTACT_PHONE => ['nullable', 'string', 'max:20'],
+            SettingKey::APP_LANGUAGE => ['nullable', 'string', Rule::in(AppLocale::values())],
         ];
     }
 
     public function attributes(): array
     {
         return [
-            'store_name' => 'Nama Toko',
-            'store_description' => 'Deskripsi Toko',
-            'contact_email' => 'Email Kontak',
-            'contact_phone' => 'Nomor Telepon',
-            'app_language' => 'Bahasa Aplikasi',
+            SettingKey::STORE_NAME => __('Nama Toko'),
+            SettingKey::STORE_DESCRIPTION => __('Deskripsi Singkat'),
+            SettingKey::CONTACT_EMAIL => __('Email Kontak'),
+            SettingKey::CONTACT_PHONE => __('Nomor Telepon / WhatsApp'),
+            SettingKey::APP_LANGUAGE => __('Bahasa Sistem'),
         ];
     }
 }

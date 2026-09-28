@@ -27,5 +27,9 @@
     "Dashboard": "Dashboard",
     "Pengaturan": "Settings",
     "Admin Panel": "Admin Panel",
-    "Logout": "Logout"
+    "Logout": "Logout",
+    "Anda telah berhasil keluar. Sesi Anda telah berakhir.": "You have successfully logged out. Your session has ended.",
+    "Pengaturan berhasil disimpan.": "Settings saved successfully.",
+    "Gagal menyimpan pengaturan.": "Failed to save settings.",
+    "Akses tidak diizinkan.": "Unauthorized access."
 }

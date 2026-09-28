@@ -27,5 +27,9 @@
     "Dashboard": "Dashboard",
     "Pengaturan": "Pengaturan",
     "Admin Panel": "Admin Panel",
-    "Logout": "Logout"
+    "Logout": "Logout",
+    "Anda telah berhasil keluar. Sesi Anda telah berakhir.": "Anda telah berhasil keluar. Sesi Anda telah berakhir.",
+    "Pengaturan berhasil disimpan.": "Pengaturan berhasil disimpan.",
+    "Gagal menyimpan pengaturan.": "Gagal menyimpan pengaturan.",
+    "Akses tidak diizinkan.": "Akses tidak diizinkan."
 }

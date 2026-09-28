@@ -36,9 +36,9 @@ class SettingsController extends Controller
         $dto = UpdateSettingsDTO::fromArray($request->validated());
 
         if ($updateSettingsAction->execute($dto)) {
-            return redirect()->back()->with('success', 'Pengaturan berhasil disimpan.');
+            return redirect()->back()->with('success', __('Pengaturan berhasil disimpan.'));
         }
 
-        return redirect()->back()->with('error', 'Gagal menyimpan pengaturan.');
+        return redirect()->back()->with('error', __('Gagal menyimpan pengaturan.'));
     }
 }

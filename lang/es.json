@@ -27,5 +27,9 @@
     "Dashboard": "Tablero",
     "Pengaturan": "Configuraciones",
     "Admin Panel": "Panel de Administración",
-    "Logout": "Cerrar sesión"
+    "Logout": "Cerrar sesión",
+    "Anda telah berhasil keluar. Sesi Anda telah berakhir.": "Ha cerrado sesión con éxito. Su sesión ha finalizado.",
+    "Pengaturan berhasil disimpan.": "Configuración guardada con éxito.",
+    "Gagal menyimpan pengaturan.": "Error al guardar la configuración.",
+    "Akses tidak diizinkan.": "Acceso no autorizado."
 }
