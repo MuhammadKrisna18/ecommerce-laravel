@@ -1,58 +1,30 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useForm } from '@inertiajs/react';
 import { motion } from 'framer-motion';
-import { UserPlus, User, AtSign, Mail, Lock, Eye, EyeOff, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { UserPlus, User, AtSign, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 
 export function RegisterForm({ onSwitchToLogin }) {
     const [showPassword, setShowPassword] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [formData, setFormData] = useState({
-        namaLengkap: '',
-        namaPanggilan: '',
+
+    const { data, setData, post, processing, errors, reset } = useForm({
+        name: '',
+        nickname: '',
         email: '',
         password: '',
     });
-    const [errors, setErrors] = useState({});
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-        if (errors[name]) {
-            setErrors((prev) => ({ ...prev, [name]: '' }));
-        }
-    };
+    useEffect(() => {
+        return () => {
+            reset('password');
+        };
+    }, []);
 
-    const validate = () => {
-        const newErrors = {};
-        if (!formData.namaLengkap.trim()) {
-            newErrors.namaLengkap = 'Nama lengkap wajib diisi.';
-        }
-        if (!formData.namaPanggilan.trim()) {
-            newErrors.namaPanggilan = 'Nama panggilan wajib diisi.';
-        }
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email wajib diisi.';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Format email tidak valid.';
-        }
-        if (!formData.password) {
-            newErrors.password = 'Kata sandi wajib diisi.';
-        } else if (formData.password.length < 8) {
-            newErrors.password = 'Kata sandi minimal 8 karakter.';
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = (e) => {
+    const submit = (e) => {
         e.preventDefault();
-        if (validate()) {
-            // Frontend only demonstration
-            setIsSubmitted(true);
-        }
+        post(route('register'));
     };
 
     return (
@@ -88,176 +60,165 @@ export function RegisterForm({ onSwitchToLogin }) {
                     </p>
                 </div>
 
-                {isSubmitted ? (
+                <form onSubmit={submit} className="space-y-4">
+                    {/* Nama Lengkap */}
+                    <div className="space-y-1.5">
+                        <Label htmlFor="name" className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
+                            Nama Lengkap
+                        </Label>
+                        <div className="relative group">
+                            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-rose-400 transition-colors">
+                                <User className="w-4 h-4" />
+                            </div>
+                            <Input
+                                id="name"
+                                type="text"
+                                name="name"
+                                value={data.name}
+                                onChange={(e) => setData('name', e.target.value)}
+                                placeholder="Contoh: Muhammad Krisna"
+                                required
+                                className="pl-10 h-11 bg-zinc-950/60 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-1 focus:ring-red-600 rounded-xl transition-all"
+                            />
+                        </div>
+                        {errors.name && (
+                            <motion.p
+                                initial={{ opacity: 0, y: -4 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-xs text-rose-400 mt-1"
+                            >
+                                {errors.name}
+                            </motion.p>
+                        )}
+                    </div>
+
+                    {/* Nama Panggilan */}
+                    <div className="space-y-1.5">
+                        <Label htmlFor="nickname" className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
+                            Nama Panggilan
+                        </Label>
+                        <div className="relative group">
+                            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-rose-400 transition-colors">
+                                <AtSign className="w-4 h-4" />
+                            </div>
+                            <Input
+                                id="nickname"
+                                type="text"
+                                name="nickname"
+                                value={data.nickname}
+                                onChange={(e) => setData('nickname', e.target.value)}
+                                placeholder="Contoh: Krisna"
+                                required
+                                className="pl-10 h-11 bg-zinc-950/60 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-1 focus:ring-red-600 rounded-xl transition-all"
+                            />
+                        </div>
+                        {errors.nickname && (
+                            <motion.p
+                                initial={{ opacity: 0, y: -4 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-xs text-rose-400 mt-1"
+                            >
+                                {errors.nickname}
+                            </motion.p>
+                        )}
+                    </div>
+
+                    {/* Email */}
+                    <div className="space-y-1.5">
+                        <Label htmlFor="reg-email" className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
+                            Alamat Email
+                        </Label>
+                        <div className="relative group">
+                            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-rose-400 transition-colors">
+                                <Mail className="w-4 h-4" />
+                            </div>
+                            <Input
+                                id="reg-email"
+                                type="email"
+                                name="email"
+                                value={data.email}
+                                autoComplete="username"
+                                onChange={(e) => setData('email', e.target.value)}
+                                placeholder="nama@email.com"
+                                required
+                                className="pl-10 h-11 bg-zinc-950/60 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-1 focus:ring-red-600 rounded-xl transition-all"
+                            />
+                        </div>
+                        {errors.email && (
+                            <motion.p
+                                initial={{ opacity: 0, y: -4 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-xs text-rose-400 mt-1"
+                            >
+                                {errors.email}
+                            </motion.p>
+                        )}
+                    </div>
+
+                    {/* Password */}
+                    <div className="space-y-1.5">
+                        <Label htmlFor="reg-password" className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
+                            Kata Sandi
+                        </Label>
+                        <div className="relative group">
+                            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-rose-400 transition-colors">
+                                <Lock className="w-4 h-4" />
+                            </div>
+                            <Input
+                                id="reg-password"
+                                type={showPassword ? 'text' : 'password'}
+                                name="password"
+                                value={data.password}
+                                autoComplete="new-password"
+                                onChange={(e) => setData('password', e.target.value)}
+                                placeholder="Minimal 8 karakter"
+                                required
+                                className="pl-10 pr-10 h-11 bg-zinc-950/60 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-1 focus:ring-red-600 rounded-xl transition-all"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-500 hover:text-zinc-300 transition-colors focus:outline-none"
+                            >
+                                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
+                        </div>
+                        {errors.password && (
+                            <motion.p
+                                initial={{ opacity: 0, y: -4 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-xs text-rose-400 mt-1"
+                            >
+                                {errors.password}
+                            </motion.p>
+                        )}
+                    </div>
+
+                    {/* Submit Button */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="p-6 rounded-xl bg-red-950/30 border border-red-800/40 text-center space-y-4"
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
+                        className="pt-2"
                     >
-                        <div className="w-12 h-12 mx-auto rounded-full bg-red-500/20 text-rose-400 flex items-center justify-center">
-                            <CheckCircle2 className="w-6 h-6" />
-                        </div>
-                        <div>
-                            <h3 className="text-base font-semibold text-white">Akun Berhasil Disiapkan (Demo)</h3>
-                            <p className="text-xs text-zinc-400 mt-1">
-                                Data pendaftaran akun user Anda ({formData.namaPanggilan || formData.namaLengkap}) telah tersimpan secara frontend.
-                            </p>
-                        </div>
                         <Button
-                            type="button"
-                            onClick={onSwitchToLogin}
-                            className="w-full h-10 bg-red-700 hover:bg-red-600 text-white font-medium rounded-xl text-sm"
+                            type="submit"
+                            disabled={processing}
+                            className="w-full h-11 bg-gradient-to-r from-red-700 via-rose-800 to-red-900 hover:from-red-600 hover:via-rose-700 hover:to-red-800 text-white font-medium rounded-xl shadow-[0_0_25px_rgba(225,29,72,0.3)] transition-all duration-300 flex items-center justify-center gap-2 border border-red-500/20"
                         >
-                            Kembali ke Halaman Masuk
+                            {processing ? (
+                                <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    <span>Mendaftarkan akun...</span>
+                                </div>
+                            ) : (
+                                <>
+                                    <span>Buat Akun User</span>
+                                    <ArrowRight className="w-4 h-4" />
+                                </>
+                            )}
                         </Button>
                     </motion.div>
-                ) : (
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        {/* Nama Lengkap */}
-                        <div className="space-y-1.5">
-                            <Label htmlFor="namaLengkap" className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
-                                Nama Lengkap
-                            </Label>
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-rose-400 transition-colors">
-                                    <User className="w-4 h-4" />
-                                </div>
-                                <Input
-                                    id="namaLengkap"
-                                    type="text"
-                                    name="namaLengkap"
-                                    value={formData.namaLengkap}
-                                    onChange={handleChange}
-                                    placeholder="Contoh: Muhammad Krisna"
-                                    className="pl-10 h-11 bg-zinc-950/60 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-1 focus:ring-red-600 rounded-xl transition-all"
-                                />
-                            </div>
-                            {errors.namaLengkap && (
-                                <motion.p
-                                    initial={{ opacity: 0, y: -4 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="text-xs text-rose-400 mt-1"
-                                >
-                                    {errors.namaLengkap}
-                                </motion.p>
-                            )}
-                        </div>
-
-                        {/* Nama Panggilan */}
-                        <div className="space-y-1.5">
-                            <Label htmlFor="namaPanggilan" className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
-                                Nama Panggilan
-                            </Label>
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-rose-400 transition-colors">
-                                    <AtSign className="w-4 h-4" />
-                                </div>
-                                <Input
-                                    id="namaPanggilan"
-                                    type="text"
-                                    name="namaPanggilan"
-                                    value={formData.namaPanggilan}
-                                    onChange={handleChange}
-                                    placeholder="Contoh: Krisna"
-                                    className="pl-10 h-11 bg-zinc-950/60 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-1 focus:ring-red-600 rounded-xl transition-all"
-                                />
-                            </div>
-                            {errors.namaPanggilan && (
-                                <motion.p
-                                    initial={{ opacity: 0, y: -4 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="text-xs text-rose-400 mt-1"
-                                >
-                                    {errors.namaPanggilan}
-                                </motion.p>
-                            )}
-                        </div>
-
-                        {/* Email */}
-                        <div className="space-y-1.5">
-                            <Label htmlFor="reg-email" className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
-                                Alamat Email
-                            </Label>
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-rose-400 transition-colors">
-                                    <Mail className="w-4 h-4" />
-                                </div>
-                                <Input
-                                    id="reg-email"
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    autoComplete="username"
-                                    onChange={handleChange}
-                                    placeholder="nama@email.com"
-                                    className="pl-10 h-11 bg-zinc-950/60 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-1 focus:ring-red-600 rounded-xl transition-all"
-                                />
-                            </div>
-                            {errors.email && (
-                                <motion.p
-                                    initial={{ opacity: 0, y: -4 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="text-xs text-rose-400 mt-1"
-                                >
-                                    {errors.email}
-                                </motion.p>
-                            )}
-                        </div>
-
-                        {/* Password */}
-                        <div className="space-y-1.5">
-                            <Label htmlFor="reg-password" className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
-                                Kata Sandi
-                            </Label>
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-rose-400 transition-colors">
-                                    <Lock className="w-4 h-4" />
-                                </div>
-                                <Input
-                                    id="reg-password"
-                                    type={showPassword ? 'text' : 'password'}
-                                    name="password"
-                                    value={formData.password}
-                                    autoComplete="new-password"
-                                    onChange={handleChange}
-                                    placeholder="Minimal 8 karakter"
-                                    className="pl-10 pr-10 h-11 bg-zinc-950/60 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-1 focus:ring-red-600 rounded-xl transition-all"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-500 hover:text-zinc-300 transition-colors focus:outline-none"
-                                >
-                                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                                </button>
-                            </div>
-                            {errors.password && (
-                                <motion.p
-                                    initial={{ opacity: 0, y: -4 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="text-xs text-rose-400 mt-1"
-                                >
-                                    {errors.password}
-                                </motion.p>
-                            )}
-                        </div>
-
-                        {/* Submit Button */}
-                        <motion.div
-                            whileHover={{ scale: 1.01 }}
-                            whileTap={{ scale: 0.99 }}
-                            className="pt-2"
-                        >
-                            <Button
-                                type="submit"
-                                className="w-full h-11 bg-gradient-to-r from-red-700 via-rose-800 to-red-900 hover:from-red-600 hover:via-rose-700 hover:to-red-800 text-white font-medium rounded-xl shadow-[0_0_25px_rgba(225,29,72,0.3)] transition-all duration-300 flex items-center justify-center gap-2 border border-red-500/20"
-                            >
-                                <span>Buat Akun User</span>
-                                <ArrowRight className="w-4 h-4" />
-                            </Button>
-                        </motion.div>
-                    </form>
-                )}
+                </form>
 
                 {/* Switch to Login Link */}
                 <div className="mt-6 pt-5 border-t border-zinc-800/60 text-center">

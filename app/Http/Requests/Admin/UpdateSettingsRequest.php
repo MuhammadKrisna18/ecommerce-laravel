@@ -12,7 +12,10 @@ class UpdateSettingsRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user() && $this->user()->role === UserRole::ADMIN->value;
+        $role = $this->user()?->role;
+        $roleValue = $role instanceof UserRole ? $role->value : $role;
+
+        return $roleValue === UserRole::ADMIN->value;
     }
 
     public function rules(): array

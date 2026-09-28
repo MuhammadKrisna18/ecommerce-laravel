@@ -11,7 +11,10 @@ class IsAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (! auth()->check() || auth()->user()->role !== UserRole::ADMIN->value) {
+        $userRole = auth()->user()->role;
+        $roleValue = $userRole instanceof UserRole ? $userRole->value : $userRole;
+
+        if (! auth()->check() || $roleValue !== UserRole::ADMIN->value) {
             abort(403, __('Akses tidak diizinkan.'));
         }
 

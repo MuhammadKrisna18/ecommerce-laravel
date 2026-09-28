@@ -15,8 +15,16 @@ class AppServiceProvider extends ServiceProvider
     {
 
         $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
-
         $this->app->bind(SettingServiceInterface::class, SettingService::class);
+
+        $this->app->bind(
+            \App\Repositories\Contracts\UserRepositoryInterface::class,
+            \App\Repositories\UserRepository::class
+        );
+        $this->app->bind(
+            \App\Services\Contracts\UserServiceInterface::class,
+            \App\Services\UserService::class
+        );
     }
 
     public function boot(): void
