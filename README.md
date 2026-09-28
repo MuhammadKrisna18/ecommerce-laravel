@@ -1,58 +1,122 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🛍️ Tokped E-Commerce Enterprise Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Platform E-Commerce modern berbasis **Laravel 12**, **Inertia.js**, dan **React** yang dirancang dengan standar arsitektur kelas enterprise, fokus pada performa tinggi, pengalaman pengguna (UI/UX) yang intuitif, serta sistem keamanan autentikasi yang ketat.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📖 1. Deskripsi Aplikasi
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Tokped E-Commerce** adalah sistem pengelolaan platform belanja daring (*e-commerce*) dengan panel administrasi modern. Aplikasi ini memadukan keandalan arsitektur backend Laravel dengan kelincahan antarmuka SPA (*Single Page Application*) dari React via Inertia.js. Panel admin menyajikan visualisasi data analitik toko, manajemen pengaturan sistem, kontrol lokalisasi multi-bahasa, serta perlindungan akses administratif secara menyeluruh.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🎯 2. Tujuan Aplikasi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. **Efisiensi Manajemen Toko**: Menyediakan pusat kendali (*command center*) yang cepat dan responsif bagi administrator untuk memantau performa penjualan, pesanan, dan konfigurasi toko.
+2. **Keamanan & Integritas Sesi Terjamin**: Memastikan data sensitif administratif terlindungi dari celah keamanan umum (XSS, Session Hijacking, Unauthorized Back-History Cache, dan brute-force).
+3. **Pengalaman Pengguna (UI/UX) Berkualitas Tinggi**: Menghadirkan antarmuka minimalis bernuansa *maroon & dark mode*, transisi animasi yang mulus (*Framer Motion*), serta navigasi yang ergonomis di perangkat desktop maupun mobile.
+4. **Kode yang Terstruktur & Scalable**: Membangun fondasi kode yang bersih (*Clean Code*) dan mudah dirawat atau diperluas di masa depan dengan pemisahan tanggung jawab yang jelas.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## ✨ 3. Fitur-Fitur yang Ada Sekarang
 
-## Agentic Development
+### 🛡️ Autentikasi & Keamanan (Security)
+- **Role-Based Access Control (RBAC)**: Pembatasan akses berbasis peran (`admin`), memblokir akses rute privat dari pengguna yang tidak memiliki wewenang.
+- **Sesi Expired Otomatis saat Logout**: Ketika tombol logout diklik, sesi langsung dihancurkan (`invalidate`), token CSRF diregenerasi, dan sesi lama tidak dapat digunakan kembali.
+- **Pencegahan Riwayat Browser (Anti Back-History Cache)**: Penerapan header anti-cache (`Cache-Control: no-cache, no-store, must-revalidate`) serta pembersihan client router state (`window.location.replace`), sehingga user yang sudah logout tidak dapat kembali melihat data dashboard saat menekan tombol *Back* pada peramban (Chrome/Edge/Firefox).
+- **Halaman Login Interaktif**: Dilengkapi fitur *Show/Hide Password*, *Remember Me*, *Rate Limiting* / proteksi throttle, dan animasi *micro-interaction*.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 📊 Dashboard Monitoring
+- **Statistik & Metrik Penjualan**: Ringkasan Total Pengguna, Total Pesanan, Akumulasi Pendapatan, dan Tingkat Konversi dengan indikator tren pertumbuhan.
+- **Log Aktivitas & Audit Keamanan**: Pemantauan langsung peristiwa sistem (pemberitahuan keamanan, perubahan cache, dan status integritas database).
+- **Desain Modern Minimalis**: Tampilan *dark maroon* yang elegan dengan layout grid responsif dan efek *ambient glow*.
 
-```bash
-composer require laravel/boost --dev
+### ⚙️ Pengaturan Toko & Lokalisasi
+- **Pengaturan Metadata Toko**: Konfigurasi Nama Toko, Deskripsi, Kontak Email, dan Nomor Telepon.
+- **Multi-Bahasa (i18n)**: Dukungan dinamis untuk multi-bahasa (Bahasa Indonesia, English, Español) dengan dialog konfirmasi pergantian bahasa.
+- **Optimasi Caching Pengaturan**: Pengambilan pengaturan toko dioptimalkan dengan Laravel Cache (`Cache::rememberForever`) dan pembersihan otomatis saat data diperbarui.
 
-php artisan boost:install
+---
+
+## 🏛️ 4. Arsitektur yang Dipakai
+
+Aplikasi ini mengadopsi pola **Layered Architecture** tingkat lanjut (Enterprise Pattern) di atas ekosistem Laravel & React:
+
+```
+[ Frontend: React + Inertia.js ]
+            │  (HTTP / JSON State)
+            ▼
+[ Controller Layer ] (Web/Admin/Auth)
+            │
+            ├──────────────► [ DTO (Data Transfer Objects) ]
+            ▼
+[ Action Layer ] (Single Responsibility: e.g. UpdateSettingsAction)
+            │
+            ├──────────────► [ Service Layer & Cache ] (e.g. SettingService)
+            ▼
+[ Repository Layer ] (e.g. SettingRepository -> BaseRepository)
+            │
+            ▼
+[ Eloquent Models & Database (MySQL / PostgreSQL / SQLite) ]
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Penjelasan Lapisan Arsitektur:
 
-## Contributing
+1. **Frontend Layer (Inertia.js + React + Tailwind CSS + Framer Motion)**:
+   - Menghilangkan kebutuhan untuk membangun API RESTful manual dengan tetap mempertahankan keuntungan SPA (tanpa reload halaman penuh).
+   - Desain modular berbasis komponen (`Components/ui`, `Features`, `Layouts`).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. **Controller Layer (`app/Http/Controllers`)**:
+   - Berperan ramping (*thin controller*) hanya untuk menerima HTTP request, memanggil validasi Form Request, dan mendelegasikan tugas ke Action / Service.
 
-## Code of Conduct
+3. **Action Layer (`app/Actions`)**:
+   - Menerapkan prinsip *Single Responsibility Principle (SRP)*. Tiap operasi bisnis utama (misalnya `UpdateSettingsAction`) dibungkus dalam satu class Action dengan manajemen transaksi database (`DB::beginTransaction`).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. **Service & Cache Layer (`app/Services`)**:
+   - Menangani orkestrasi logika bisnis tingkat menengah dan strategi caching (misal `SettingService`) untuk memastikan performa database tetap optimal.
 
-## Security Vulnerabilities
+5. **Repository Layer (`app/Repositories`)**:
+   - Mengabstraksi logika akses data Eloquent melalui antarmuka (`RepositoryInterface` dan `BaseRepository`), memudahkan unit testing dan decoupling langsung terhadap database engine.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6. **DTO Layer (`app/DTOs`)**:
+   - Menyediakan struktur transfer data yang terdefinisi dengan tipe data yang jelas antara Controller dan Action.
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🚀 Panduan Menjalankan Proyek
+
+### Prasyarat
+- PHP >= 8.2
+- Composer
+- Node.js >= 18.x & NPM
+
+### Langkah Instalasi
+```bash
+# 1. Clone repositori
+git clone https://github.com/MuhammadKrisna18/ecommerce-laravel.git
+cd ecommerce-laravel
+
+# 2. Install dependensi backend & frontend
+composer install
+npm install
+
+# 3. Konfigurasi Environment
+cp .env.example .env
+php artisan key:generate
+
+# 4. Jalankan Migrasi Database & Seeder
+php artisan migrate --seed
+
+# 5. Jalankan Server Pengembangan
+# Terminal 1:
+php artisan serve
+
+# Terminal 2:
+npm run dev
+```
+
+---
+
+## 📄 Lisensi
+Proyek ini dilisensikan di bawah lisensi [MIT](LICENSE).

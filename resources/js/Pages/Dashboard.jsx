@@ -10,9 +10,12 @@ export default function Dashboard() {
     return (
         <AdminLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    {t('Dashboard Admin')}
-                </h2>
+                <div className="flex flex-col">
+                    <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                        {t('Dashboard Admin')}
+                    </h2>
+                    <span className="text-xs text-zinc-400">Ringkasan performa dan pemantauan sistem toko</span>
+                </div>
             }
         >
             <Head title={t('Dashboard Admin')} />
