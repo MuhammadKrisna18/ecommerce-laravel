@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Setting;
 use App\Repositories\Contracts\SettingRepositoryInterface;
+use Illuminate\Support\Facades\Schema;
 
 class SettingRepository extends BaseRepository implements SettingRepositoryInterface
 {
@@ -14,7 +15,7 @@ class SettingRepository extends BaseRepository implements SettingRepositoryInter
 
     public function getAllAsKeyValue(): array
     {
-        if (!\Illuminate\Support\Facades\Schema::hasTable($this->model->getTable())) {
+        if (! Schema::hasTable($this->model->getTable())) {
             return [];
         }
 
@@ -23,11 +24,12 @@ class SettingRepository extends BaseRepository implements SettingRepositoryInter
 
     public function getByKey(string $key): ?string
     {
-        if (!\Illuminate\Support\Facades\Schema::hasTable($this->model->getTable())) {
+        if (! Schema::hasTable($this->model->getTable())) {
             return null;
         }
 
         $setting = $this->model->where('key', $key)->first();
+
         return $setting ? $setting->value : null;
     }
 

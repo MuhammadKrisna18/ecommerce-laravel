@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 class SettingService implements SettingServiceInterface
 {
     protected SettingRepositoryInterface $settingRepository;
+
     const CACHE_KEY = 'app_settings';
 
     public function __construct(SettingRepositoryInterface $settingRepository)
@@ -27,6 +28,7 @@ class SettingService implements SettingServiceInterface
     public function getSetting(string $key, mixed $default = null): mixed
     {
         $settings = $this->getAllSettings();
+
         return $settings[$key] ?? $default;
     }
 
@@ -50,6 +52,7 @@ class SettingService implements SettingServiceInterface
             return true;
         } catch (\Throwable $e) {
             DB::rollBack();
+
             return false;
         }
     }

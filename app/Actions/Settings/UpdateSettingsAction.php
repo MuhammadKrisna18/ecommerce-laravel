@@ -14,9 +14,6 @@ class UpdateSettingsAction
         $this->settingService = $settingService;
     }
 
-    /**
-     * Execute the update action using structured DTO.
-     */
     public function execute(UpdateSettingsDTO $dto): bool
     {
         return $this->settingService->saveSettings($dto->toFilteredArray());

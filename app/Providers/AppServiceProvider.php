@@ -11,21 +11,14 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        // Bind Repository Abstraction to Concrete Implementation (DIP)
+
         $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
 
-        // Bind Service Abstraction to Concrete Implementation (DIP)
         $this->app->bind(SettingServiceInterface::class, SettingService::class);
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         Vite::prefetch(concurrency: 3);

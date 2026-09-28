@@ -7,9 +7,9 @@ use App\DTOs\UpdateSettingsDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateSettingsRequest;
 use App\Services\Contracts\SettingServiceInterface;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
 
 class SettingsController extends Controller
 {
@@ -20,9 +20,6 @@ class SettingsController extends Controller
         $this->settingService = $settingService;
     }
 
-    /**
-     * Display the settings management view.
-     */
     public function index(): Response
     {
         $settings = $this->settingService->getAllSettings();
@@ -32,11 +29,8 @@ class SettingsController extends Controller
         ]);
     }
 
-    /**
-     * Update application settings.
-     */
     public function update(
-        UpdateSettingsRequest $request, 
+        UpdateSettingsRequest $request,
         UpdateSettingsAction $updateSettingsAction
     ): RedirectResponse {
         $dto = UpdateSettingsDTO::fromArray($request->validated());
