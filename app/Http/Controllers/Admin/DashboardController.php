@@ -21,7 +21,7 @@ class DashboardController extends Controller
         $users = $this->userService->getUserList('user');
         $stats = $this->userService->getDashboardStats();
 
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Admin/Dashboard', [
             'users' => $users,
             'stats' => $stats,
         ]);

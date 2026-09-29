@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Enums\UserRole;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,11 +14,10 @@ class IsAdmin
             return redirect()->route('login');
         }
 
-        $userRole = auth()->user()->role;
-        $roleValue = $userRole instanceof UserRole ? $userRole->value : $userRole;
+        $user = auth()->user();
 
-        if ($roleValue !== UserRole::ADMIN->value) {
-            if ($roleValue === UserRole::USER->value && $request->routeIs('dashboard')) {
+        if (! $user->isAdmin()) {
+            if ($user->isUser() && $request->routeIs('admin.dashboard')) {
                 return redirect()->route('user.dashboard');
             }
 

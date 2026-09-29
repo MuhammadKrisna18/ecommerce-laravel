@@ -14,9 +14,9 @@ export default function AdminLayout({ header, children }) {
     const navItems = [
         {
             name: t('Dashboard'),
-            href: route('dashboard'),
+            href: route('admin.dashboard'),
             icon: LayoutDashboard,
-            active: route().current('dashboard'),
+            active: route().current('admin.dashboard'),
         },
         {
             name: t('Pengaturan Toko'),
@@ -44,11 +44,11 @@ export default function AdminLayout({ header, children }) {
                     header={header}
                     onMenuToggle={() => setIsSidebarOpen((v) => !v)}
                     right={
-                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-950/40 border border-red-900/30 text-xs text-rose-300">
-                            <UserCheck className="w-3.5 h-3.5 text-rose-400" />
+                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#6dd7fd]/15 border border-[#0093cb]/30 text-xs text-[#0093cb]">
+                            <UserCheck className="w-3.5 h-3.5 text-[#0093cb]" />
                             <span>
                                 Role:{' '}
-                                <strong className="text-white uppercase tracking-wider">
+                                <strong className="text-slate-800 uppercase tracking-wider font-bold">
                                     {auth.user.role || 'Admin'}
                                 </strong>
                             </span>

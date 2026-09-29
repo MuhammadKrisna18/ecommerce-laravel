@@ -18,8 +18,8 @@ export function AppTopbar({ header, right, onMenuToggle, className }) {
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             className={cn(
-                'h-20 bg-[#0c0809]/90 backdrop-blur-md border-b border-red-950/30',
-                'flex items-center justify-between px-4 sm:px-8 sticky top-0 z-10',
+                'h-20 bg-white/90 backdrop-blur-md border-b border-slate-200/80',
+                'flex items-center justify-between px-4 sm:px-8 sticky top-0 z-10 shadow-sm',
                 className
             )}
         >
@@ -28,7 +28,7 @@ export function AppTopbar({ header, right, onMenuToggle, className }) {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="md:hidden text-zinc-300 hover:bg-zinc-800"
+                    className="md:hidden text-slate-600 hover:bg-[#0093cb]/10 hover:text-[#0093cb]"
                     onClick={onMenuToggle}
                 >
                     <Menu className="w-5 h-5" />

@@ -33,27 +33,27 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="w-full max-w-[440px]"
         >
-            <div className="relative rounded-2xl bg-[#0d090a]/85 backdrop-blur-xl border border-red-900/30 p-8 shadow-[0_0_50px_-12px_rgba(153,27,27,0.35)] hover:border-red-800/50 transition-all duration-300">
-                {/* Top Glowing Header Accent */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[2px] bg-gradient-to-r from-transparent via-red-600 to-transparent shadow-[0_0_12px_#dc2626]" />
+            <div className="relative rounded-2xl bg-white border border-slate-200/80 p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] transition-all duration-300">
+                {/* Top Header Accent */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[3px] bg-gradient-to-r from-transparent via-[#0093cb] to-transparent" />
 
                 {/* Brand / Title Icon */}
                 <div className="flex flex-col items-center text-center mb-8">
                     <motion.div
                         whileHover={{ scale: 1.05, rotate: 5 }}
                         whileTap={{ scale: 0.95 }}
-                        className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-700 via-rose-900 to-black border border-red-500/30 shadow-[0_0_20px_rgba(225,29,72,0.3)] flex items-center justify-center mb-4 text-white"
+                        className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0093cb] to-[#6dd7fd] shadow-[0_4px_20px_rgba(0,147,203,0.25)] flex items-center justify-center mb-4 text-white"
                     >
-                        <ShieldCheck className="w-7 h-7 text-red-100" />
+                        <ShieldCheck className="w-7 h-7 text-white" />
                     </motion.div>
                     
-                    <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
                         Portal Admin
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-red-950/80 text-rose-300 border border-red-800/40">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#6dd7fd]/20 text-[#0093cb] border border-[#0093cb]/20">
                             v2.0
                         </span>
                     </h1>
-                    <p className="text-sm text-zinc-400 mt-1.5">
+                    <p className="text-sm text-slate-500 mt-1.5">
                         Masuk dengan akun terdaftar untuk mengelola sistem
                     </p>
                 </div>
@@ -63,9 +63,9 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                     <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
-                        className="mb-6 p-3.5 rounded-xl bg-red-950/40 border border-red-800/50 flex items-start gap-3 text-rose-200 text-sm"
+                        className="mb-6 p-3.5 rounded-xl bg-sky-50 border border-sky-200 flex items-start gap-3 text-sky-800 text-sm"
                     >
-                        <Sparkles className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+                        <Sparkles className="w-5 h-5 text-[#0093cb] shrink-0 mt-0.5" />
                         <span className="leading-snug">{status}</span>
                     </motion.div>
                 )}
@@ -73,11 +73,11 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                 <form onSubmit={submit} className="space-y-5">
                     {/* Email Input */}
                     <div className="space-y-2">
-                        <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
+                        <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-slate-600">
                             Alamat Email
                         </Label>
                         <div className="relative group">
-                            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-rose-400 transition-colors">
+                            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#0093cb] transition-colors">
                                 <Mail className="w-4 h-4" />
                             </div>
                             <Input
@@ -89,14 +89,14 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                                 onChange={(e) => setData('email', e.target.value)}
                                 placeholder="admin@ecommerce.id"
                                 required
-                                className="pl-10 h-11 bg-zinc-950/60 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-1 focus:ring-red-600 rounded-xl transition-all"
+                                className="pl-10 h-11 bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-[#0093cb] focus:ring-1 focus:ring-[#0093cb] rounded-xl transition-all shadow-sm"
                             />
                         </div>
                         {errors.email && (
                             <motion.p
                                 initial={{ opacity: 0, y: -4 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="text-xs text-rose-400 mt-1"
+                                className="text-xs text-rose-500 mt-1 font-medium"
                             >
                                 {errors.email}
                             </motion.p>
@@ -105,11 +105,11 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
 
                     {/* Password Input */}
                     <div className="space-y-2">
-                        <Label htmlFor="password" className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
+                        <Label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-slate-600">
                             Kata Sandi
                         </Label>
                         <div className="relative group">
-                            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-rose-400 transition-colors">
+                            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-[#0093cb] transition-colors">
                                 <Lock className="w-4 h-4" />
                             </div>
                             <Input
@@ -121,12 +121,12 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                                 onChange={(e) => setData('password', e.target.value)}
                                 placeholder="••••••••"
                                 required
-                                className="pl-10 pr-10 h-11 bg-zinc-950/60 border-zinc-800 text-white placeholder:text-zinc-600 focus:border-red-600 focus:ring-1 focus:ring-red-600 rounded-xl transition-all"
+                                className="pl-10 pr-10 h-11 bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-[#0093cb] focus:ring-1 focus:ring-[#0093cb] rounded-xl transition-all shadow-sm"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-500 hover:text-zinc-300 transition-colors focus:outline-none"
+                                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 transition-colors focus:outline-none"
                             >
                                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                             </button>
@@ -135,7 +135,7 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                             <motion.p
                                 initial={{ opacity: 0, y: -4 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="text-xs text-rose-400 mt-1"
+                                className="text-xs text-rose-500 mt-1 font-medium"
                             >
                                 {errors.password}
                             </motion.p>
@@ -151,9 +151,9 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                                 id="remember"
                                 checked={data.remember}
                                 onChange={(e) => setData('remember', e.target.checked)}
-                                className="w-4 h-4 rounded border-zinc-700 bg-zinc-900 text-red-600 focus:ring-red-600 focus:ring-offset-0 focus:ring-offset-transparent cursor-pointer"
+                                className="w-4 h-4 rounded border-slate-300 bg-white text-[#0093cb] focus:ring-[#0093cb] focus:ring-offset-0 focus:ring-offset-transparent cursor-pointer"
                             />
-                            <span className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors">
+                            <span className="text-sm text-slate-600 hover:text-slate-800 transition-colors">
                                 Ingat sesi login
                             </span>
                         </label>
@@ -168,7 +168,7 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                         <Button
                             type="submit"
                             disabled={processing}
-                            className="w-full h-11 bg-gradient-to-r from-red-700 via-rose-800 to-red-900 hover:from-red-600 hover:via-rose-700 hover:to-red-800 text-white font-medium rounded-xl shadow-[0_0_25px_rgba(225,29,72,0.3)] transition-all duration-300 flex items-center justify-center gap-2 border border-red-500/20"
+                            className="w-full h-11 bg-gradient-to-r from-[#0093cb] to-[#0081b3] hover:from-[#0081b3] hover:to-[#006fa0] text-white font-medium rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.3)] transition-all duration-300 flex items-center justify-center gap-2"
                         >
                             {processing ? (
                                 <div className="flex items-center gap-2">
@@ -186,19 +186,19 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                 </form>
 
                 {/* Footer link to Register */}
-                <div className="mt-6 pt-5 border-t border-zinc-800/60 text-center">
-                    <p className="text-xs text-zinc-400">
+                <div className="mt-6 pt-5 border-t border-slate-100 text-center">
+                    <p className="text-xs text-slate-500">
                         Belum punya akun?{' '}
                         <button
                             type="button"
                             onClick={onSwitchToRegister}
-                            className="text-rose-400 hover:text-rose-300 font-medium hover:underline transition-colors focus:outline-none"
+                            className="text-[#0093cb] hover:text-[#006fa0] font-semibold hover:underline transition-colors focus:outline-none"
                         >
                             Daftar Akun User
                         </button>
                     </p>
-                    <p className="text-[11px] text-zinc-500 flex items-center justify-center gap-1.5 mt-3">
-                        <Lock className="w-3 h-3 text-red-500/70" />
+                    <p className="text-[11px] text-slate-400 flex items-center justify-center gap-1.5 mt-3">
+                        <Lock className="w-3 h-3 text-slate-400" />
                         Autentikasi Terenkripsi & Proteksi Sesi Aktif
                     </p>
                 </div>

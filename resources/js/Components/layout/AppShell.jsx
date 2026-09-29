@@ -13,16 +13,16 @@ export function AppShell({ sidebar, topbar, children, className }) {
     return (
         <div
             className={cn(
-                'min-h-screen bg-[#090809] text-zinc-100 flex overflow-hidden selection:bg-rose-900 selection:text-white',
+                'min-h-screen bg-slate-50 text-slate-900 flex overflow-hidden selection:bg-[#6dd7fd]/40 selection:text-slate-900',
                 className
             )}
         >
             {sidebar}
 
             {/* Main area */}
-            <main className="flex-1 flex flex-col min-w-0 bg-[#070607] relative overflow-y-auto">
+            <main className="flex-1 flex flex-col min-w-0 bg-[#f8fafc] relative overflow-y-auto">
                 {/* Ambient glow */}
-                <div className="absolute top-0 right-1/4 w-96 h-64 bg-red-950/20 blur-[130px] pointer-events-none" />
+                <div className="absolute top-0 right-1/4 w-96 h-64 bg-[#6dd7fd]/20 blur-[130px] pointer-events-none" />
 
                 {topbar}
 

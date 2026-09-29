@@ -1,23 +1,32 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+Route::get('/', fn () => redirect()->route('login'));
 
-Route::middleware(['auth', 'verified', 'admin', 'prevent-back-history'])->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+// ── Admin routes ─────────────────────────────────────────────────────────────
+Route::middleware(['auth', 'verified', 'admin', 'prevent-back-history'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])
+            ->name('dashboard');
 
-    Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])->name('admin.settings.index');
-    Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])->name('admin.settings.update');
-});
+        Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])
+            ->name('settings.index');
 
-Route::middleware(['auth', 'verified', 'user', 'prevent-back-history'])->group(function () {
-    Route::get('/user/dashboard', [\App\Http\Controllers\User\DashboardController::class, 'index'])->name('user.dashboard');
-});
+        Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])
+            ->name('settings.update');
+    });
+
+// ── User routes ───────────────────────────────────────────────────────────────
+Route::middleware(['auth', 'verified', 'user', 'prevent-back-history'])
+    ->prefix('user')
+    ->name('user.')
+    ->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\User\DashboardController::class, 'index'])
+            ->name('dashboard');
+    });
 
 require __DIR__.'/auth.php';
+

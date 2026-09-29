@@ -32,6 +32,6 @@ class UserDashboardTest extends TestCase
 
         $response = $this->actingAs($admin)->get(route('user.dashboard'));
 
-        $response->assertRedirect(route('dashboard'));
+        $response->assertRedirect(route('admin.dashboard'));
     }
 }

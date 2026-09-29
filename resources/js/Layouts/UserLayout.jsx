@@ -38,11 +38,11 @@ export default function UserLayout({ header, children }) {
                     header={header}
                     onMenuToggle={() => setIsSidebarOpen((v) => !v)}
                     right={
-                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-950/40 border border-red-900/30 text-xs text-rose-300">
-                            <UserIcon className="w-3.5 h-3.5 text-rose-400" />
+                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#6dd7fd]/15 border border-[#0093cb]/30 text-xs text-[#0093cb]">
+                            <UserIcon className="w-3.5 h-3.5 text-[#0093cb]" />
                             <span>
                                 Role:{' '}
-                                <strong className="text-white uppercase tracking-wider">
+                                <strong className="text-slate-800 uppercase tracking-wider font-bold">
                                     {auth.user.role || 'User'}
                                 </strong>
                             </span>
