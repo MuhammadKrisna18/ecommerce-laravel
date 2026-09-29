@@ -1,4 +1,4 @@
-import { Link, router } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ChevronRight,
@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
 import { useTranslation } from '@/Hooks/useTranslation';
+import { useLogout } from '@/Hooks/useLogout';
 import { cn } from '@/lib/utils';
 
 // ─── NavItem ────────────────────────────────────────────────────────────────
@@ -60,11 +61,7 @@ function NavItem({ item, index, mobile = false }) {
 // ─── UserFooter ─────────────────────────────────────────────────────────────
 
 function UserFooter({ user, t }) {
-    const handleLogout = () => {
-        router.post(route('logout'), {}, {
-            onFinish: () => window.location.replace(route('login')),
-        });
-    };
+    const logout = useLogout();
 
     return (
         <div className="p-4 border-t border-red-950/40 bg-zinc-950/40">
@@ -94,10 +91,29 @@ function UserFooter({ user, t }) {
 
             <button
                 type="button"
-                onClick={handleLogout}
+                onClick={logout}
                 className="w-full mt-3 flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-rose-400/90 rounded-xl bg-red-950/20 border border-red-900/30 hover:bg-red-900/40 hover:text-white transition-all shadow-sm"
             >
                 <LogOut className="w-3.5 h-3.5" />
+                {t('Logout Sesi')}
+            </button>
+        </div>
+    );
+}
+
+// ─── MobileFooter ────────────────────────────────────────────────────────────
+
+function MobileFooter({ t }) {
+    const logout = useLogout();
+
+    return (
+        <div className="p-4 border-t border-red-950/40">
+            <button
+                type="button"
+                onClick={logout}
+                className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-rose-300 rounded-xl bg-red-950/30 border border-red-900/40 hover:bg-red-900/40 transition-colors"
+            >
+                <LogOut className="w-4 h-4 mr-2" />
                 {t('Logout Sesi')}
             </button>
         </div>
@@ -109,14 +125,14 @@ function UserFooter({ user, t }) {
 /**
  * Shared sidebar for Admin and User layouts.
  *
- * @param {object}         props
- * @param {object}         props.user          - auth.user
- * @param {Array}          props.navItems       - [{ name, href, icon, active }]
- * @param {React.ReactNode} props.brandIcon     - Icon component for the brand logo
- * @param {string}         props.brandLabel     - e.g. "Panel Manajemen"
- * @param {string}         props.mobileTitle    - e.g. "Tokped Admin"
- * @param {boolean}        props.isMobileOpen   - Mobile sidebar open state
- * @param {Function}       props.onMobileClose  - Toggle handler
+ * @param {object}          props
+ * @param {object}          props.user           - auth.user
+ * @param {Array}           props.navItems        - [{ name, href, icon, active }]
+ * @param {React.ElementType} props.brandIcon     - Icon component for the brand logo
+ * @param {string}          props.brandLabel      - e.g. "Panel Manajemen"
+ * @param {string}          props.mobileTitle     - e.g. "Tokped Admin"
+ * @param {boolean}         props.isMobileOpen    - Mobile sidebar open state
+ * @param {Function}        props.onMobileClose   - Toggle handler
  */
 export function AppSidebar({
     user,
@@ -223,21 +239,8 @@ export function AppSidebar({
                         ))}
                     </nav>
 
-                    {/* Mobile footer logout */}
-                    <div className="p-4 border-t border-red-950/40">
-                        <button
-                            type="button"
-                            onClick={() => {
-                                router.post(route('logout'), {}, {
-                                    onFinish: () => window.location.replace(route('login')),
-                                });
-                            }}
-                            className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-rose-300 rounded-xl bg-red-950/30 border border-red-900/40 hover:bg-red-900/40"
-                        >
-                            <LogOut className="w-4 h-4 mr-2" />
-                            {t('Logout Sesi')}
-                        </button>
-                    </div>
+                    {/* Mobile footer */}
+                    <MobileFooter t={t} />
                 </motion.aside>
             )}
         </AnimatePresence>

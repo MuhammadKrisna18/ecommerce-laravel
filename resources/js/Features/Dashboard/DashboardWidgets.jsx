@@ -12,11 +12,11 @@ import {
     AtSign
 } from 'lucide-react';
 import { useTranslation } from '@/Hooks/useTranslation';
-import { usePage } from '@inertiajs/react';
+import { useAuth } from '@/Hooks/useAuth';
 
 export function DashboardWidgets({ users = [], stats = {} }) {
     const { t } = useTranslation();
-    const { auth } = usePage().props;
+    const { user } = useAuth();
 
     const containerVariants = {
         hidden: { opacity: 0 },
