@@ -28,7 +28,7 @@ export function AppTopbar({ header, right, onMenuToggle, className }) {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="md:hidden text-slate-600 hover:bg-[#0093cb]/10 hover:text-[#0093cb]"
+                    className="md:hidden text-slate-600 hover:bg-brand-primary/10 hover:text-brand-primary"
                     onClick={onMenuToggle}
                 >
                     <Menu className="w-5 h-5" />

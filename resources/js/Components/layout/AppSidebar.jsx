@@ -21,13 +21,13 @@ function NavItem({ item, index, mobile = false }) {
             <Link
                 href={item.href}
                 className={cn(
-                    'flex items-center px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors',
+                    'flex items-center px-4 py-2.5 rounded-xl text-sm font-medium transition-colors',
                     item.active
-                        ? 'bg-[#0093cb] text-white font-semibold shadow-sm'
-                        : 'text-slate-600 hover:bg-[#6dd7fd]/15 hover:text-[#0093cb] border border-transparent'
+                        ? 'bg-brand-primary/10 text-brand-primary font-semibold'
+                        : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
                 )}
             >
-                <Icon className="w-4 h-4 mr-3" />
+                <Icon className={cn("w-4 h-4 mr-3", item.active ? "text-brand-primary" : "text-slate-400")} />
                 {item.name}
             </Link>
         );
@@ -35,24 +35,24 @@ function NavItem({ item, index, mobile = false }) {
 
     return (
         <motion.div
-            initial={{ opacity: 0, x: -16 }}
+            initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.05 + index * 0.05 }}
+            transition={{ delay: 0.04 + index * 0.04 }}
         >
             <Link
                 href={item.href}
                 className={cn(
-                    'flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all',
+                    'flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium transition-all group',
                     item.active
-                        ? 'bg-[#0093cb] text-white font-semibold shadow-[0_4px_12px_rgba(0,147,203,0.25)]'
-                        : 'text-slate-600 hover:bg-[#6dd7fd]/15 hover:text-[#0093cb] border border-transparent'
+                        ? 'bg-brand-primary/10 text-brand-primary font-semibold'
+                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 )}
             >
                 <div className="flex items-center">
-                    <Icon className={cn('w-4 h-4 mr-3 transition-colors', item.active ? 'text-white' : 'text-slate-400')} />
+                    <Icon className={cn('w-4 h-4 mr-3 transition-colors', item.active ? 'text-brand-primary' : 'text-slate-400 group-hover:text-slate-600')} />
                     <span>{item.name}</span>
                 </div>
-                {item.active && <ChevronRight className="w-4 h-4 text-white" />}
+                {item.active && <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />}
             </Link>
         </motion.div>
     );
@@ -64,35 +64,36 @@ function UserFooter({ user, t }) {
     const logout = useLogout();
 
     return (
-        <div className="p-4 border-t border-slate-200/80 bg-slate-50/80">
-            <div className="flex items-center gap-3 px-2 py-1.5 rounded-lg">
+        <div className="p-4 border-t border-slate-100 bg-white">
+            <div className="flex items-center gap-3 p-1 rounded-xl">
                 {/* Avatar */}
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0093cb] to-[#6dd7fd] text-white font-bold text-sm shadow-sm flex items-center justify-center shrink-0">
-                    {user.name?.charAt(0).toUpperCase()}
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent text-white font-bold text-sm shadow-sm flex items-center justify-center shrink-0">
+                    {user?.name?.charAt(0).toUpperCase()}
                 </div>
 
                 {/* Info */}
                 <div className="flex flex-col min-w-0 flex-1">
                     <span className="text-sm font-semibold text-slate-800 truncate flex items-center gap-1.5">
-                        {user.name}
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+                        {user?.name}
                     </span>
 
-                    {user.nickname && (
-                        <span className="text-xs text-[#0093cb] font-medium flex items-center gap-0.5 truncate">
-                            <AtSign className="w-3 h-3" />
+                    {user?.nickname && (
+                        <span className="text-xs text-brand-primary font-medium flex items-center gap-0.5 truncate">
+                            <AtSign className="w-3 h-3 text-brand-primary/70 shrink-0" />
                             {user.nickname}
                         </span>
                     )}
 
-                    <span className="text-[11px] text-slate-500 truncate">{user.email}</span>
+                    <span className="text-[11px] text-slate-400 truncate mt-0.5" title={user?.email}>
+                        {user?.email}
+                    </span>
                 </div>
             </div>
 
             <button
                 type="button"
                 onClick={logout}
-                className="w-full mt-3 flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-slate-600 rounded-xl bg-white border border-slate-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all shadow-sm"
+                className="w-full mt-3 flex items-center justify-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-600 rounded-xl bg-slate-50 border border-slate-200/80 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all shadow-none"
             >
                 <LogOut className="w-3.5 h-3.5" />
                 {t('Logout Sesi')}
@@ -146,15 +147,15 @@ export function AppSidebar({
         >
             {/* Brand header */}
             <div className="h-20 flex items-center gap-3 px-6 border-b border-slate-200/80 relative">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0093cb] to-[#6dd7fd] flex items-center justify-center text-white shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent flex items-center justify-center text-white shadow-sm">
                     <BrandIcon className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex flex-col">
                     <span className="font-bold text-base tracking-tight text-slate-900">
                         Tokped Commerce
                     </span>
-                    <span className="text-[11px] font-semibold text-[#0093cb] flex items-center gap-1">
-                        <BrandIcon className="w-3 h-3 text-[#0093cb]" />
+                    <span className="text-[11px] font-semibold text-brand-primary flex items-center gap-1">
+                        <BrandIcon className="w-3 h-3 text-brand-primary" />
                         {brandLabel}
                     </span>
                 </div>
@@ -206,7 +207,7 @@ export function AppSidebar({
                     {/* Mobile header */}
                     <div className="h-20 flex items-center justify-between px-6 border-b border-slate-200/80">
                         <div className="flex items-center gap-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0093cb] to-[#6dd7fd] flex items-center justify-center text-white">
+                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent flex items-center justify-center text-white">
                                 <BrandIcon className="w-5 h-5" />
                             </div>
                             <span className="font-bold text-slate-900 tracking-tight">{mobileTitle}</span>

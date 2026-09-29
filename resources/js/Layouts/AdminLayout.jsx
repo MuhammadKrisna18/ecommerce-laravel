@@ -44,8 +44,8 @@ export default function AdminLayout({ header, children }) {
                     header={header}
                     onMenuToggle={() => setIsSidebarOpen((v) => !v)}
                     right={
-                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#6dd7fd]/15 border border-[#0093cb]/30 text-xs text-[#0093cb]">
-                            <UserCheck className="w-3.5 h-3.5 text-[#0093cb]" />
+                        <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-accent/20 border border-brand-primary/30 text-xs text-brand-primary">
+                            <UserCheck className="w-3.5 h-3.5 text-brand-primary" />
                             <span>
                                 Role:{' '}
                                 <strong className="text-slate-800 uppercase tracking-wider font-bold">

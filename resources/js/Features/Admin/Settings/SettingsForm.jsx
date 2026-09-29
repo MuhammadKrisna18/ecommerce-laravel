@@ -66,7 +66,7 @@ function LangConfirmModal({ open, pendingLang, onConfirm, onCancel, t }) {
                 </Button>
                 <Button
                     onClick={onConfirm}
-                    className="bg-[#0093cb] hover:bg-[#0081b3] text-white rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.3)]"
+                    className="bg-brand-primary hover:bg-brand-dark text-white rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.3)]"
                 >
                     {t('Ya, Ubah Bahasa')}
                 </Button>
@@ -77,7 +77,7 @@ function LangConfirmModal({ open, pendingLang, onConfirm, onCancel, t }) {
 
 // ─── SettingsForm ─────────────────────────────────────────────────────────────
 
-const inputCls = "h-11 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus:border-[#0093cb] focus:ring-1 focus:ring-[#0093cb] rounded-xl transition-all shadow-sm";
+const inputCls = "h-11 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm";
 
 /**
  * Settings form feature component.
@@ -145,7 +145,7 @@ export function SettingsForm({ settings }) {
                         {/* Card header */}
                         <div className="p-6 sm:p-8 border-b border-slate-100 bg-slate-50/60">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0093cb] to-[#6dd7fd] flex items-center justify-center text-white shadow-sm">
+                                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent flex items-center justify-center text-white shadow-sm">
                                     <Store className="w-5 h-5" />
                                 </div>
                                 <div>
@@ -212,7 +212,7 @@ export function SettingsForm({ settings }) {
                                             id="app_language"
                                             value={data.app_language}
                                             onChange={handleLanguageChange}
-                                            className="w-full h-11 rounded-xl bg-white border border-slate-200 px-4 text-sm text-slate-800 focus:outline-none focus:border-[#0093cb] focus:ring-1 focus:ring-[#0093cb] transition-all cursor-pointer shadow-sm"
+                                            className="w-full h-11 rounded-xl bg-white border border-slate-200 px-4 text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer shadow-sm"
                                         >
                                             <option value="id" className="text-slate-800">Bahasa Indonesia</option>
                                             <option value="en" className="text-slate-800">English (Inggris)</option>
@@ -229,7 +229,7 @@ export function SettingsForm({ settings }) {
                         {/* Card footer */}
                         <div className="p-6 sm:p-8 border-t border-slate-100 bg-slate-50/60 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div className="text-xs text-slate-500 flex items-center gap-1.5">
-                                <ShieldCheck className="w-4 h-4 text-[#0093cb]" />
+                                <ShieldCheck className="w-4 h-4 text-brand-primary" />
                                 Perubahan akan langsung disimpan ke cache memori &amp; database
                             </div>
 
@@ -237,7 +237,7 @@ export function SettingsForm({ settings }) {
                                 <Button
                                     type="submit"
                                     disabled={processing}
-                                    className="h-11 px-6 bg-gradient-to-r from-[#0093cb] to-[#0081b3] hover:from-[#0081b3] hover:to-[#006fa0] text-white font-medium rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.3)] transition-all flex items-center justify-center gap-2"
+                                    className="h-11 px-6 bg-gradient-to-r from-brand-primary to-brand-dark hover:opacity-95 text-white font-medium rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.3)] transition-all flex items-center justify-center gap-2"
                                 >
                                     {processing ? (
                                         <>

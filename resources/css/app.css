@@ -13,8 +13,16 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    /* #0093cb: hsl(196, 100%, 40%) */
-    --primary: 196 100% 40%;
+    /* Brand Colors (Central Source of Truth) */
+    /* #0093cb: 196 100% 40% */
+    --brand-primary: 196 100% 40%;
+    /* #6dd7fd: 196 97% 71% */
+    --brand-accent: 196 97% 71%;
+    /* #006fa0: 198 100% 31% */
+    --brand-dark: 198 100% 31%;
+
+    /* Semantic Tokens */
+    --primary: var(--brand-primary);
     --primary-foreground: 0 0% 100%;
 
     /* #6dd7fd light tint */
@@ -24,8 +32,7 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    /* #6dd7fd: hsl(196, 97%, 71%) */
-    --accent: 196 97% 71%;
+    --accent: var(--brand-accent);
     --accent-foreground: 196 100% 20%;
 
     --destructive: 0 84.2% 60.2%;
@@ -33,7 +40,7 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 196 100% 40%;
+    --ring: var(--brand-primary);
 
     --radius: 0.75rem;
   }

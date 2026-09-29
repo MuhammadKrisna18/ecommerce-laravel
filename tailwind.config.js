@@ -24,6 +24,12 @@ export default {
                 sans: ['Geist', ...defaultTheme.fontFamily.sans],
             },
             colors: {
+                brand: {
+                    DEFAULT: "hsl(var(--brand-primary) / <alpha-value>)",
+                    primary: "hsl(var(--brand-primary) / <alpha-value>)",
+                    accent: "hsl(var(--brand-accent) / <alpha-value>)",
+                    dark: "hsl(var(--brand-dark) / <alpha-value>)",
+                },
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
                 ring: "hsl(var(--ring))",
