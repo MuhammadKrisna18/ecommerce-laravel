@@ -51,5 +51,17 @@
     "Profil berhasil diperbarui.": "Profile updated successfully.",
     "Foto profil berhasil diperbarui.": "Profile photo updated successfully.",
     "Foto profil berhasil dihapus.": "Profile photo removed successfully.",
-    "Kelola data diri, informasi kontak, dan foto profil akun Anda.": "Manage your personal details, contact information, and profile photo."
+    "Kelola data diri, informasi kontak, dan foto profil akun Anda.": "Manage your personal details, contact information, and profile photo.",
+    "Edit Profil": "Edit Profile",
+    "Informasi Pribadi": "Personal Information",
+    "Kelola data diri, identitas username, dan alamat pengiriman Anda.": "Manage your personal information, username, and shipping address.",
+    "Email Akun": "Account Email",
+    "Belum diatur": "Not set yet",
+    "Digunakan sebagai panggilan unik Anda di platform": "Used as your unique handle on the platform",
+    "Email terhubung dengan kredensial login utama Anda": "Email connected to your primary login credentials",
+    "Alamat lengkap tempat tinggal untuk pengiriman pesanan Anda": "Full residential address for your order deliveries",
+    "Data profil Anda terlindungi dengan standar keamanan privasi.": "Your profile data is protected by privacy security standards.",
+    "TTL": "Birth Details",
+    "Alamat": "Address",
+    "Terakhir Diperbarui": "Last Updated"
 }

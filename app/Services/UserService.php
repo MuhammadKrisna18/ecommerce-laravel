@@ -42,8 +42,12 @@ class UserService implements UserServiceInterface
             'nickname' => $user->nickname,
             'avatar_url' => $user->avatar_url,
             'email' => $user->email,
+            'birth_date' => $user->birth_date?->format('d/m/Y') ?? null,
+            'birth_place' => $user->birth_place,
+            'address' => $user->address,
             'role' => $user->role instanceof \App\Enums\UserRole ? $user->role->value : $user->role,
             'created_at' => $user->created_at?->translatedFormat('d M Y, H:i') ?? '-',
+            'updated_at' => $user->updated_at?->translatedFormat('d M Y, H:i') ?? '-',
         ])->toArray();
     }
 

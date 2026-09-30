@@ -20,8 +20,12 @@ export default {
             },
         },
         extend: {
+            /**
+             * Font family — 'Inter' is loaded via resources/css/fonts.css
+             * which is the single source of truth for all typography.
+             */
             fontFamily: {
-                sans: ['Geist', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 brand: {

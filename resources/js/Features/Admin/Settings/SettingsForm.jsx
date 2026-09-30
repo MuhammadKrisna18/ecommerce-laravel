@@ -5,7 +5,7 @@ import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
 import { Alert } from '@/Components/ui/alert';
-import { Modal } from '@/Components/ui/modal';
+import { CleanModal } from '@/Components/ui/CleanModal';
 import { Spinner } from '@/Components/ui/spinner';
 import {
     Save,
@@ -28,13 +28,13 @@ function FieldRow({ id, icon: Icon, label, error, children }) {
         <div className="space-y-2">
             <Label
                 htmlFor={id}
-                className="text-xs font-semibold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5"
+                className="text-xs font-semibold text-slate-700 flex items-center gap-1.5"
             >
-                <Icon className="w-3.5 h-3.5 text-rose-400" />
+                <Icon className="w-3.5 h-3.5 text-brand-primary" />
                 {label}
             </Label>
             {children}
-            {error && <p className="text-xs text-rose-400">{error}</p>}
+            {error && <p className="text-xs text-rose-500 font-medium">{error}</p>}
         </div>
     );
 }
@@ -45,33 +45,42 @@ function LangConfirmModal({ open, pendingLang, onConfirm, onCancel, t }) {
     const langName = { id: t('Indonesia'), en: t('Inggris'), es: t('Spanyol') };
 
     return (
-        <Modal
+        <CleanModal
             open={open}
             onClose={onCancel}
             title={t('Konfirmasi Ubah Bahasa')}
-            description="Pengaturan lokalisasi antarmuka"
+            description={t('Pengaturan lokalisasi antarmuka')}
+            icon={Globe}
             size="sm"
         >
-            <p className="text-sm text-zinc-300 leading-relaxed mb-4">
-                {t('Apakah Anda yakin ingin mengubah bahasa sistem menjadi')}{' '}
-                <span className="font-bold text-rose-300 underline underline-offset-4">
-                    {langName[pendingLang] ?? pendingLang}
-                </span>
-                ?
-            </p>
+            <div className="p-6">
+                <p className="text-sm text-slate-600 leading-relaxed mb-6">
+                    {t('Apakah Anda yakin ingin mengubah bahasa sistem menjadi')}{' '}
+                    <strong className="font-semibold text-brand-primary">
+                        {langName[pendingLang] ?? pendingLang}
+                    </strong>
+                    ?
+                </p>
 
-            <Modal.Footer>
-                <Button variant="ghost" onClick={onCancel} className="text-zinc-400 hover:text-white hover:bg-zinc-900 rounded-xl">
-                    {t('Batal')}
-                </Button>
-                <Button
-                    onClick={onConfirm}
-                    className="bg-brand-primary hover:bg-brand-dark text-white rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.3)]"
-                >
-                    {t('Ya, Ubah Bahasa')}
-                </Button>
-            </Modal.Footer>
-        </Modal>
+                <div className="flex items-center justify-end gap-3">
+                    <Button 
+                        type="button"
+                        variant="ghost" 
+                        onClick={onCancel} 
+                        className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl"
+                    >
+                        {t('Batal')}
+                    </Button>
+                    <Button
+                        type="button"
+                        onClick={onConfirm}
+                        className="bg-gradient-to-r from-brand-primary to-brand-dark hover:opacity-95 text-white rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.25)]"
+                    >
+                        {t('Ya, Ubah Bahasa')}
+                    </Button>
+                </div>
+            </div>
+        </CleanModal>
     );
 }
 

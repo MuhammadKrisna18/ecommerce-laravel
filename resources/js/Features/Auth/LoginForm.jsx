@@ -73,7 +73,7 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                 <form onSubmit={submit} className="space-y-5">
                     {/* Email Input */}
                     <div className="space-y-2">
-                        <Label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                        <Label htmlFor="email" className="text-xs font-semibold text-slate-700">
                             Alamat Email
                         </Label>
                         <div className="relative group">
@@ -105,7 +105,7 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
 
                     {/* Password Input */}
                     <div className="space-y-2">
-                        <Label htmlFor="password" className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                        <Label htmlFor="password" className="text-xs font-semibold text-slate-700">
                             Kata Sandi
                         </Label>
                         <div className="relative group">

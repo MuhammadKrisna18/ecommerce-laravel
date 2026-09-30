@@ -11,11 +11,11 @@ export default function SettingsIndex({ settings }) {
         <AdminLayout
             header={
                 <div className="flex flex-col">
-                    <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-                        <Sliders className="w-5 h-5 text-rose-400" />
+                    <h2 className="text-xl font-bold tracking-tight text-slate-800 flex items-center gap-2">
+                        <Sliders className="w-5 h-5 text-brand-primary" />
                         {t('Pengaturan Toko')}
                     </h2>
-                    <span className="text-xs text-zinc-400">
+                    <span className="text-xs text-slate-500 font-normal">
                         {t('Konfigurasi identitas toko, kontak layanan, dan lokalisasi')}
                     </span>
                 </div>

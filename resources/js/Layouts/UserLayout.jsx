@@ -48,7 +48,7 @@ export default function UserLayout({ header, children }) {
                             <UserIcon className="w-3.5 h-3.5 text-brand-primary" />
                             <span>
                                 Role:{' '}
-                                <strong className="text-slate-800 uppercase tracking-wider font-bold">
+                                <strong className="text-slate-800 font-semibold capitalize">
                                     {auth.user.role || 'User'}
                                 </strong>
                             </span>

@@ -9,7 +9,9 @@ import {
     UserCheck, 
     Mail, 
     Calendar,
-    AtSign
+    AtSign,
+    MapPin,
+    Clock
 } from 'lucide-react';
 import { useTranslation } from '@/Hooks/useTranslation';
 import { useAuth } from '@/Hooks/useAuth';
@@ -107,7 +109,7 @@ export function DashboardWidgets({ users = [], stats = {} }) {
                     >
                         <div className="bg-white rounded-2xl border border-slate-200/70 p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] hover:border-brand-primary/30 transition-all">
                             <div className="flex items-center justify-between">
-                                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                                <span className="text-xs font-semibold text-slate-500">
                                     {stat.title}
                                 </span>
                                 <div className="w-8 h-8 rounded-lg bg-brand-primary/10 text-brand-primary flex items-center justify-center">
@@ -158,10 +160,12 @@ export function DashboardWidgets({ users = [], stats = {} }) {
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left text-sm">
                                     <thead>
-                                        <tr className="border-b border-slate-100 bg-slate-50/60 text-[11px] uppercase tracking-wider text-slate-400 font-bold">
+                                        <tr className="border-b border-slate-200/80 bg-slate-50/80 text-xs font-semibold text-slate-600">
                                             <th className="py-3 px-6">No</th>
                                             <th className="py-3 px-6">{t('Nama Lengkap')}</th>
                                             <th className="py-3 px-6">{t('Email')}</th>
+                                            <th className="py-3 px-6">{t('TTL')}</th>
+                                            <th className="py-3 px-6">{t('Alamat')}</th>
                                             <th className="py-3 px-6">{t('Role')}</th>
                                             <th className="py-3 px-6">{t('Terdaftar Pada')}</th>
                                         </tr>
@@ -177,38 +181,84 @@ export function DashboardWidgets({ users = [], stats = {} }) {
                                                 </td>
                                                 <td className="py-4 px-6">
                                                     <div className="flex items-center gap-3">
-                                                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-primary to-brand-accent text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
-                                                            {user.name.charAt(0).toUpperCase()}
-                                                        </div>
+                                                        {user.avatar_url ? (
+                                                            <img
+                                                                src={user.avatar_url}
+                                                                alt={user.name}
+                                                                className="w-9 h-9 rounded-xl object-cover border border-slate-200 shadow-sm shrink-0"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+                                                                {user.name.charAt(0).toUpperCase()}
+                                                            </div>
+                                                        )}
                                                         <div>
-                                                            <p className="font-semibold text-slate-800 group-hover:text-brand-primary transition-colors">
+                                                            <p className="font-semibold text-slate-800 group-hover:text-brand-primary transition-colors text-sm">
                                                                 {user.name}
                                                             </p>
-                                                            {user.nickname && (
-                                                                <p className="text-xs text-slate-400 flex items-center gap-1">
-                                                                    <AtSign className="w-3 h-3 text-slate-300" />
+                                                            {user.nickname ? (
+                                                                <p className="text-xs text-brand-primary font-medium flex items-center gap-0.5">
+                                                                    <AtSign className="w-3 h-3 text-brand-primary/70 shrink-0" />
                                                                     {user.nickname}
                                                                 </p>
+                                                            ) : (
+                                                                <span className="text-[11px] text-slate-400 italic">
+                                                                    {t('Belum diatur')}
+                                                                </span>
                                                             )}
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td className="py-4 px-6">
                                                     <span className="text-slate-600 flex items-center gap-1.5 text-xs sm:text-sm">
-                                                        <Mail className="w-3.5 h-3.5 text-slate-300" />
+                                                        <Mail className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                                                         {user.email}
                                                     </span>
+                                                </td>
+                                                <td className="py-4 px-6 text-xs text-slate-600">
+                                                    {user.birth_place || user.birth_date ? (
+                                                        <div className="flex items-center gap-1.5">
+                                                            <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                                            <span>
+                                                                {[user.birth_place, user.birth_date].filter(Boolean).join(', ')}
+                                                            </span>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-slate-400 italic text-[11px]">
+                                                            {t('Belum diatur')}
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td className="py-4 px-6 text-xs text-slate-600 max-w-[200px]">
+                                                    {user.address ? (
+                                                        <span className="flex items-center gap-1.5 truncate" title={user.address}>
+                                                            <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                                            <span className="truncate">{user.address}</span>
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-slate-400 italic text-[11px]">
+                                                            {t('Belum diatur')}
+                                                        </span>
+                                                    )}
                                                 </td>
                                                 <td className="py-4 px-6">
                                                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-primary/10 text-brand-primary capitalize">
                                                         {user.role}
                                                     </span>
                                                 </td>
-                                                <td className="py-4 px-6 text-xs text-slate-500">
-                                                    <span className="flex items-center gap-1.5">
-                                                        <Calendar className="w-3.5 h-3.5 text-slate-300" />
-                                                        {user.created_at}
-                                                    </span>
+                                                <td className="py-4 px-6 text-xs text-slate-500 whitespace-nowrap">
+                                                    <div className="space-y-1">
+                                                        <span className="flex items-center gap-1.5 text-slate-600">
+                                                            <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                                                            {user.created_at}
+                                                        </span>
+                                                        {user.updated_at && user.updated_at !== user.created_at && (
+                                                            <span className="flex items-center gap-1 text-[11px] text-brand-primary font-medium">
+                                                                <Clock className="w-3 h-3 shrink-0" />
+                                                                <span>Update: {user.updated_at}</span>
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))}

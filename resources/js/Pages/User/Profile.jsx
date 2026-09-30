@@ -16,11 +16,11 @@ export default function ProfileEdit({ user }) {
         <UserLayout
             header={
                 <div className="flex flex-col">
-                    <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-                        <User className="w-5 h-5 text-brand-accent" />
+                    <h2 className="text-xl font-bold tracking-tight text-slate-800 flex items-center gap-2">
+                        <User className="w-5 h-5 text-brand-primary" />
                         {t('Profil Pengguna')}
                     </h2>
-                    <span className="text-xs text-zinc-400">
+                    <span className="text-xs text-slate-500 font-normal">
                         {t('Kelola data diri, informasi kontak, dan foto profil akun Anda.')}
                     </span>
                 </div>

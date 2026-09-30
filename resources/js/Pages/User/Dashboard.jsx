@@ -10,10 +10,10 @@ export default function UserDashboard() {
         <UserLayout
             header={
                 <div className="flex flex-col">
-                    <h2 className="text-xl font-bold tracking-tight text-white">
+                    <h2 className="text-xl font-bold tracking-tight text-slate-800">
                         {t('Dashboard Pengguna')}
                     </h2>
-                    <span className="text-xs text-zinc-400">
+                    <span className="text-xs text-slate-500 font-normal">
                         Selamat datang di area dashboard akun Anda
                     </span>
                 </div>

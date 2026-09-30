@@ -1,3 +1,9 @@
+/*
+ * Global font config is maintained in fonts.css.
+ * All font loading, weights, and CSS variable declaration live there.
+ */
+@import './fonts.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

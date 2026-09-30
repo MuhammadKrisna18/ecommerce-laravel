@@ -63,7 +63,7 @@ export function RegisterForm({ onSwitchToLogin }) {
                 <form onSubmit={submit} className="space-y-4">
                     {/* Nama Lengkap */}
                     <div className="space-y-1.5">
-                        <Label htmlFor="name" className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                        <Label htmlFor="name" className="text-xs font-semibold text-slate-700">
                             Nama Lengkap
                         </Label>
                         <div className="relative group">
@@ -94,7 +94,7 @@ export function RegisterForm({ onSwitchToLogin }) {
 
                     {/* Nama Panggilan */}
                     <div className="space-y-1.5">
-                        <Label htmlFor="nickname" className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                        <Label htmlFor="nickname" className="text-xs font-semibold text-slate-700">
                             Nama Panggilan
                         </Label>
                         <div className="relative group">
@@ -125,7 +125,7 @@ export function RegisterForm({ onSwitchToLogin }) {
 
                     {/* Email */}
                     <div className="space-y-1.5">
-                        <Label htmlFor="reg-email" className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                        <Label htmlFor="reg-email" className="text-xs font-semibold text-slate-700">
                             Alamat Email
                         </Label>
                         <div className="relative group">
@@ -157,7 +157,7 @@ export function RegisterForm({ onSwitchToLogin }) {
 
                     {/* Password */}
                     <div className="space-y-1.5">
-                        <Label htmlFor="reg-password" className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                        <Label htmlFor="reg-password" className="text-xs font-semibold text-slate-700">
                             Kata Sandi
                         </Label>
                         <div className="relative group">

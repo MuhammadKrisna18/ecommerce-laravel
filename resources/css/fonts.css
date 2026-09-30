@@ -1,0 +1,32 @@
+/*
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Global Font Configuration
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * Single source of truth for all typography in this application.
+ *
+ * Font:   Inter (Google Fonts)
+ * Weights loaded: 300 (Light), 400 (Regular), 500 (Medium),
+ *                 600 (SemiBold), 700 (Bold), 800 (ExtraBold)
+ *
+ * This file is imported by resources/css/app.css.
+ * Tailwind fontFamily.sans is configured to use 'Inter' in tailwind.config.js.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/* Preconnect to speed up initial font download */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+    :root {
+        --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                     'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    }
+
+    html,
+    body {
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}

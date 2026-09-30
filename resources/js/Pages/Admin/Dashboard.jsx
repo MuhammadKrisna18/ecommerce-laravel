@@ -11,10 +11,12 @@ export default function Dashboard({ users = [], stats = {} }) {
         <AdminLayout
             header={
                 <div className="flex flex-col">
-                    <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                    <h2 className="text-xl font-bold tracking-tight text-slate-800 flex items-center gap-2">
                         {t('Dashboard Admin')}
                     </h2>
-                    <span className="text-xs text-zinc-400">Ringkasan performa dan pemantauan sistem toko</span>
+                    <span className="text-xs text-slate-500 font-normal">
+                        Ringkasan performa dan pemantauan sistem toko
+                    </span>
                 </div>
             }
         >

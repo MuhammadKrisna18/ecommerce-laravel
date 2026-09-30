@@ -170,8 +170,8 @@ export function AppSidebar({
             </div>
 
             {/* Nav label */}
-            <div className="px-6 py-3.5 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                Menu Utama
+            <div className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                {t('Menu Utama')}
             </div>
 
             {/* Nav items */}
