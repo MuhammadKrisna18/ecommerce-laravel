@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Services\Contracts\UserServiceInterface;
 use Inertia\Inertia;
@@ -18,7 +19,7 @@ class DashboardController extends Controller
 
     public function index(): Response
     {
-        $users = $this->userService->getUserList('user');
+        $users = $this->userService->getUserList(UserRole::USER->value);
         $stats = $this->userService->getDashboardStats();
 
         return Inertia::render('Admin/Dashboard', [

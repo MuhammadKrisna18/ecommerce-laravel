@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTOs\RegisterUserDTO;
+use App\Enums\UserRole;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Services\Contracts\UserServiceInterface;
@@ -31,7 +32,7 @@ class UserService implements UserServiceInterface
         return $user;
     }
 
-    public function getUserList(string $role = 'user'): array
+    public function getUserList(string $role = UserRole::USER->value): array
     {
         $users = $this->userRepository->getUsersByRole($role);
 
@@ -47,8 +48,8 @@ class UserService implements UserServiceInterface
 
     public function getDashboardStats(): array
     {
-        $totalUsers = $this->userRepository->countByRole('user');
-        $totalAdmins = $this->userRepository->countByRole('admin');
+        $totalUsers = $this->userRepository->countByRole(UserRole::USER->value);
+        $totalAdmins = $this->userRepository->countByRole(UserRole::ADMIN->value);
 
         return [
             'total_users' => $totalUsers,

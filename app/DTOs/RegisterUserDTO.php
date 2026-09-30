@@ -2,6 +2,8 @@
 
 namespace App\DTOs;
 
+use App\Enums\UserRole;
+
 class RegisterUserDTO extends BaseDTO
 {
     public string $name;
@@ -12,5 +14,5 @@ class RegisterUserDTO extends BaseDTO
 
     public string $password;
 
-    public string $role = 'user';
+    public string $role = UserRole::USER->value;
 }
