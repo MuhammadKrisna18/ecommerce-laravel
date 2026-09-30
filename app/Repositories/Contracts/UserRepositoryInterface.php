@@ -9,7 +9,7 @@ interface UserRepositoryInterface extends RepositoryInterface
 {
     public function findByEmail(string $email): ?User;
 
-    public function findByNicknameIgnoreCase(string $nickname): ?User;
+    public function findByNicknameIgnoreCase(string $nickname, int|string|null $ignoreUserId = null): ?User;
 
     public function getUsersByRole(string $role): \Illuminate\Database\Eloquent\Collection;
 

@@ -26,6 +26,15 @@ Route::middleware(['auth', 'verified', 'user', 'prevent-back-history'])
     ->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\User\DashboardController::class, 'index'])
             ->name('dashboard');
+
+        Route::get('/profile', [\App\Http\Controllers\User\ProfileController::class, 'edit'])
+            ->name('profile.edit');
+        Route::patch('/profile', [\App\Http\Controllers\User\ProfileController::class, 'update'])
+            ->name('profile.update');
+        Route::post('/profile/avatar', [\App\Http\Controllers\User\ProfileController::class, 'updateAvatar'])
+            ->name('profile.avatar.update');
+        Route::delete('/profile/avatar', [\App\Http\Controllers\User\ProfileController::class, 'destroyAvatar'])
+            ->name('profile.avatar.destroy');
     });
 
 require __DIR__.'/auth.php';

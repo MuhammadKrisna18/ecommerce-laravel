@@ -40,6 +40,7 @@ class UserService implements UserServiceInterface
             'id' => $user->id,
             'name' => $user->name,
             'nickname' => $user->nickname,
+            'avatar_url' => $user->avatar_url,
             'email' => $user->email,
             'role' => $user->role instanceof \App\Enums\UserRole ? $user->role->value : $user->role,
             'created_at' => $user->created_at?->translatedFormat('d M Y, H:i') ?? '-',
@@ -56,5 +57,56 @@ class UserService implements UserServiceInterface
             'total_admins' => $totalAdmins,
             'total_accounts' => $totalUsers + $totalAdmins,
         ];
+    }
+
+    public function updateProfile(User $user, \App\DTOs\UpdateProfileDTO $dto): User
+    {
+        $this->userRepository->update($user->id, [
+            'name' => $dto->name,
+            'nickname' => $dto->nickname,
+            'birth_date' => $dto->birth_date ?: null,
+            'birth_place' => $dto->birth_place ?: null,
+            'address' => $dto->address ?: null,
+        ]);
+
+        /** @var User $updatedUser */
+        $updatedUser = $this->userRepository->find($user->id);
+
+        return $updatedUser;
+    }
+
+    public function updateAvatar(User $user, \Illuminate\Http\UploadedFile $file): User
+    {
+        // Delete previous avatar if stored locally
+        if ($user->avatar && ! filter_var($user->avatar, FILTER_VALIDATE_URL)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($user->avatar);
+        }
+
+        $path = $file->store('avatars', 'public');
+
+        $this->userRepository->update($user->id, [
+            'avatar' => $path,
+        ]);
+
+        /** @var User $updatedUser */
+        $updatedUser = $this->userRepository->find($user->id);
+
+        return $updatedUser;
+    }
+
+    public function deleteAvatar(User $user): User
+    {
+        if ($user->avatar && ! filter_var($user->avatar, FILTER_VALIDATE_URL)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($user->avatar);
+        }
+
+        $this->userRepository->update($user->id, [
+            'avatar' => null,
+        ]);
+
+        /** @var User $updatedUser */
+        $updatedUser = $this->userRepository->find($user->id);
+
+        return $updatedUser;
     }
 }

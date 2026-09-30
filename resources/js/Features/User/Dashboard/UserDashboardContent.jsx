@@ -41,11 +41,50 @@ export function UserDashboardContent() {
                 </div>
             </motion.div>
 
+            {/* Profile Overview Card */}
+            <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+            >
+                <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                    <div className="flex items-center gap-4">
+                        {user?.avatar_url ? (
+                            <img
+                                src={user.avatar_url}
+                                alt={user.name}
+                                className="w-16 h-16 rounded-2xl object-cover border border-slate-200 shadow-sm"
+                            />
+                        ) : (
+                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-primary to-brand-accent text-white font-extrabold text-2xl flex items-center justify-center shadow-sm">
+                                {user?.name?.charAt(0).toUpperCase()}
+                            </div>
+                        )}
+                        <div>
+                            <h3 className="text-lg font-bold text-slate-800">{user?.name}</h3>
+                            <p className="text-xs text-brand-primary font-medium">
+                                {user?.nickname ? `@${user.nickname}` : user?.email}
+                            </p>
+                            <p className="text-xs text-slate-400 mt-1">
+                                {user?.address ? user.address : 'Alamat belum diatur'}
+                            </p>
+                        </div>
+                    </div>
+
+                    <a
+                        href={route('user.profile.edit')}
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all"
+                    >
+                        <span>{t('Ubah Profil')}</span>
+                    </a>
+                </div>
+            </motion.div>
+
             {/* Placeholder / coming soon */}
             <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.4, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
             >
                 <div className="rounded-2xl border border-dashed border-slate-200 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.02)] p-12 text-center">
                     <div className="w-16 h-16 mx-auto rounded-2xl bg-brand-accent/20 border border-brand-primary/20 flex items-center justify-center text-brand-primary mb-4 shadow-sm">

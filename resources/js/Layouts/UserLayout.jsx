@@ -18,6 +18,12 @@ export default function UserLayout({ header, children }) {
             icon: LayoutDashboard,
             active: route().current('user.dashboard'),
         },
+        {
+            name: t('Profil Saya'),
+            href: route('user.profile.edit'),
+            icon: UserIcon,
+            active: route().current('user.profile.*'),
+        },
     ];
 
     return (

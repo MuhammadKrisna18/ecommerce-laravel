@@ -67,9 +67,17 @@ function UserFooter({ user, t }) {
         <div className="p-4 border-t border-slate-100 bg-white">
             <div className="flex items-center gap-3 p-1 rounded-xl">
                 {/* Avatar */}
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent text-white font-bold text-sm shadow-sm flex items-center justify-center shrink-0">
-                    {user?.name?.charAt(0).toUpperCase()}
-                </div>
+                {user?.avatar_url ? (
+                    <img
+                        src={user.avatar_url}
+                        alt={user.name}
+                        className="w-10 h-10 rounded-xl object-cover border border-slate-200 shadow-sm shrink-0"
+                    />
+                ) : (
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent text-white font-bold text-sm shadow-sm flex items-center justify-center shrink-0">
+                        {user?.name?.charAt(0).toUpperCase()}
+                    </div>
+                )}
 
                 {/* Info */}
                 <div className="flex flex-col min-w-0 flex-1">

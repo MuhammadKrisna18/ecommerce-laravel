@@ -17,10 +17,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $this->model->where('email', $email)->first();
     }
 
-    public function findByNicknameIgnoreCase(string $nickname): ?User
+    public function findByNicknameIgnoreCase(string $nickname, int|string|null $ignoreUserId = null): ?User
     {
         return $this->model
             ->whereRaw('LOWER(nickname) = ?', [mb_strtolower(trim($nickname))])
+            ->when($ignoreUserId, fn ($query) => $query->where('id', '!=', $ignoreUserId))
             ->first();
     }
 

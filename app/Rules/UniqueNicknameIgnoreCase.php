@@ -10,9 +10,12 @@ class UniqueNicknameIgnoreCase implements ValidationRule
 {
     protected UserRepositoryInterface $userRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    protected int|string|null $ignoreUserId;
+
+    public function __construct(UserRepositoryInterface $userRepository, int|string|null $ignoreUserId = null)
     {
         $this->userRepository = $userRepository;
+        $this->ignoreUserId = $ignoreUserId;
     }
 
     /**
@@ -26,7 +29,7 @@ class UniqueNicknameIgnoreCase implements ValidationRule
             return;
         }
 
-        $existingUser = $this->userRepository->findByNicknameIgnoreCase($value);
+        $existingUser = $this->userRepository->findByNicknameIgnoreCase($value, $this->ignoreUserId);
 
         if ($existingUser) {
             $fail(__('Nama panggilan sudah digunakan. Silakan pilih nama panggilan lain.'));
