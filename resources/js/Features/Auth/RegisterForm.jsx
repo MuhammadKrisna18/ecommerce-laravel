@@ -66,7 +66,14 @@ export function RegisterForm({ onSwitchToLogin }) {
                 }),
             });
 
-            const data = await res.json();
+            const rawText = await res.text();
+            let data;
+            try {
+                data = JSON.parse(rawText);
+            } catch (parseError) {
+                throw new Error('Respons server bukan JSON (Status ' + res.status + '): ' + rawText.slice(0, 120));
+            }
+
             if (res.ok && data.redirect_url) {
                 window.location.href = data.redirect_url;
             } else {
@@ -77,6 +84,7 @@ export function RegisterForm({ onSwitchToLogin }) {
             setFirebaseError('Koneksi ke Firebase gagal: ' + err.message);
             setIsGoogleLoading(false);
         }
+
     };
 
 

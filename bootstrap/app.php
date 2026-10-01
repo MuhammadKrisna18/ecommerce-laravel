@@ -24,9 +24,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'user' => \App\Http\Middleware\IsUser::class,
             'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'auth/firebase',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*'),
+            fn (Request $request) => $request->is('api/*') || $request->is('auth/firebase') || $request->expectsJson(),
         );
     })->create();
+

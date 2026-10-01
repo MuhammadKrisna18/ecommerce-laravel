@@ -25,46 +25,57 @@ class FirebaseAuthController extends Controller
      */
     public function authenticate(FirebaseLoginRequest $request): JsonResponse
     {
-        $email = $request->input('email');
-        $name = $request->input('name') ?? explode('@', $email)[0];
-        $avatar = $request->input('avatar');
+        try {
+            $email = $request->input('email');
+            $name = $request->input('name') ?? explode('@', $email)[0];
+            $avatar = $request->input('avatar');
 
-        // Look up existing user
-        $user = $this->userRepository->findByEmail($email);
+            // Look up existing user
+            $user = $this->userRepository->findByEmail($email);
 
-        if (! $user) {
-            // Generate unique nickname candidate
-            $baseNickname = Str::slug(explode('@', $email)[0], '');
-            if (empty($baseNickname)) {
-                $baseNickname = 'user';
+            if (! $user) {
+                // Generate unique nickname candidate
+                $baseNickname = Str::slug(explode('@', $email)[0], '');
+                if (empty($baseNickname)) {
+                    $baseNickname = 'user';
+                }
+                $nickname = $baseNickname;
+                $counter = 1;
+                while ($this->userRepository->findByNicknameIgnoreCase($nickname)) {
+                    $nickname = $baseNickname.$counter;
+                    $counter++;
+                }
+
+                // Create new User
+                $user = $this->userRepository->create([
+                    'name' => $name,
+                    'nickname' => $nickname,
+                    'email' => $email,
+                    'avatar' => $avatar,
+                    'password' => Hash::make(Str::random(32)),
+                    'role' => UserRole::USER->value,
+                ]);
             }
-            $nickname = $baseNickname;
-            $counter = 1;
-            while ($this->userRepository->findByNicknameIgnoreCase($nickname)) {
-                $nickname = $baseNickname.$counter;
-                $counter++;
-            }
 
-            // Create new User
-            $user = $this->userRepository->create([
-                'name' => $name,
-                'nickname' => $nickname,
-                'email' => $email,
-                'avatar' => $avatar,
-                'password' => Hash::make(Str::random(32)),
-                'role' => UserRole::USER->value,
+            // Log the user in to the Laravel session
+            Auth::login($user, true);
+            $request->session()->regenerate();
+
+            $targetUrl = $user->isAdmin() ? route('admin.dashboard') : route('user.dashboard');
+
+            return response()->json([
+                'status' => 'success',
+                'redirect_url' => $targetUrl,
             ]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Firebase authentication failed: '.$e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Autentikasi gagal diproses di server: '.$e->getMessage(),
+            ], 500);
         }
-
-        // Log the user in to the Laravel session
-        Auth::login($user, true);
-        $request->session()->regenerate();
-
-        $targetUrl = $user->isAdmin() ? route('admin.dashboard') : route('user.dashboard');
-
-        return response()->json([
-            'status' => 'success',
-            'redirect_url' => $targetUrl,
-        ]);
     }
 }
