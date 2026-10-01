@@ -63,7 +63,7 @@ export function ProfileForm({ user }) {
                         <Button
                             type="button"
                             onClick={() => setIsEditModalOpen(true)}
-                            className="h-10 px-4 bg-gradient-to-r from-brand-primary to-brand-dark hover:opacity-95 text-white font-medium rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.3)] transition-all flex items-center gap-2 text-xs"
+                            className="h-10 px-4 bg-brand-primary hover:bg-brand-dark text-white font-medium rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.25)] transition-colors duration-200 flex items-center gap-2 text-xs"
                         >
                             <Edit3 className="w-3.5 h-3.5" />
                             <span>{t('Edit Profil')}</span>

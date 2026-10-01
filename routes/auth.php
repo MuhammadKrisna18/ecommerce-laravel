@@ -14,9 +14,13 @@ Route::middleware('guest')->group(function () {
         ->name('register');
 
     Route::post('register', [RegisteredUserController::class, 'store']);
+
+    Route::post('auth/firebase', [\App\Http\Controllers\Auth\FirebaseAuthController::class, 'authenticate'])
+        ->name('auth.firebase');
 });
 
 Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });
+

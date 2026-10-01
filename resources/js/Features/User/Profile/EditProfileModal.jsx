@@ -203,7 +203,7 @@ export function EditProfileModal({ open, onClose, user }) {
                             <Button
                                 type="submit"
                                 disabled={processing}
-                                className="h-11 px-6 bg-gradient-to-r from-brand-primary to-brand-dark hover:opacity-95 text-white font-medium rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.3)] transition-all flex items-center justify-center gap-2 text-xs"
+                                className="h-11 px-6 bg-brand-primary hover:bg-brand-dark text-white font-medium rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.25)] transition-colors duration-200 flex items-center justify-center gap-2 text-xs"
                             >
                                 {processing ? (
                                     <>
