@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', fn () => redirect()->route('login'));
 
 // ── Admin routes ─────────────────────────────────────────────────────────────
-Route::middleware(['auth', 'verified', 'admin', 'prevent-back-history'])
+Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -30,10 +30,10 @@ Route::middleware(['auth', 'verified', 'admin', 'prevent-back-history'])
 // ── Frozen Notice route ──────────────────────────────────────────────────────
 Route::get('/account/frozen', \App\Http\Controllers\Auth\FrozenNoticeController::class)
     ->name('frozen.notice')
-    ->middleware(['auth', 'prevent-back-history']);
+    ->middleware(['auth']);
 
 // ── User routes ───────────────────────────────────────────────────────────────
-Route::middleware(['auth', 'verified', 'user', 'prevent-back-history'])
+Route::middleware(['auth', 'verified', 'user'])
     ->prefix('user')
     ->name('user.')
     ->group(function () {

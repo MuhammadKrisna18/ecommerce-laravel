@@ -35,11 +35,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $this->model->where('role', $role)->count();
     }
 
-    public function getRecentUsers(int $limit = 5): \Illuminate\Database\Eloquent\Collection
-    {
-        return $this->model->latest()->take($limit)->get();
-    }
-
     public function getPaginatedNonAdminUsers(int $perPage = 15): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         return $this->model

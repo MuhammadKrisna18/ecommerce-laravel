@@ -141,7 +141,80 @@ Aplikasi ini mengadopsi pola **Layered Architecture** tingkat lanjut (Enterprise
 
 ---
 
-## 🧪 5. Pengujian Kualitas (Testing with EP & BVA)
+## 🔄 5. Control Flow Graph (CFG) Backend
+
+Berikut adalah visualisasi **Control Flow Graph (CFG)** alur pemrosesan request di sisi backend, mulai dari HTTP Entry Point, evaluasi pipeline Middleware, percabangan otorisasi dan validasi FormRequest, hingga orkestrasi di lapisan Action, Service, dan Repository:
+
+### 📊 Diagram CFG Alur Request & Pipeline Backend
+
+```mermaid
+flowchart TD
+    START([● Entry Point: HTTP Request]) --> B1[Global Middleware Stack:\nPreventBackHistory, SetAppLocale]
+    
+    %% Middleware Guard Check
+    B1 --> COND_AUTH{Is Authenticated?}
+    COND_AUTH -- No --> COND_GUEST_ROUTE{Route is Guest?}
+    COND_GUEST_ROUTE -- Yes --> GUEST_HANDLER[Guest Controllers:\nLogin, Register, Firebase]
+    COND_GUEST_ROUTE -- No --> REDIRECT_LOGIN[Redirect to Login] --> END_RES([◉ Terminate / Response])
+    
+    COND_AUTH -- Yes --> COND_FROZEN{Is Account Frozen?\nis_frozen == true}
+    
+    %% Frozen Guard
+    COND_FROZEN -- Yes --> COND_FROZEN_URL{Request is\n/account/frozen\nor /logout?}
+    COND_FROZEN_URL -- Yes --> FROZEN_RENDER[Render Frozen Notice Page] --> END_RES
+    COND_FROZEN_URL -- No --> REDIRECT_FROZEN[Redirect to /account/frozen] --> END_RES
+    
+    %% Role Guard Check
+    COND_FROZEN -- No --> COND_ROLE{Route Target Role}
+    
+    %% Admin Guard
+    COND_ROLE -- Admin Route --> COND_IS_ADMIN{Is Admin?\nrole == ADMIN}
+    COND_IS_ADMIN -- No --> ABORT_403_ADMIN[Abort 403 / Redirect User Dashboard] --> END_RES
+    COND_IS_ADMIN -- Yes --> ADMIN_ROUTER[Admin Controller Match]
+    
+    %% User Guard
+    COND_ROLE -- User Route --> COND_IS_USER{Is User?\nrole == USER}
+    COND_IS_USER -- No --> REDIRECT_ADMIN[Redirect to Admin Dashboard] --> END_RES
+    COND_IS_USER -- Yes --> USER_ROUTER[User Controller Match]
+    
+    %% Controller & FormRequest Validation
+    ADMIN_ROUTER --> FORM_REQ_VALIDATION{FormRequest Validation\n& Security Code Match}
+    USER_ROUTER --> FORM_REQ_VALIDATION
+    
+    FORM_REQ_VALIDATION -- Validation Fails --> ERR_REDIRECT[Redirect Back with Session Errors / 422 JSON] --> END_RES
+    
+    %% Business Logic Pipeline
+    FORM_REQ_VALIDATION -- Validation Passes --> BUILD_DTO[Construct Typed DTO\nfrom Validated Array]
+    BUILD_DTO --> EXEC_ACTION[Execute Specific Single-Action\ne.g., FreezeUserAction, UpdateProfileAction]
+    EXEC_ACTION --> SERVICE_CONTRACT[Call Service via Interface Contract\nUserServiceInterface / SettingServiceInterface]
+    
+    %% Service & DB Interaction
+    SERVICE_CONTRACT --> TX_START[Begin DB Transaction / Cache Lookup]
+    TX_START --> REPO_CONTRACT[Call Repository Contract\nUserRepositoryInterface / SettingRepositoryInterface]
+    REPO_CONTRACT --> ELOQUENT_EXEC[(Eloquent ORM & MySQL Execution)]
+    
+    ELOQUENT_EXEC --> COND_TX{Execution Successful?}
+    COND_TX -- Exception / Failure --> TX_ROLLBACK[DB Rollback / Flash Error Alert] --> END_RES
+    COND_TX -- Success --> TX_COMMIT[DB Commit / Forget Cache / Storage Sync]
+    TX_COMMIT --> RESP_SUCCESS[Redirect Back with Success Message / Inertia Render] --> END_RES
+```
+
+### 🔍 Representasi Simpul (Nodes) & Busur (Edges) Kontrol CFG:
+
+| Simpul (Node) | Kategori | Deskripsi Logika Kendali Backend |
+| :--- | :--- | :--- |
+| **`B1`** | Basic Block | Pengecekan header anti-cache `PreventBackHistory` dan inisialisasi lokal bahasa `SetAppLocale`. |
+| **`COND_AUTH`** | Decision Node | Percabangan pengecekan status login pengguna (`auth()->check()`). |
+| **`COND_FROZEN`** | Decision Node | Filter `EnsureAccountNotFrozen` mengevaluasi status pembekuan akun (`is_frozen`). |
+| **`COND_ROLE`** | Branching Node | Evaluasi hak akses middleware `IsAdmin` vs `IsUser`. Mencegah eskalasi hak akses / lintas-peran. |
+| **`FORM_REQ_VALIDATION`** | Decision Node | Validasi aturan data, validasi case-insensitive, dan pencocokan 4-digit kode acak (`expected_code`). |
+| **`BUILD_DTO` ➔ `EXEC_ACTION`** | Basic Block | Enkapsulasi data ke DTO dan delegasi tugas tunggal ke lapisan Action (*Single Responsibility*). |
+| **`SERVICE_CONTRACT` ➔ `REPO`** | Subgraph | Eksekusi transaksi basis data melalui antarmuka lapisan abstraksi Service & Repository. |
+| **`COND_TX`** | Decision Node | Percabangan penanganan commit transaksi atau rollback saat terjadi galat database. |
+
+---
+
+## 🧪 6. Pengujian Kualitas (Testing with EP & BVA)
 
 Aplikasi dilengkapi test suite komprehensif menggunakan PHPUnit / Pest:
 - **User Management & Security Testing** (`tests/Feature/Admin/UserManagementTest.php`):
@@ -167,7 +240,7 @@ php artisan test
 
 ---
 
-## 🚀 6. Panduan Menjalankan Proyek
+## 🚀 7. Panduan Menjalankan Proyek
 
 ### Prasyarat
 - PHP >= 8.2
