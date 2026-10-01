@@ -14,18 +14,24 @@ use Inertia\Response;
 class SettingsController extends Controller
 {
     protected SettingServiceInterface $settingService;
+    protected \App\Services\Contracts\UserServiceInterface $userService;
 
-    public function __construct(SettingServiceInterface $settingService)
-    {
+    public function __construct(
+        SettingServiceInterface $settingService,
+        \App\Services\Contracts\UserServiceInterface $userService
+    ) {
         $this->settingService = $settingService;
+        $this->userService = $userService;
     }
 
     public function index(): Response
     {
         $settings = $this->settingService->getAllSettings();
+        $users = $this->userService->getPaginatedUsers(15);
 
         return Inertia::render('Admin/Settings/Index', [
             'settings' => $settings,
+            'users' => $users,
         ]);
     }
 

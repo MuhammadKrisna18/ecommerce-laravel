@@ -39,4 +39,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     {
         return $this->model->latest()->take($limit)->get();
     }
+
+    public function getPaginatedNonAdminUsers(int $perPage = 15): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        return $this->model
+            ->where('role', '!=', \App\Enums\UserRole::ADMIN->value)
+            ->select(['id', 'name', 'email', 'avatar', 'role', 'frozen_until', 'frozen_reason', 'created_at'])
+            ->latest()
+            ->paginate($perPage);
+    }
 }

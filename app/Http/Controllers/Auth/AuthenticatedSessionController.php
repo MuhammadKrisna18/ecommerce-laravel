@@ -28,6 +28,11 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = $request->user();
+
+        if ($user && $user->is_frozen) {
+            return redirect()->route('frozen.notice');
+        }
+
         $targetRoute = ($user && $user->isAdmin()) ? route('admin.dashboard') : route('user.dashboard');
 
         return redirect()->intended($targetRoute);

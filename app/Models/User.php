@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'nickname', 'avatar', 'birth_date', 'birth_place', 'address', 'email', 'password', 'role'])]
+#[Fillable(['name', 'nickname', 'avatar', 'birth_date', 'birth_place', 'address', 'email', 'password', 'role', 'frozen_until', 'frozen_reason'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $appends = ['avatar_url'];
+    protected $appends = ['avatar_url', 'is_frozen', 'frozen_duration_text'];
 
     protected function casts(): array
     {
@@ -24,6 +24,7 @@ class User extends Authenticatable
             'birth_date' => 'date:Y-m-d',
             'password' => 'hashed',
             'role' => UserRole::class,
+            'frozen_until' => 'datetime',
         ];
     }
 
@@ -38,6 +39,23 @@ class User extends Authenticatable
         }
 
         return \Illuminate\Support\Facades\Storage::disk('public')->url($this->avatar);
+    }
+
+    public function getIsFrozenAttribute(): bool
+    {
+        return $this->frozen_until !== null && $this->frozen_until->isFuture();
+    }
+
+    public function getFrozenDurationTextAttribute(): ?string
+    {
+        if (! $this->is_frozen) {
+            return null;
+        }
+
+        return $this->frozen_until->diffForHumans(now(), [
+            'parts' => 2,
+            'syntax' => \Carbon\CarbonInterface::DIFF_ABSOLUTE,
+        ]);
     }
 
     public function isAdmin(): bool

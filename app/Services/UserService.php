@@ -113,4 +113,87 @@ class UserService implements UserServiceInterface
 
         return $updatedUser;
     }
+
+    public function getPaginatedUsers(int $perPage = 15): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    {
+        return $this->userRepository->getPaginatedNonAdminUsers($perPage);
+    }
+
+    public function freezeUser(User $user, \App\DTOs\FreezeUserDTO $dto): User
+    {
+        $now = \Carbon\Carbon::now();
+
+        $frozenUntil = match ($dto->durationUnit) {
+            'hours' => $now->addHours($dto->durationValue),
+            'days' => $now->addDays($dto->durationValue),
+            'weeks' => $now->addWeeks($dto->durationValue),
+            'months' => $now->addMonths($dto->durationValue),
+            'years' => $now->addYears($dto->durationValue),
+        };
+
+        $this->userRepository->update($user->id, [
+            'frozen_until' => $frozenUntil,
+            'frozen_reason' => $dto->reason,
+        ]);
+
+        /** @var User $updatedUser */
+        $updatedUser = $this->userRepository->find($user->id);
+
+        return $updatedUser;
+    }
+
+    public function unfreezeUser(User $user): User
+    {
+        $this->userRepository->update($user->id, [
+            'frozen_until' => null,
+            'frozen_reason' => null,
+        ]);
+
+        /** @var User $updatedUser */
+        $updatedUser = $this->userRepository->find($user->id);
+
+        return $updatedUser;
+    }
+
+    public function deleteUser(User $user): bool
+    {
+        if ($user->avatar && ! filter_var($user->avatar, FILTER_VALIDATE_URL)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($user->avatar);
+        }
+
+        return $this->userRepository->delete($user->id);
+    }
+
+    public function findOrCreateFromFirebase(\App\DTOs\FirebaseAuthDTO $dto): User
+    {
+        $user = $this->userRepository->findByEmail($dto->email);
+
+        if ($user) {
+            return $user;
+        }
+
+        // Generate unique nickname candidate
+        $baseNickname = \Illuminate\Support\Str::slug(explode('@', $dto->email)[0], '');
+        if (empty($baseNickname)) {
+            $baseNickname = 'user';
+        }
+        $nickname = $baseNickname;
+        $counter = 1;
+        while ($this->userRepository->findByNicknameIgnoreCase($nickname)) {
+            $nickname = $baseNickname.$counter;
+            $counter++;
+        }
+
+        /** @var User $newUser */
+        $newUser = $this->userRepository->create([
+            'name' => $dto->name,
+            'nickname' => $nickname,
+            'email' => $dto->email,
+            'avatar' => $dto->avatar,
+            'password' => Hash::make(\Illuminate\Support\Str::random(32)),
+            'role' => UserRole::USER->value,
+        ]);
+
+        return $newUser;
+    }
 }

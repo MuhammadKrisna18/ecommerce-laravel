@@ -17,7 +17,20 @@ Route::middleware(['auth', 'verified', 'admin', 'prevent-back-history'])
 
         Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])
             ->name('settings.update');
+
+        // User account control routes
+        Route::post('/users/{user}/freeze', [\App\Http\Controllers\Admin\UserManagementController::class, 'freeze'])
+            ->name('users.freeze');
+        Route::post('/users/{user}/unfreeze', [\App\Http\Controllers\Admin\UserManagementController::class, 'unfreeze'])
+            ->name('users.unfreeze');
+        Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserManagementController::class, 'destroy'])
+            ->name('users.destroy');
     });
+
+// ── Frozen Notice route ──────────────────────────────────────────────────────
+Route::get('/account/frozen', \App\Http\Controllers\Auth\FrozenNoticeController::class)
+    ->name('frozen.notice')
+    ->middleware(['auth', 'prevent-back-history']);
 
 // ── User routes ───────────────────────────────────────────────────────────────
 Route::middleware(['auth', 'verified', 'user', 'prevent-back-history'])
