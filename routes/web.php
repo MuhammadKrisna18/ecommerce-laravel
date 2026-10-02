@@ -59,5 +59,18 @@ Route::middleware(['auth', 'verified', 'user'])
             ->name('settings.seller.upgrade');
     });
 
+Route::middleware(['auth', 'verified', 'seller'])
+    ->prefix('seller')
+    ->name('seller.')
+    ->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Seller\DashboardController::class, 'index'])
+            ->name('dashboard');
+        Route::get('/products', [\App\Http\Controllers\Seller\ProductController::class, 'index'])
+            ->name('products.index');
+        Route::get('/settings', [\App\Http\Controllers\Seller\SettingsController::class, 'index'])
+            ->name('settings.index');
+    });
+
 require __DIR__.'/auth.php';
+
 

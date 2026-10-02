@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { router } from '@inertiajs/react';
+import { router, Link } from '@inertiajs/react';
 import {
     Store,
     ShoppingBag,
@@ -212,13 +212,13 @@ export function SellerUpgradeCard({ user }) {
                         </p>
                     </div>
                     <div className="pt-2">
-                        <Button
-                            type="button"
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold px-6 shadow-sm"
+                        <Link
+                            href={route('seller.dashboard')}
+                            className="inline-flex items-center bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold px-6 py-2.5 shadow-sm transition-colors"
                         >
                             <Store className="w-4 h-4 mr-2" />
                             {t('Buka Tokped Seller Center')}
-                        </Button>
+                        </Link>
                     </div>
                 </div>
             ) : (
