@@ -55,7 +55,7 @@ export default function UserLayout({ header, children }) {
                             <span>
                                 {t('Role')}:{' '}
                                 <strong className="text-slate-800 font-semibold capitalize">
-                                    {auth.user.role === 'admin' ? t('Admin') : t('User')}
+                                    {auth.user.role === 'admin' ? t('Admin') : auth.user.role === 'seller' ? t('Seller') : t('User')}
                                 </strong>
                             </span>
                         </div>

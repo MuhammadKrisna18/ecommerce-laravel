@@ -11,10 +11,12 @@ import {
     Mail,
     CheckCircle,
     UserCheck,
+    Store,
 } from 'lucide-react';
 import { useTranslation } from '@/Hooks/useTranslation';
 import { SecurityCard } from '@/Features/User/Settings/SecurityCard';
 import { PreferencesCard } from '@/Features/User/Settings/PreferencesCard';
+import { SellerUpgradeCard } from '@/Features/User/Settings/SellerUpgradeCard';
 import { NotificationCard } from '@/Features/User/Settings/NotificationCard';
 import { PrivacyAndDangerCard } from '@/Features/User/Settings/PrivacyAndDangerCard';
 
@@ -28,6 +30,12 @@ export function UserSettingsContent({ user, authProvider, locale }) {
             name: t('Keamanan & Sandi'),
             icon: KeyRound,
             badge: null,
+        },
+        {
+            id: 'seller',
+            name: t('Buka Toko'),
+            icon: Store,
+            badge: user?.role === 'seller' ? t('Aktif') : t('Gratis'),
         },
         {
             id: 'preferences',
@@ -79,7 +87,7 @@ export function UserSettingsContent({ user, authProvider, locale }) {
                                 </h3>
                                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-primary/20 text-brand-accent border border-brand-accent/30">
                                     <UserCheck className="w-3 h-3" />
-                                    {user?.role === 'admin' ? t('Admin') : t('User')}
+                                    {user?.role === 'admin' ? t('Admin') : user?.role === 'seller' ? t('Seller') : t('User')}
                                 </span>
                             </div>
 
@@ -145,7 +153,18 @@ export function UserSettingsContent({ user, authProvider, locale }) {
                             )}
                             <span className="relative z-10 flex items-center gap-2">
                                 <Icon className={`w-4 h-4 ${isActive ? 'text-brand-primary' : 'text-slate-400'}`} />
-                                {tab.name}
+                                <span>{tab.name}</span>
+                                {tab.badge && (
+                                    <span
+                                        className={`ml-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider ${
+                                            tab.id === 'seller'
+                                                ? 'bg-emerald-100 text-emerald-700'
+                                                : 'bg-brand-primary/10 text-brand-primary'
+                                        }`}
+                                    >
+                                        {tab.badge}
+                                    </span>
+                                )}
                             </span>
                         </button>
                     );
@@ -162,6 +181,7 @@ export function UserSettingsContent({ user, authProvider, locale }) {
                     transition={{ duration: 0.25 }}
                 >
                     {activeTab === 'security' && <SecurityCard user={user} />}
+                    {activeTab === 'seller' && <SellerUpgradeCard user={user} />}
                     {activeTab === 'preferences' && <PreferencesCard locale={locale} />}
                     {activeTab === 'notifications' && <NotificationCard />}
                     {activeTab === 'privacy' && (
