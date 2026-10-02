@@ -4,13 +4,13 @@ namespace App\Actions\Admin;
 
 use App\DTOs\FreezeUserDTO;
 use App\Models\User;
-use App\Services\Contracts\Admin\AdminUserServiceInterface;
+use App\Services\Contracts\Admin\AdminUserManagementServiceInterface;
 
 class FreezeUserAction
 {
-    protected AdminUserServiceInterface $adminUserService;
+    protected AdminUserManagementServiceInterface $adminUserService;
 
-    public function __construct(AdminUserServiceInterface $adminUserService)
+    public function __construct(AdminUserManagementServiceInterface $adminUserService)
     {
         $this->adminUserService = $adminUserService;
     }

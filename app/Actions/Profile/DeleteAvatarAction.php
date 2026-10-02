@@ -3,13 +3,13 @@
 namespace App\Actions\Profile;
 
 use App\Models\User;
-use App\Services\Contracts\User\UserServiceInterface;
+use App\Services\Contracts\User\UserAvatarServiceInterface;
 
 class DeleteAvatarAction
 {
-    protected UserServiceInterface $userService;
+    protected UserAvatarServiceInterface $userService;
 
-    public function __construct(UserServiceInterface $userService)
+    public function __construct(UserAvatarServiceInterface $userService)
     {
         $this->userService = $userService;
     }

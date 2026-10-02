@@ -4,13 +4,13 @@ namespace App\Actions\User;
 
 use App\DTOs\UpdatePasswordDTO;
 use App\Models\User;
-use App\Services\Contracts\User\UserServiceInterface;
+use App\Services\Contracts\User\UserPasswordServiceInterface;
 
 class UpdatePasswordAction
 {
-    protected UserServiceInterface $userService;
+    protected UserPasswordServiceInterface $userService;
 
-    public function __construct(UserServiceInterface $userService)
+    public function __construct(UserPasswordServiceInterface $userService)
     {
         $this->userService = $userService;
     }

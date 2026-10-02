@@ -4,15 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
-use App\Services\Contracts\Admin\AdminUserServiceInterface;
+use App\Services\Contracts\Admin\AdminUserQueryServiceInterface;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    protected AdminUserServiceInterface $adminUserService;
+    protected AdminUserQueryServiceInterface $adminUserService;
 
-    public function __construct(AdminUserServiceInterface $adminUserService)
+    public function __construct(AdminUserQueryServiceInterface $adminUserService)
     {
         $this->adminUserService = $adminUserService;
     }

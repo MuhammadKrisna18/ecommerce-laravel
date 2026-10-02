@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Services\Contracts\Admin;
+
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+
+interface AdminUserQueryServiceInterface
+{
+    public function getUserList(string $role = 'user'): array;
+
+    public function getDashboardStats(): array;
+
+    public function getPaginatedUsers(int $perPage = 15): LengthAwarePaginator;
+}

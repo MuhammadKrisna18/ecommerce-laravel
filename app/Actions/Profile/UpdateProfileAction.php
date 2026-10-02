@@ -4,13 +4,13 @@ namespace App\Actions\Profile;
 
 use App\DTOs\UpdateProfileDTO;
 use App\Models\User;
-use App\Services\Contracts\User\UserServiceInterface;
+use App\Services\Contracts\User\UserProfileServiceInterface;
 
 class UpdateProfileAction
 {
-    protected UserServiceInterface $userService;
+    protected UserProfileServiceInterface $userService;
 
-    public function __construct(UserServiceInterface $userService)
+    public function __construct(UserProfileServiceInterface $userService)
     {
         $this->userService = $userService;
     }
