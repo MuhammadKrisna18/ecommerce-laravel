@@ -77,5 +77,8 @@
     "Autentikasi Dua Langkah (2FA)": "Two-Factor Authentication (2FA)",
     "Sesi & Perangkat Aktif": "Active Sessions & Devices",
     "Zona Bahaya": "Danger Zone",
-    "Unduh Salinan Data Akun": "Download Account Data Copy"
+    "Unduh Salinan Data Akun": "Download Account Data Copy",
+    "Kata sandi berhasil diperbarui.": "Password updated successfully.",
+    "Kata sandi saat ini tidak cocok.": "Current password does not match.",
+    "Konfirmasi kata sandi tidak cocok.": "Password confirmation does not match."
 }

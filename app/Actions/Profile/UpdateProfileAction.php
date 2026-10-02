@@ -4,7 +4,7 @@ namespace App\Actions\Profile;
 
 use App\DTOs\UpdateProfileDTO;
 use App\Models\User;
-use App\Services\Contracts\UserServiceInterface;
+use App\Services\Contracts\User\UserServiceInterface;
 
 class UpdateProfileAction
 {

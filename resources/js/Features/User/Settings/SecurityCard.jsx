@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useForm } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     KeyRound,
@@ -11,7 +12,6 @@ import {
     Smartphone,
     Laptop,
     LogOut,
-    AlertCircle,
     Info,
 } from 'lucide-react';
 import { Input } from '@/Components/ui/input';
@@ -20,7 +20,9 @@ import { Button } from '@/Components/ui/button';
 import { Switch } from '@/Components/ui/switch';
 import { CleanModal } from '@/Components/ui/CleanModal';
 import { Alert } from '@/Components/ui/alert';
+import { Spinner } from '@/Components/ui/spinner';
 import { useTranslation } from '@/Hooks/useTranslation';
+import { useFlash } from '@/Hooks/useFlash';
 
 function calculatePasswordStrength(pass) {
     if (!pass) return { score: 0, label: 'Kosong', color: 'bg-slate-200', text: 'text-slate-400' };
@@ -46,16 +48,12 @@ function calculatePasswordStrength(pass) {
 
 export function SecurityCard({ user }) {
     const { t } = useTranslation();
+    const { success: flashSuccess, error: flashError } = useFlash();
 
-    // Password fields state
-    const [currentPassword, setCurrentPassword] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    // Visibility toggles
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [isSavingPassword, setIsSavingPassword] = useState(false);
-    const [passwordFeedback, setPasswordFeedback] = useState(null);
 
     // 2FA state
     const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
@@ -66,38 +64,30 @@ export function SecurityCard({ user }) {
     const [showLogoutOtherModal, setShowLogoutOtherModal] = useState(false);
     const [sessionNotice, setSessionNotice] = useState(null);
 
-    const strength = calculatePasswordStrength(newPassword);
+    // Inertia form for password update
+    const {
+        data,
+        setData,
+        put,
+        processing,
+        errors,
+        reset,
+    } = useForm({
+        current_password: '',
+        password: '',
+        password_confirmation: '',
+    });
+
+    const strength = calculatePasswordStrength(data.password);
 
     const handlePasswordSubmit = (e) => {
         e.preventDefault();
-        setPasswordFeedback(null);
-
-        if (!currentPassword) {
-            setPasswordFeedback({ type: 'danger', message: t('Harap masukkan kata sandi saat ini.') });
-            return;
-        }
-
-        if (newPassword.length < 8) {
-            setPasswordFeedback({ type: 'danger', message: t('Kata sandi baru minimal harus 8 karakter.') });
-            return;
-        }
-
-        if (newPassword !== confirmPassword) {
-            setPasswordFeedback({ type: 'danger', message: t('Konfirmasi kata sandi tidak cocok dengan kata sandi baru.') });
-            return;
-        }
-
-        setIsSavingPassword(true);
-        setTimeout(() => {
-            setIsSavingPassword(false);
-            setCurrentPassword('');
-            setNewPassword('');
-            setConfirmPassword('');
-            setPasswordFeedback({
-                type: 'success',
-                message: t('Kata sandi Anda berhasil diperbarui dengan standar enkripsi aman.'),
-            });
-        }, 800);
+        put(route('user.settings.password.update'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                reset();
+            },
+        });
     };
 
     const handleToggleTwoFactor = (checked) => {
@@ -148,16 +138,24 @@ export function SecurityCard({ user }) {
                 </div>
 
                 <form onSubmit={handlePasswordSubmit} className="p-6 sm:p-8 space-y-6">
+                    {/* Flash messages from backend */}
                     <AnimatePresence>
-                        {passwordFeedback && (
+                        {flashSuccess && (
                             <motion.div
                                 initial={{ opacity: 0, y: -8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0 }}
                             >
-                                <Alert variant={passwordFeedback.type}>
-                                    {passwordFeedback.message}
-                                </Alert>
+                                <Alert variant="success">{flashSuccess}</Alert>
+                            </motion.div>
+                        )}
+                        {flashError && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0 }}
+                            >
+                                <Alert variant="danger">{flashError}</Alert>
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -175,10 +173,12 @@ export function SecurityCard({ user }) {
                             <Input
                                 id="current_password"
                                 type={showCurrentPassword ? 'text' : 'password'}
-                                value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
+                                value={data.current_password}
+                                onChange={(e) => setData('current_password', e.target.value)}
                                 placeholder={t('Masukkan kata sandi lama Anda')}
-                                className="h-11 pr-11 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm"
+                                className={`h-11 pr-11 bg-white text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm ${
+                                    errors.current_password ? 'border-rose-400' : 'border-slate-200'
+                                }`}
                             />
                             <button
                                 type="button"
@@ -192,6 +192,11 @@ export function SecurityCard({ user }) {
                                 )}
                             </button>
                         </div>
+                        {errors.current_password && (
+                            <p className="text-xs text-rose-500 font-medium">
+                                {errors.current_password}
+                            </p>
+                        )}
                     </div>
 
                     {/* Grid New & Confirm Password */}
@@ -199,7 +204,7 @@ export function SecurityCard({ user }) {
                         {/* New Password */}
                         <div className="space-y-2">
                             <Label
-                                htmlFor="new_password"
+                                htmlFor="password"
                                 className="text-xs font-semibold text-slate-700 flex items-center gap-1.5"
                             >
                                 <Lock className="w-3.5 h-3.5 text-brand-primary" />
@@ -207,12 +212,14 @@ export function SecurityCard({ user }) {
                             </Label>
                             <div className="relative">
                                 <Input
-                                    id="new_password"
+                                    id="password"
                                     type={showNewPassword ? 'text' : 'password'}
-                                    value={newPassword}
-                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    value={data.password}
+                                    onChange={(e) => setData('password', e.target.value)}
                                     placeholder={t('Minimal 8 karakter kombinasi')}
-                                    className="h-11 pr-11 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm"
+                                    className={`h-11 pr-11 bg-white text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm ${
+                                        errors.password ? 'border-rose-400' : 'border-slate-200'
+                                    }`}
                                 />
                                 <button
                                     type="button"
@@ -226,9 +233,14 @@ export function SecurityCard({ user }) {
                                     )}
                                 </button>
                             </div>
+                            {errors.password && (
+                                <p className="text-xs text-rose-500 font-medium">
+                                    {errors.password}
+                                </p>
+                            )}
 
                             {/* Password Strength Indicator */}
-                            {newPassword && (
+                            {data.password && (
                                 <motion.div
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
@@ -257,7 +269,7 @@ export function SecurityCard({ user }) {
                         {/* Confirm Password */}
                         <div className="space-y-2">
                             <Label
-                                htmlFor="confirm_password"
+                                htmlFor="password_confirmation"
                                 className="text-xs font-semibold text-slate-700 flex items-center gap-1.5"
                             >
                                 <Lock className="w-3.5 h-3.5 text-brand-primary" />
@@ -265,12 +277,14 @@ export function SecurityCard({ user }) {
                             </Label>
                             <div className="relative">
                                 <Input
-                                    id="confirm_password"
+                                    id="password_confirmation"
                                     type={showConfirmPassword ? 'text' : 'password'}
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    value={data.password_confirmation}
+                                    onChange={(e) => setData('password_confirmation', e.target.value)}
                                     placeholder={t('Ulangi kata sandi baru')}
-                                    className="h-11 pr-11 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm"
+                                    className={`h-11 pr-11 bg-white text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm ${
+                                        errors.password_confirmation ? 'border-rose-400' : 'border-slate-200'
+                                    }`}
                                 />
                                 <button
                                     type="button"
@@ -284,17 +298,22 @@ export function SecurityCard({ user }) {
                                     )}
                                 </button>
                             </div>
+                            {errors.password_confirmation && (
+                                <p className="text-xs text-rose-500 font-medium">
+                                    {errors.password_confirmation}
+                                </p>
+                            )}
 
                             {/* Match check badge */}
-                            {confirmPassword && (
+                            {data.password_confirmation && (
                                 <p
                                     className={`text-[11px] flex items-center gap-1 font-medium pt-1 ${
-                                        newPassword === confirmPassword
+                                        data.password === data.password_confirmation
                                             ? 'text-emerald-600'
                                             : 'text-rose-500'
                                     }`}
                                 >
-                                    {newPassword === confirmPassword ? (
+                                    {data.password === data.password_confirmation ? (
                                         <>
                                             <CheckCircle2 className="w-3.5 h-3.5" />
                                             {t('Kata sandi cocok')}
@@ -315,7 +334,7 @@ export function SecurityCard({ user }) {
                         <div className="flex items-center gap-2">
                             <div
                                 className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
-                                    newPassword.length >= 8
+                                    data.password.length >= 8
                                         ? 'bg-emerald-100 text-emerald-600'
                                         : 'bg-slate-200 text-slate-400'
                                 }`}
@@ -327,7 +346,7 @@ export function SecurityCard({ user }) {
                         <div className="flex items-center gap-2">
                             <div
                                 className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
-                                    /\d/.test(newPassword)
+                                    /\d/.test(data.password)
                                         ? 'bg-emerald-100 text-emerald-600'
                                         : 'bg-slate-200 text-slate-400'
                                 }`}
@@ -339,7 +358,7 @@ export function SecurityCard({ user }) {
                         <div className="flex items-center gap-2">
                             <div
                                 className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
-                                    /[^A-Za-z0-9]/.test(newPassword)
+                                    /[^A-Za-z0-9]/.test(data.password)
                                         ? 'bg-emerald-100 text-emerald-600'
                                         : 'bg-slate-200 text-slate-400'
                                 }`}
@@ -360,15 +379,20 @@ export function SecurityCard({ user }) {
                         <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
                             <Button
                                 type="submit"
-                                disabled={isSavingPassword}
+                                disabled={processing}
                                 className="h-11 px-6 bg-brand-primary hover:bg-brand-dark text-white font-medium rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.25)] transition-colors duration-200 flex items-center gap-2"
                             >
-                                <KeyRound className="w-4 h-4" />
-                                <span>
-                                    {isSavingPassword
-                                        ? t('Menyimpan Sandi...')
-                                        : t('Perbarui Kata Sandi')}
-                                </span>
+                                {processing ? (
+                                    <>
+                                        <Spinner size="sm" color="white" />
+                                        <span>{t('Menyimpan Sandi...')}</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <KeyRound className="w-4 h-4" />
+                                        <span>{t('Perbarui Kata Sandi')}</span>
+                                    </>
+                                )}
                             </Button>
                         </motion.div>
                     </div>

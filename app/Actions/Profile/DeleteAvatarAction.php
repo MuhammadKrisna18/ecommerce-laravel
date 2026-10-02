@@ -3,7 +3,7 @@
 namespace App\Actions\Profile;
 
 use App\Models\User;
-use App\Services\Contracts\UserServiceInterface;
+use App\Services\Contracts\User\UserServiceInterface;
 
 class DeleteAvatarAction
 {

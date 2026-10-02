@@ -4,19 +4,19 @@ namespace App\Actions\Admin;
 
 use App\DTOs\FreezeUserDTO;
 use App\Models\User;
-use App\Services\Contracts\UserServiceInterface;
+use App\Services\Contracts\Admin\AdminUserServiceInterface;
 
 class FreezeUserAction
 {
-    protected UserServiceInterface $userService;
+    protected AdminUserServiceInterface $adminUserService;
 
-    public function __construct(UserServiceInterface $userService)
+    public function __construct(AdminUserServiceInterface $adminUserService)
     {
-        $this->userService = $userService;
+        $this->adminUserService = $adminUserService;
     }
 
     public function execute(User $user, FreezeUserDTO $dto): User
     {
-        return $this->userService->freezeUser($user, $dto);
+        return $this->adminUserService->freezeUser($user, $dto);
     }
 }

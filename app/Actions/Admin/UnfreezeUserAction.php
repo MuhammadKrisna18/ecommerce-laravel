@@ -3,19 +3,19 @@
 namespace App\Actions\Admin;
 
 use App\Models\User;
-use App\Services\Contracts\UserServiceInterface;
+use App\Services\Contracts\Admin\AdminUserServiceInterface;
 
 class UnfreezeUserAction
 {
-    protected UserServiceInterface $userService;
+    protected AdminUserServiceInterface $adminUserService;
 
-    public function __construct(UserServiceInterface $userService)
+    public function __construct(AdminUserServiceInterface $adminUserService)
     {
-        $this->userService = $userService;
+        $this->adminUserService = $adminUserService;
     }
 
     public function execute(User $user): User
     {
-        return $this->userService->unfreezeUser($user);
+        return $this->adminUserService->unfreezeUser($user);
     }
 }

@@ -5,18 +5,18 @@ namespace App\Http\Controllers\Auth;
 use App\DTOs\FirebaseAuthDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\FirebaseLoginRequest;
-use App\Services\Contracts\UserServiceInterface;
+use App\Services\Contracts\Auth\AuthServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class FirebaseAuthController extends Controller
 {
-    protected UserServiceInterface $userService;
+    protected AuthServiceInterface $authService;
 
-    public function __construct(UserServiceInterface $userService)
+    public function __construct(AuthServiceInterface $authService)
     {
-        $this->userService = $userService;
+        $this->authService = $authService;
     }
 
     /**
@@ -26,7 +26,7 @@ class FirebaseAuthController extends Controller
     {
         try {
             $dto = FirebaseAuthDTO::fromArray($request->validated());
-            $user = $this->userService->findOrCreateFromFirebase($dto);
+            $user = $this->authService->findOrCreateFromFirebase($dto);
 
             // Log the user in to the Laravel session
             Auth::login($user, true);

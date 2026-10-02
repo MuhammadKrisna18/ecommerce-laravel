@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Actions\Profile;
+namespace App\Actions\User;
 
+use App\DTOs\UpdatePasswordDTO;
 use App\Models\User;
 use App\Services\Contracts\User\UserServiceInterface;
-use Illuminate\Http\UploadedFile;
 
-class UpdateAvatarAction
+class UpdatePasswordAction
 {
     protected UserServiceInterface $userService;
 
@@ -15,8 +15,8 @@ class UpdateAvatarAction
         $this->userService = $userService;
     }
 
-    public function execute(User $user, UploadedFile $file): User
+    public function execute(User $user, UpdatePasswordDTO $dto): User
     {
-        return $this->userService->updateAvatar($user, $file);
+        return $this->userService->updatePassword($user, $dto->password);
     }
 }

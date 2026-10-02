@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Actions\User\UpdatePasswordAction;
+use App\DTOs\UpdatePasswordDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UpdatePasswordRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -29,5 +33,19 @@ class SettingsController extends Controller
             'authProvider' => str_contains($user->email ?? '', '@gmail.com') ? 'google' : 'email',
             'locale' => app()->getLocale(),
         ]);
+    }
+
+    /**
+     * Update the user password.
+     */
+    public function updatePassword(
+        UpdatePasswordRequest $request,
+        UpdatePasswordAction $updatePasswordAction
+    ): RedirectResponse {
+        $dto = UpdatePasswordDTO::fromArray($request->validated());
+
+        $updatePasswordAction->execute($request->user(), $dto);
+
+        return redirect()->back()->with('success', __('Kata sandi berhasil diperbarui.'));
     }
 }

@@ -51,6 +51,8 @@ Route::middleware(['auth', 'verified', 'user'])
 
         Route::get('/settings', [\App\Http\Controllers\User\SettingsController::class, 'index'])
             ->name('settings.index');
+        Route::put('/settings/password', [\App\Http\Controllers\User\SettingsController::class, 'updatePassword'])
+            ->name('settings.password.update');
     });
 
 require __DIR__.'/auth.php';
