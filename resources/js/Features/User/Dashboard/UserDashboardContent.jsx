@@ -28,14 +28,18 @@ export function UserDashboardContent() {
                     <div className="relative z-10 space-y-3 max-w-2xl">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 border border-white/30 text-white text-xs font-semibold backdrop-blur-sm">
                             <Sparkles className="w-3.5 h-3.5 text-brand-accent" />
-                            <span>Area Pengguna Tokped</span>
+                            <span>{t('Area Pengguna Tokped')}</span>
                         </div>
                         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-                            Halo, <span>{displayName}</span> 👋
+                            {t('Halo')}, <span>{displayName}</span> 👋
                         </h1>
                         <p className="text-sm text-sky-100 leading-relaxed">
-                            Akun Anda telah aktif sebagai <strong className="text-white underline decoration-brand-accent underline-offset-4 font-bold">User</strong>.
-                            Halaman ini disiapkan untuk fitur belanja, transaksi, dan aktivitas Anda selanjutnya.
+                            {t('Akun Anda telah aktif sebagai')}{' '}
+                            <strong className="text-white underline decoration-brand-accent underline-offset-4 font-bold">
+                                {t('User')}
+                            </strong>
+                            .{' '}
+                            {t('Halaman ini disiapkan untuk fitur belanja, transaksi, dan aktivitas Anda selanjutnya.')}
                         </p>
                     </div>
                 </div>
@@ -66,7 +70,7 @@ export function UserDashboardContent() {
                                 {user?.nickname ? `@${user.nickname}` : user?.email}
                             </p>
                             <p className="text-xs text-slate-400 mt-1">
-                                {user?.address ? user.address : 'Alamat belum diatur'}
+                                {user?.address ? user.address : t('Alamat belum diatur')}
                             </p>
                         </div>
                     </div>
@@ -91,15 +95,14 @@ export function UserDashboardContent() {
                         <ShoppingBag className="w-8 h-8" />
                     </div>
                     <h3 className="text-lg font-bold text-slate-800 tracking-tight">
-                        Halaman Dashboard User Masih Kosong
+                        {t('Halaman Dashboard User Masih Kosong')}
                     </h3>
                     <p className="text-xs sm:text-sm text-slate-500 mt-2 max-w-md mx-auto leading-relaxed">
-                        Belum ada modul atau aktivitas yang ditampilkan saat ini. Modul pesanan,
-                        riwayat belanja, dan fitur user lainnya dapat ditambahkan pada langkah berikutnya.
+                        {t('Belum ada modul atau aktivitas yang ditampilkan saat ini. Modul pesanan, riwayat belanja, dan fitur user lainnya dapat ditambahkan pada langkah berikutnya.')}
                     </p>
                     <div className="mt-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 font-medium">
                         <Clock className="w-3.5 h-3.5 text-brand-primary" />
-                        <span>Status: Siap untuk pengembangan modul selanjutnya</span>
+                        <span>{t('Status: Siap untuk pengembangan modul selanjutnya')}</span>
                     </div>
                 </div>
             </motion.div>

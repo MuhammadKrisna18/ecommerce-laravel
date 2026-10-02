@@ -53,9 +53,9 @@ export default function UserLayout({ header, children }) {
                         <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-accent/20 border border-brand-primary/30 text-xs text-brand-primary">
                             <UserIcon className="w-3.5 h-3.5 text-brand-primary" />
                             <span>
-                                Role:{' '}
+                                {t('Role')}:{' '}
                                 <strong className="text-slate-800 font-semibold capitalize">
-                                    {auth.user.role || 'User'}
+                                    {auth.user.role === 'admin' ? t('Admin') : t('User')}
                                 </strong>
                             </span>
                         </div>

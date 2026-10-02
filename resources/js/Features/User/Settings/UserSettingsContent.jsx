@@ -79,7 +79,7 @@ export function UserSettingsContent({ user, authProvider, locale }) {
                                 </h3>
                                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-primary/20 text-brand-accent border border-brand-accent/30">
                                     <UserCheck className="w-3 h-3" />
-                                    {user?.role || 'User'}
+                                    {user?.role === 'admin' ? t('Admin') : t('User')}
                                 </span>
                             </div>
 

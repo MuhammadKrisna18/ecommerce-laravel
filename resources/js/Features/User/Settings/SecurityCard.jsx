@@ -9,15 +9,12 @@ import {
     ShieldCheck,
     CheckCircle2,
     XCircle,
-    Smartphone,
     Laptop,
     LogOut,
-    Info,
 } from 'lucide-react';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
-import { Switch } from '@/Components/ui/switch';
 import { CleanModal } from '@/Components/ui/CleanModal';
 import { Alert } from '@/Components/ui/alert';
 import { Spinner } from '@/Components/ui/spinner';
@@ -55,11 +52,6 @@ export function SecurityCard({ user }) {
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    // 2FA state
-    const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
-    const [showTwoFactorModal, setShowTwoFactorModal] = useState(false);
-    const [twoFactorNotice, setTwoFactorNotice] = useState(null);
-
     // Sessions modal
     const [showLogoutOtherModal, setShowLogoutOtherModal] = useState(false);
     const [sessionNotice, setSessionNotice] = useState(null);
@@ -90,32 +82,11 @@ export function SecurityCard({ user }) {
         });
     };
 
-    const handleToggleTwoFactor = (checked) => {
-        if (checked) {
-            setShowTwoFactorModal(true);
-        } else {
-            setTwoFactorEnabled(false);
-            setTwoFactorNotice({
-                type: 'info',
-                message: t('Verifikasi dua langkah (2FA) telah dinonaktifkan.'),
-            });
-        }
-    };
-
-    const confirmEnableTwoFactor = () => {
-        setTwoFactorEnabled(true);
-        setShowTwoFactorModal(false);
-        setTwoFactorNotice({
-            type: 'success',
-            message: t('Autentikasi Dua Langkah (2FA) berhasil diaktifkan untuk akun Anda.'),
-        });
-    };
-
     const confirmLogoutOtherSessions = () => {
         setShowLogoutOtherModal(false);
         setSessionNotice({
             type: 'success',
-            message: t('Semua sesi login di perangkat lain telah berhasil dihentikan.'),
+            message: t('Semua sesi di perangkat lain telah berhasil dihentikan.'),
         });
     };
 
@@ -399,55 +370,6 @@ export function SecurityCard({ user }) {
                 </form>
             </div>
 
-            {/* Autentikasi Dua Langkah (2FA) */}
-            <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-6 sm:p-8">
-                <AnimatePresence>
-                    {twoFactorNotice && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0 }}
-                            className="mb-4"
-                        >
-                            <Alert variant={twoFactorNotice.type}>
-                                {twoFactorNotice.message}
-                            </Alert>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="flex items-start gap-3.5">
-                        <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-brand-primary shrink-0">
-                            <Smartphone className="w-5 h-5" />
-                        </div>
-                        <div>
-                            <div className="flex items-center gap-2">
-                                <h4 className="text-base font-bold text-slate-800">
-                                    {t('Autentikasi Dua Langkah (2FA)')}
-                                </h4>
-                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-200">
-                                    {t('Disarankan')}
-                                </span>
-                            </div>
-                            <p className="text-xs text-slate-500 mt-1 max-w-xl">
-                                {t('Tambahkan lapisan keamanan ekstra pada akun Anda dengan memverifikasi kode OTP setiap kali masuk dari perangkat baru.')}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 self-end sm:self-center">
-                        <span className="text-xs font-semibold text-slate-600">
-                            {twoFactorEnabled ? t('Aktif') : t('Nonaktif')}
-                        </span>
-                        <Switch
-                            checked={twoFactorEnabled}
-                            onChange={handleToggleTwoFactor}
-                            aria-label={t('Aktifkan 2FA')}
-                        />
-                    </div>
-                </div>
-            </div>
 
             {/* Sesi & Perangkat Aktif */}
             <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-6 sm:p-8 space-y-4">
@@ -515,60 +437,22 @@ export function SecurityCard({ user }) {
                 </div>
             </div>
 
-            {/* Modal Konfirmasi 2FA */}
-            <CleanModal
-                open={showTwoFactorModal}
-                onClose={() => setShowTwoFactorModal(false)}
-                title={t('Aktifkan Autentikasi 2 Langkah')}
-                description={t('Perlindungan ganda untuk akun Tokped Anda')}
-                icon={Smartphone}
-                size="md"
-            >
-                <div className="p-6 space-y-4">
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                        {t('Dengan mengaktifkan fitur ini, Anda akan diminta memasukkan kode verifikasi 6-digit saat melakukan login dari peramban atau perangkat baru.')}
-                    </p>
-
-                    <div className="p-4 rounded-2xl bg-sky-50/80 border border-sky-100 flex items-start gap-3 text-xs text-sky-800">
-                        <Info className="w-4 h-4 text-brand-primary shrink-0 mt-0.5" />
-                        <span>
-                            {t('Metode verifikasi default akan dikirimkan ke email terdaftar Anda:')}{' '}
-                            <strong className="font-semibold">{user.email}</strong>
-                        </span>
-                    </div>
-
-                    <div className="flex items-center justify-end gap-3 pt-3">
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            onClick={() => setShowTwoFactorModal(false)}
-                            className="rounded-xl"
-                        >
-                            {t('Batal')}
-                        </Button>
-                        <Button
-                            type="button"
-                            onClick={confirmEnableTwoFactor}
-                            className="bg-brand-primary hover:bg-brand-dark text-white rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.25)]"
-                        >
-                            {t('Aktifkan Sekarang')}
-                        </Button>
-                    </div>
-                </div>
-            </CleanModal>
 
             {/* Modal Logout Perangkat Lain */}
             <CleanModal
                 open={showLogoutOtherModal}
                 onClose={() => setShowLogoutOtherModal(false)}
-                title={t('Keluar dari Perangkat Lain')}
-                description={t('Hentikan semua sesi aktif selain browser ini')}
+                title={t('Keluar dari Semua Perangkat Lain')}
+                description={t('Keluar dari Perangkat Lain')}
                 icon={LogOut}
                 size="sm"
             >
                 <div className="p-6 space-y-4">
                     <p className="text-sm text-slate-600 leading-relaxed">
-                        {t('Tindakan ini akan mengakhiri semua sesi login aktif di komputer, ponsel, atau tablet lain. Sesi di peramban ini akan tetap aktif.')}
+                        {t('Tindakan ini akan mengakhiri semua sesi login aktif di komputer, ponsel, atau browser lain kecuali perangkat ini.')}
+                    </p>
+                    <p className="text-xs text-slate-500 font-medium">
+                        {t('Apakah Anda yakin ingin melanjutkan?')}
                     </p>
 
                     <div className="flex items-center justify-end gap-3 pt-2">
@@ -585,7 +469,7 @@ export function SecurityCard({ user }) {
                             onClick={confirmLogoutOtherSessions}
                             className="bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-xs"
                         >
-                            {t('Ya, Keluar Semua')}
+                            {t('Ya, Keluarkan Perangkat Lain')}
                         </Button>
                     </div>
                 </div>

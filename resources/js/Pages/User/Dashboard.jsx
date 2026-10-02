@@ -14,7 +14,7 @@ export default function UserDashboard() {
                         {t('Dashboard Pengguna')}
                     </h2>
                     <span className="text-xs text-slate-500 font-normal">
-                        Selamat datang di area dashboard akun Anda
+                        {t('Selamat datang di area dashboard akun Anda')}
                     </span>
                 </div>
             }

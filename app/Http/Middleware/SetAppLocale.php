@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Constants\SettingKey;
+use App\Enums\AppLocale;
 use App\Services\Contracts\SettingServiceInterface;
 use Closure;
 use Illuminate\Http\Request;
@@ -20,7 +21,15 @@ class SetAppLocale
 
     public function handle(Request $request, Closure $next): Response
     {
-        $language = $this->settingService->getSetting(SettingKey::APP_LANGUAGE, config('app.locale'));
+        $user = $request->user();
+
+        $language = $request->session()->get('locale')
+            ?? $user?->locale
+            ?? $this->settingService->getSetting(SettingKey::APP_LANGUAGE, config('app.locale'));
+
+        if (! in_array($language, AppLocale::values(), true)) {
+            $language = config('app.locale');
+        }
 
         App::setLocale($language);
 

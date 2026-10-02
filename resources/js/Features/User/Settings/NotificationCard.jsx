@@ -6,7 +6,6 @@ import {
     Tag,
     ShieldAlert,
     Mail,
-    Smartphone,
     Monitor,
     Check,
 } from 'lucide-react';
@@ -50,7 +49,6 @@ export function NotificationCard() {
         promotions: true,
         securityAlerts: true,
         channelEmail: true,
-        channelWhatsapp: false,
         channelPush: true,
     });
 
@@ -143,13 +141,6 @@ export function NotificationCard() {
                                 onChange={handleToggle('channelEmail')}
                             />
 
-                            <NotificationRow
-                                icon={Smartphone}
-                                title={t('Notifikasi WhatsApp / SMS')}
-                                description={t('Kirimkan pemberitahuan instan langsung ke nomor telepon seluler Anda.')}
-                                checked={settings.channelWhatsapp}
-                                onChange={handleToggle('channelWhatsapp')}
-                            />
 
                             <NotificationRow
                                 icon={Monitor}

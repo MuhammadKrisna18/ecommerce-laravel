@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Actions\User\UpdateLocaleAction;
 use App\Actions\User\UpdatePasswordAction;
+use App\DTOs\UpdateLocaleDTO;
 use App\DTOs\UpdatePasswordDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UpdateLocaleRequest;
 use App\Http\Requests\User\UpdatePasswordRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -47,5 +50,19 @@ class SettingsController extends Controller
         $updatePasswordAction->execute($request->user(), $dto);
 
         return redirect()->back()->with('success', __('Kata sandi berhasil diperbarui.'));
+    }
+
+    /**
+     * Update the user interface language preference.
+     */
+    public function updateLocale(
+        UpdateLocaleRequest $request,
+        UpdateLocaleAction $updateLocaleAction
+    ): RedirectResponse {
+        $dto = UpdateLocaleDTO::fromArray($request->validated());
+
+        $updateLocaleAction->execute($request->user(), $dto);
+
+        return redirect()->back()->with('success', __('Preferensi bahasa berhasil diperbarui.'));
     }
 }

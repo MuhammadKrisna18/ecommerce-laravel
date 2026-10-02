@@ -15,6 +15,8 @@ import {
 import { useTranslation } from '@/Hooks/useTranslation';
 
 function InfoItem({ icon: Icon, label, value, helper }) {
+    const { t } = useTranslation();
+
     return (
         <div className="space-y-1.5 p-4 rounded-2xl bg-slate-50/80 border border-slate-100 hover:border-slate-200 transition-colors">
             <span className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
@@ -26,7 +28,7 @@ function InfoItem({ icon: Icon, label, value, helper }) {
                     value
                 ) : (
                     <span className="text-slate-400 italic text-xs font-normal">
-                        Belum diatur
+                        {t('Belum diatur')}
                     </span>
                 )}
             </div>

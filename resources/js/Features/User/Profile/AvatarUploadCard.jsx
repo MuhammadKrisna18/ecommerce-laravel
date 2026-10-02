@@ -20,13 +20,13 @@ export function AvatarUploadCard({ user }) {
 
         // Validation max 2MB
         if (file.size > 2 * 1024 * 1024) {
-            setErrorMessage('Ukuran file maksimal 2MB.');
+            setErrorMessage(t('Ukuran file maksimal 2MB.'));
             return;
         }
 
         // Validate image mime
         if (!['image/jpeg', 'image/png', 'image/jpg', 'image/webp'].includes(file.type)) {
-            setErrorMessage('Format gambar harus JPG, PNG, atau WEBP.');
+            setErrorMessage(t('Format gambar harus JPG, PNG, atau WEBP.'));
             return;
         }
 
@@ -55,7 +55,7 @@ export function AvatarUploadCard({ user }) {
             },
             onError: (errs) => {
                 setIsUploading(false);
-                setErrorMessage(errs.avatar || 'Gagal mengunggah foto profil.');
+                setErrorMessage(errs.avatar || t('Gagal mengunggah foto profil.'));
             },
         });
     };
@@ -70,7 +70,7 @@ export function AvatarUploadCard({ user }) {
     };
 
     const handleDeleteAvatar = () => {
-        if (!confirm('Apakah Anda yakin ingin menghapus foto profil?')) return;
+        if (!confirm(t('Apakah Anda yakin ingin menghapus foto profil?'))) return;
 
         setIsDeleting(true);
         router.delete(route('user.profile.avatar.destroy'), {

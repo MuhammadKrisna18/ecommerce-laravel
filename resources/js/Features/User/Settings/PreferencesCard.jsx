@@ -1,14 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Globe,
-    Clock,
-    Coins,
-    Calendar,
     Check,
-    Save,
-    CheckCircle2,
     SlidersHorizontal,
+    Loader2,
 } from 'lucide-react';
 import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
@@ -23,35 +19,17 @@ export function PreferencesCard({ locale: initialLocale }) {
     const [selectedLocale, setSelectedLocale] = useState(initialLocale || currentLocale || 'id');
     const [pendingLocale, setPendingLocale] = useState(null);
     const [showLangModal, setShowLangModal] = useState(false);
-
-    const [timezone, setTimezone] = useState('Asia/Jakarta');
-    const [currency, setCurrency] = useState('IDR');
-    const [dateFormat, setDateFormat] = useState('DD/MM/YYYY');
-    const [isSavingPreferences, setIsSavingPreferences] = useState(false);
+    const [isUpdatingLocale, setIsUpdatingLocale] = useState(false);
     const [feedback, setFeedback] = useState(null);
+
+    useEffect(() => {
+        setSelectedLocale(initialLocale || currentLocale || 'id');
+    }, [initialLocale, currentLocale]);
 
     const languages = [
         { code: 'id', name: 'Bahasa Indonesia', native: 'Bahasa Indonesia', flag: '🇮🇩' },
         { code: 'en', name: 'English (US)', native: 'English', flag: '🇺🇸' },
         { code: 'es', name: 'Español', native: 'Español', flag: '🇪🇸' },
-    ];
-
-    const timezones = [
-        { code: 'Asia/Jakarta', label: 'WIB - Waktu Indonesia Barat (UTC+07:00)' },
-        { code: 'Asia/Makassar', label: 'WITA - Waktu Indonesia Tengah (UTC+08:00)' },
-        { code: 'Asia/Jayapura', label: 'WIT - Waktu Indonesia Timur (UTC+09:00)' },
-    ];
-
-    const currencies = [
-        { code: 'IDR', symbol: 'Rp', name: 'Rupiah Indonesia' },
-        { code: 'USD', symbol: '$', name: 'US Dollar' },
-        { code: 'EUR', symbol: '€', name: 'Euro' },
-    ];
-
-    const dateFormats = [
-        { format: 'DD/MM/YYYY', example: '25/12/2026' },
-        { format: 'YYYY-MM-DD', example: '2026-12-25' },
-        { format: 'DD MMMM YYYY', example: '25 Desember 2026' },
     ];
 
     const handleSelectLanguage = (code) => {
@@ -62,26 +40,33 @@ export function PreferencesCard({ locale: initialLocale }) {
     };
 
     const confirmLanguageChange = () => {
-        if (pendingLocale) {
-            setSelectedLocale(pendingLocale);
-            setShowLangModal(false);
-            setFeedback({
-                type: 'success',
-                message: t('Preferensi bahasa berhasil diperbarui. Antarmuka akan dimuat ulang.'),
-            });
-        }
-    };
+        if (!pendingLocale || isUpdatingLocale) return;
 
-    const handleSavePreferences = (e) => {
-        e.preventDefault();
-        setIsSavingPreferences(true);
-        setTimeout(() => {
-            setIsSavingPreferences(false);
-            setFeedback({
-                type: 'success',
-                message: t('Pengaturan preferensi tampilan dan regional berhasil disimpan.'),
-            });
-        }, 600);
+        setIsUpdatingLocale(true);
+        router.put(
+            route('user.settings.locale.update'),
+            { locale: pendingLocale },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setSelectedLocale(pendingLocale);
+                    setShowLangModal(false);
+                    setIsUpdatingLocale(false);
+                    setFeedback({
+                        type: 'success',
+                        message: t('Preferensi bahasa berhasil diperbarui.'),
+                    });
+                },
+                onError: (errors) => {
+                    setIsUpdatingLocale(false);
+                    setShowLangModal(false);
+                    setFeedback({
+                        type: 'error',
+                        message: errors?.locale || t('Gagal menyimpan pengaturan.'),
+                    });
+                },
+            }
+        );
     };
 
     return (
@@ -97,12 +82,12 @@ export function PreferencesCard({ locale: initialLocale }) {
                             {t('Preferensi & Tampilan')}
                         </h3>
                         <p className="text-xs text-slate-500 mt-0.5">
-                            {t('Sesuaikan bahasa antarmuka, zona waktu, dan format regional akun Anda')}
+                            {t('Pilih bahasa utama yang ingin Anda gunakan untuk menjelajahi platform Tokped')}
                         </p>
                     </div>
                 </div>
 
-                <div className="p-6 sm:p-8 space-y-8">
+                <div className="p-6 sm:p-8 space-y-6">
                     <AnimatePresence>
                         {feedback && (
                             <motion.div
@@ -121,9 +106,6 @@ export function PreferencesCard({ locale: initialLocale }) {
                             <Globe className="w-3.5 h-3.5 text-brand-primary" />
                             {t('Bahasa Sistem / Interface')}
                         </Label>
-                        <p className="text-xs text-slate-400">
-                            {t('Pilih bahasa utama yang ingin Anda gunakan untuk menjelajahi platform Tokped')}
-                        </p>
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                             {languages.map((lang) => {
@@ -158,108 +140,6 @@ export function PreferencesCard({ locale: initialLocale }) {
                             })}
                         </div>
                     </div>
-
-                    <div className="h-px bg-slate-100" />
-
-                    {/* Zona Waktu & Mata Uang */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Zona Waktu */}
-                        <div className="space-y-2">
-                            <Label
-                                htmlFor="timezone"
-                                className="text-xs font-semibold text-slate-700 flex items-center gap-1.5"
-                            >
-                                <Clock className="w-3.5 h-3.5 text-brand-primary" />
-                                {t('Zona Waktu')}
-                            </Label>
-                            <select
-                                id="timezone"
-                                value={timezone}
-                                onChange={(e) => setTimezone(e.target.value)}
-                                className="w-full h-11 rounded-xl bg-white border border-slate-200 px-3.5 text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer shadow-sm"
-                            >
-                                {timezones.map((tz) => (
-                                    <option key={tz.code} value={tz.code}>
-                                        {tz.label}
-                                    </option>
-                                ))}
-                            </select>
-                            <p className="text-[11px] text-slate-400">
-                                {t('Semua riwayat transaksi dan log sesi akan mengikuti zona waktu ini')}
-                            </p>
-                        </div>
-
-                        {/* Mata Uang */}
-                        <div className="space-y-2">
-                            <Label
-                                htmlFor="currency"
-                                className="text-xs font-semibold text-slate-700 flex items-center gap-1.5"
-                            >
-                                <Coins className="w-3.5 h-3.5 text-brand-primary" />
-                                {t('Mata Uang Tampilan')}
-                            </Label>
-                            <select
-                                id="currency"
-                                value={currency}
-                                onChange={(e) => setCurrency(e.target.value)}
-                                className="w-full h-11 rounded-xl bg-white border border-slate-200 px-3.5 text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer shadow-sm"
-                            >
-                                {currencies.map((curr) => (
-                                    <option key={curr.code} value={curr.code}>
-                                        {curr.code} ({curr.symbol}) - {curr.name}
-                                    </option>
-                                ))}
-                            </select>
-                            <p className="text-[11px] text-slate-400">
-                                {t('Mata uang standar belanja default transaksi Anda')}
-                            </p>
-                        </div>
-
-                        {/* Format Tanggal */}
-                        <div className="space-y-2">
-                            <Label
-                                htmlFor="dateFormat"
-                                className="text-xs font-semibold text-slate-700 flex items-center gap-1.5"
-                            >
-                                <Calendar className="w-3.5 h-3.5 text-brand-primary" />
-                                {t('Format Tanggal')}
-                            </Label>
-                            <select
-                                id="dateFormat"
-                                value={dateFormat}
-                                onChange={(e) => setDateFormat(e.target.value)}
-                                className="w-full h-11 rounded-xl bg-white border border-slate-200 px-3.5 text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer shadow-sm"
-                            >
-                                {dateFormats.map((df) => (
-                                    <option key={df.format} value={df.format}>
-                                        {df.format} (e.g. {df.example})
-                                    </option>
-                                ))}
-                            </select>
-                            <p className="text-[11px] text-slate-400">
-                                {t('Format tanggal pada nota dan histori faktur')}
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Tombol Simpan */}
-                    <div className="flex items-center justify-end pt-4 border-t border-slate-100">
-                        <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
-                            <Button
-                                type="button"
-                                onClick={handleSavePreferences}
-                                disabled={isSavingPreferences}
-                                className="h-11 px-6 bg-brand-primary hover:bg-brand-dark text-white font-medium rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.25)] transition-colors duration-200 flex items-center gap-2"
-                            >
-                                <Save className="w-4 h-4" />
-                                <span>
-                                    {isSavingPreferences
-                                        ? t('Menyimpan...')
-                                        : t('Simpan Preferensi')}
-                                </span>
-                            </Button>
-                        </motion.div>
-                    </div>
                 </div>
             </div>
 
@@ -276,7 +156,7 @@ export function PreferencesCard({ locale: initialLocale }) {
                     <p className="text-sm text-slate-600 leading-relaxed mb-6">
                         {t('Apakah Anda yakin ingin mengubah bahasa sistem menjadi')}{' '}
                         <strong className="font-semibold text-brand-primary">
-                            {languages.find((l) => l.code === pendingLocale)?.name || pendingLocale}
+                            {{ id: t('Indonesia'), en: t('Inggris'), es: t('Spanyol') }[pendingLocale] || pendingLocale}
                         </strong>
                         ?
                     </p>
@@ -286,6 +166,7 @@ export function PreferencesCard({ locale: initialLocale }) {
                             type="button"
                             variant="ghost"
                             onClick={() => setShowLangModal(false)}
+                            disabled={isUpdatingLocale}
                             className="rounded-xl"
                         >
                             {t('Batal')}
@@ -293,9 +174,11 @@ export function PreferencesCard({ locale: initialLocale }) {
                         <Button
                             type="button"
                             onClick={confirmLanguageChange}
-                            className="bg-brand-primary hover:bg-brand-dark text-white rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.25)] transition-colors"
+                            disabled={isUpdatingLocale}
+                            className="bg-brand-primary hover:bg-brand-dark text-white rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.25)] transition-colors flex items-center gap-2"
                         >
-                            {t('Ya, Ubah Bahasa')}
+                            {isUpdatingLocale && <Loader2 className="w-4 h-4 animate-spin" />}
+                            <span>{isUpdatingLocale ? t('Menyimpan...') : t('Ya, Ubah Bahasa')}</span>
                         </Button>
                     </div>
                 </div>

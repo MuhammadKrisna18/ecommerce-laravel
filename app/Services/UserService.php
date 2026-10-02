@@ -100,4 +100,9 @@ class UserService implements UserServiceInterface
     {
         return $this->roleUserService->updatePassword($user, $newPassword);
     }
+
+    public function updateLocale(User $user, \App\DTOs\UpdateLocaleDTO $dto): User
+    {
+        return $this->roleUserService->updateLocale($user, $dto);
+    }
 }
