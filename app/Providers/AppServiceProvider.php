@@ -19,6 +19,7 @@ use App\Services\Contracts\User\UserAvatarServiceInterface;
 use App\Services\Contracts\User\UserPasswordServiceInterface;
 use App\Services\Contracts\User\UserPreferenceServiceInterface;
 use App\Services\Contracts\User\UserProfileServiceInterface;
+use App\Services\Contracts\User\UserSellerServiceInterface;
 use App\Services\Contracts\User\UserServiceInterface as RoleUserServiceInterface;
 use App\Services\Contracts\UserServiceInterface;
 use App\Services\SettingService;
@@ -26,6 +27,7 @@ use App\Services\User\UserAvatarService;
 use App\Services\User\UserPasswordService;
 use App\Services\User\UserPreferenceService;
 use App\Services\User\UserProfileService;
+use App\Services\User\UserSellerService;
 use App\Services\User\UserService as RoleUserService;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Vite;
@@ -51,6 +53,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserAvatarServiceInterface::class, UserAvatarService::class);
         $this->app->bind(UserPasswordServiceInterface::class, UserPasswordService::class);
         $this->app->bind(UserPreferenceServiceInterface::class, UserPreferenceService::class);
+        $this->app->bind(UserSellerServiceInterface::class, UserSellerService::class);
 
         // Role-based service bindings
         $this->app->bind(AdminUserServiceInterface::class, AdminUserService::class);

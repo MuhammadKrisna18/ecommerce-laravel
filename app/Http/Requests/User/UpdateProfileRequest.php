@@ -18,7 +18,7 @@ class UpdateProfileRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return $this->user()?->isUser() ?? false;
+        return $this->user() && ($this->user()->isUser() || $this->user()->isSeller());
     }
 
     public function rules(): array

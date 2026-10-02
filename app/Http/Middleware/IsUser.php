@@ -21,7 +21,7 @@ class IsUser
 
         $user = auth()->user();
 
-        if (! $user->isUser()) {
+        if (! $user->isUser() && ! $user->isSeller()) {
             if ($user->isAdmin()) {
                 return redirect()->route('admin.dashboard');
             }

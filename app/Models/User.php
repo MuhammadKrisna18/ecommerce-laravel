@@ -67,4 +67,14 @@ class User extends Authenticatable
     {
         return $this->role === UserRole::USER;
     }
+
+    public function isSeller(): bool
+    {
+        return $this->role === UserRole::SELLER;
+    }
+
+    public function store(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Store::class);
+    }
 }

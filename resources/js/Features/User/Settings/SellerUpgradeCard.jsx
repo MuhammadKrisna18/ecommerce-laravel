@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { router } from '@inertiajs/react';
 import {
     Store,
     ShoppingBag,
@@ -11,8 +12,6 @@ import {
     ArrowRight,
     Sparkles,
     Check,
-    AlertCircle,
-    Info,
 } from 'lucide-react';
 import { Label } from '@/Components/ui/label';
 import { Input } from '@/Components/ui/input';
@@ -24,25 +23,22 @@ import { useTranslation } from '@/Hooks/useTranslation';
 export function SellerUpgradeCard({ user }) {
     const { t } = useTranslation();
 
-    // Check if user is already a seller
     const isAlreadySeller = user?.role === 'seller';
 
-    // Form fields state (NIK and bank account removed)
     const [formData, setFormData] = useState({
-        store_name: '',
-        categories: ['electronics'],
-        description: '',
+        store_name: user?.store?.name || '',
+        categories: user?.store?.categories || ['electronics'],
+        description: user?.store?.description || '',
         owner_name: user?.name || '',
-        phone: '',
-        city: '',
-        store_address: user?.address || '',
+        phone: user?.store?.phone || '',
+        city: user?.store?.city || '',
+        store_address: user?.store?.address || user?.address || '',
         agree_terms: false,
     });
 
     const [formErrors, setFormErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [submittedApplication, setSubmittedApplication] = useState(null);
 
     const categoryOptions = [
         { value: 'electronics', label: t('Elektronik & Gadget') },
@@ -54,7 +50,6 @@ export function SellerUpgradeCard({ user }) {
         { value: 'automotive', label: t('Otomotif & Aksesoris') },
     ];
 
-    // Helper to generate store URL slug preview
     const storeSlug = formData.store_name
         ? formData.store_name
               .toLowerCase()
@@ -88,10 +83,14 @@ export function SellerUpgradeCard({ user }) {
 
     const validateForm = () => {
         const errors = {};
-        if (!formData.store_name.trim()) {
+        const trimmedStoreName = formData.store_name.trim();
+
+        if (!trimmedStoreName) {
             errors.store_name = t('Nama toko wajib diisi');
-        } else if (formData.store_name.trim().length < 3) {
-            errors.store_name = t('Nama toko minimal 3 karakter');
+        } else if (trimmedStoreName.length < 4) {
+            errors.store_name = t('Nama toko minimal 4 karakter');
+        } else if (!/^[\p{L}\s]+$/u.test(trimmedStoreName)) {
+            errors.store_name = t('Nama toko hanya boleh berisi huruf');
         }
 
         if (!formData.categories || formData.categories.length === 0) {
@@ -133,25 +132,22 @@ export function SellerUpgradeCard({ user }) {
 
     const handleConfirmSubmit = () => {
         setIsSubmitting(true);
-        // Simulate frontend submission workflow
-        setTimeout(() => {
-            setIsSubmitting(false);
-            setShowConfirmModal(false);
-            setSubmittedApplication({
-                ...formData,
-                submitted_at: new Date().toLocaleDateString('id-ID', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                }),
-                status: 'pending_verification',
-            });
-        }, 1000);
+        router.post(route('user.settings.seller.upgrade'), formData, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setIsSubmitting(false);
+                setShowConfirmModal(false);
+            },
+            onError: (serverErrors) => {
+                setIsSubmitting(false);
+                setShowConfirmModal(false);
+                setFormErrors(serverErrors);
+            },
+        });
     };
 
     return (
         <div className="space-y-6">
-            {/* Header Hero Banner */}
             <div className="rounded-3xl bg-gradient-to-br from-emerald-600 via-teal-600 to-slate-900 text-white p-6 sm:p-8 shadow-xl relative overflow-hidden">
                 <div className="absolute -right-8 -bottom-8 w-60 h-60 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute left-1/3 -top-12 w-48 h-48 bg-teal-300/15 rounded-full blur-2xl pointer-events-none" />
@@ -175,7 +171,6 @@ export function SellerUpgradeCard({ user }) {
                     </div>
                 </div>
 
-                {/* Seller Advantages Pills */}
                 <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 mt-6 border-t border-white/15 text-xs text-emerald-50">
                     <div className="flex items-center gap-2">
                         <div className="w-6 h-6 rounded-lg bg-emerald-500/30 flex items-center justify-center text-emerald-200 shrink-0">
@@ -198,7 +193,6 @@ export function SellerUpgradeCard({ user }) {
                 </div>
             </div>
 
-            {/* If application submitted or already seller */}
             {isAlreadySeller ? (
                 <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-6 sm:p-8 text-center space-y-4">
                     <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 mx-auto flex items-center justify-center shadow-sm">
@@ -208,6 +202,11 @@ export function SellerUpgradeCard({ user }) {
                         <h3 className="text-lg font-bold text-slate-800">
                             {t('Akun Seller Anda Telah Aktif!')}
                         </h3>
+                        {user?.store?.name && (
+                            <p className="text-sm font-semibold text-emerald-700">
+                                {user.store.name}
+                            </p>
+                        )}
                         <p className="text-xs text-slate-500">
                             {t('Anda telah terdaftar sebagai mitra penjual Tokped. Kelola produk, pesanan pembeli, dan pengaturan toko Anda melalui Seller Portal.')}
                         </p>
@@ -222,79 +221,7 @@ export function SellerUpgradeCard({ user }) {
                         </Button>
                     </div>
                 </div>
-            ) : submittedApplication ? (
-                /* Success Pending Verification State */
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="rounded-3xl bg-white border border-emerald-200 shadow-[0_10px_30px_rgba(16,185,129,0.06)] p-6 sm:p-8 space-y-6"
-                >
-                    <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                            <CheckCircle2 className="w-6 h-6" />
-                        </div>
-                        <div className="space-y-1">
-                            <div className="flex items-center gap-2 flex-wrap">
-                                <h3 className="text-lg font-bold text-slate-800">
-                                    {t('Pendaftaran Toko Berhasil Dikirim')}
-                                </h3>
-                                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                                    {t('Status: Menunggu Verifikasi')}
-                                </span>
-                            </div>
-                            <p className="text-xs text-slate-500 leading-relaxed">
-                                {t('Tim kurasi Tokped sedang memvalidasi data toko Anda. Proses ini memakan waktu maksimal 1x24 jam kerja.')}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                        <div>
-                            <span className="text-slate-400 font-medium">{t('Nama Toko')}</span>
-                            <p className="font-bold text-slate-800 text-sm mt-0.5">
-                                {submittedApplication.store_name}
-                            </p>
-                        </div>
-                        <div>
-                            <span className="text-slate-400 font-medium">{t('Kota Penjemputan')}</span>
-                            <p className="font-semibold text-slate-800 mt-0.5">
-                                {submittedApplication.city}
-                            </p>
-                        </div>
-                        <div>
-                            <span className="text-slate-400 font-medium">{t('Kategori Produk')}</span>
-                            <div className="flex flex-wrap gap-1 mt-1">
-                                {submittedApplication.categories.map((catVal) => {
-                                    const label = categoryOptions.find((c) => c.value === catVal)?.label;
-                                    return (
-                                        <span
-                                            key={catVal}
-                                            className="px-2 py-0.5 rounded-md bg-emerald-100/80 text-emerald-800 font-medium text-[11px]"
-                                        >
-                                            {label}
-                                        </span>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-                        <span className="text-xs text-slate-400">
-                            {t('Diajukan pada')}: {submittedApplication.submitted_at}
-                        </span>
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            onClick={() => setSubmittedApplication(null)}
-                            className="text-xs text-brand-primary hover:bg-brand-primary/5 rounded-xl"
-                        >
-                            {t('Ubah Data Pendaftaran')}
-                        </Button>
-                    </div>
-                </motion.div>
             ) : (
-                /* Registration Form */
                 <form
                     onSubmit={handleOpenConfirmation}
                     className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] overflow-hidden"
@@ -319,7 +246,6 @@ export function SellerUpgradeCard({ user }) {
                     </div>
 
                     <div className="p-6 sm:p-8 space-y-8">
-                        {/* 1. INFORMASI TOKO */}
                         <div className="space-y-4">
                             <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                                 <ShoppingBag className="w-4 h-4 text-emerald-600" />
@@ -357,7 +283,6 @@ export function SellerUpgradeCard({ user }) {
                                     )}
                                 </div>
 
-                                {/* Multi-select Kategori Produk */}
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between">
                                         <Label className="text-xs font-semibold text-slate-700">
@@ -425,7 +350,6 @@ export function SellerUpgradeCard({ user }) {
                             </div>
                         </div>
 
-                        {/* 2. DATA DIRI PEMILIK TOKO (NIK DIHAPUS) */}
                         <div className="space-y-4">
                             <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                                 <UserCheck className="w-4 h-4 text-emerald-600" />
@@ -478,7 +402,6 @@ export function SellerUpgradeCard({ user }) {
                             </div>
                         </div>
 
-                        {/* 3. ALAMAT LOKASI & PENJEMPUTAN BARANG */}
                         <div className="space-y-4">
                             <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                                 <MapPin className="w-4 h-4 text-emerald-600" />
@@ -531,7 +454,6 @@ export function SellerUpgradeCard({ user }) {
                             </div>
                         </div>
 
-                        {/* Terms & Agreement Checkbox */}
                         <div className="pt-2">
                             <label className="flex items-start gap-3 cursor-pointer select-none">
                                 <input
@@ -556,7 +478,6 @@ export function SellerUpgradeCard({ user }) {
                             )}
                         </div>
 
-                        {/* Submit Button */}
                         <div className="flex items-center justify-end pt-4 border-t border-slate-100">
                             <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
                                 <Button
@@ -573,7 +494,6 @@ export function SellerUpgradeCard({ user }) {
                 </form>
             )}
 
-            {/* Modal Konfirmasi Pendaftaran Seller */}
             <CleanModal
                 open={showConfirmModal}
                 onClose={() => setShowConfirmModal(false)}

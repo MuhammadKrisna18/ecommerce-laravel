@@ -55,6 +55,8 @@ Route::middleware(['auth', 'verified', 'user'])
             ->name('settings.password.update');
         Route::put('/settings/locale', [\App\Http\Controllers\User\SettingsController::class, 'updateLocale'])
             ->name('settings.locale.update');
+        Route::post('/settings/seller', [\App\Http\Controllers\User\SettingsController::class, 'upgradeToSeller'])
+            ->name('settings.seller.upgrade');
     });
 
 require __DIR__.'/auth.php';

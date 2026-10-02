@@ -288,5 +288,8 @@
     "Nama Pemilik": "Owner Name",
     "Telepon / WhatsApp": "Phone / WhatsApp",
     "Ubah akun belanja Anda menjadi akun penjual untuk menjangkau jutaan pembeli aktif di Tokped dengan fasilitas pengiriman lengkap dan sistem penjualan yang mudah.": "Transform your shopping account into a seller account to reach millions of active buyers on Tokped with complete shipping facilities and an easy selling system.",
-    "Tim kurasi Tokped sedang memvalidasi data toko Anda. Proses ini memakan waktu maksimal 1x24 jam kerja.": "The Tokped curation team is validating your store information. This process takes a maximum of 1x24 business hours."
+    "Tim kurasi Tokped sedang memvalidasi data toko Anda. Proses ini memakan waktu maksimal 1x24 jam kerja.": "The Tokped curation team is validating your store information. This process takes a maximum of 1x24 business hours.",
+    "Nama toko hanya boleh berisi huruf": "Store name can only contain letters",
+    "Nama toko minimal 4 karakter": "Store name must be at least 4 characters",
+    "Selamat! Akun Anda berhasil diubah menjadi akun Seller Tokped.": "Congratulations! Your account has been upgraded to a Tokped Seller account."
 }
