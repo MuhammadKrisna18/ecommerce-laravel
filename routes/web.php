@@ -48,6 +48,9 @@ Route::middleware(['auth', 'verified', 'user'])
             ->name('profile.avatar.update');
         Route::delete('/profile/avatar', [\App\Http\Controllers\User\ProfileController::class, 'destroyAvatar'])
             ->name('profile.avatar.destroy');
+
+        Route::get('/settings', [\App\Http\Controllers\User\SettingsController::class, 'index'])
+            ->name('settings.index');
     });
 
 require __DIR__.'/auth.php';

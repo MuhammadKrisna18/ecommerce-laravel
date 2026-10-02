@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { usePage } from '@inertiajs/react';
-import { LayoutDashboard, ShoppingBag, User as UserIcon } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, User as UserIcon, Settings } from 'lucide-react';
 import { AppShell } from '@/Components/layout/AppShell';
 import { AppSidebar } from '@/Components/layout/AppSidebar';
 import { AppTopbar } from '@/Components/layout/AppTopbar';
@@ -23,6 +23,12 @@ export default function UserLayout({ header, children }) {
             href: route('user.profile.edit'),
             icon: UserIcon,
             active: route().current('user.profile.*'),
+        },
+        {
+            name: t('Pengaturan'),
+            href: route('user.settings.index'),
+            icon: Settings,
+            active: route().current('user.settings.*'),
         },
     ];
 

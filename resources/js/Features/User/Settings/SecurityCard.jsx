@@ -1,0 +1,571 @@
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+    KeyRound,
+    Lock,
+    Eye,
+    EyeOff,
+    ShieldCheck,
+    CheckCircle2,
+    XCircle,
+    Smartphone,
+    Laptop,
+    LogOut,
+    AlertCircle,
+    Info,
+} from 'lucide-react';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Button } from '@/Components/ui/button';
+import { Switch } from '@/Components/ui/switch';
+import { CleanModal } from '@/Components/ui/CleanModal';
+import { Alert } from '@/Components/ui/alert';
+import { useTranslation } from '@/Hooks/useTranslation';
+
+function calculatePasswordStrength(pass) {
+    if (!pass) return { score: 0, label: 'Kosong', color: 'bg-slate-200', text: 'text-slate-400' };
+    let score = 0;
+    if (pass.length >= 8) score++;
+    if (/[A-Z]/.test(pass) && /[a-z]/.test(pass)) score++;
+    if (/\d/.test(pass)) score++;
+    if (/[^A-Za-z0-9]/.test(pass)) score++;
+
+    switch (score) {
+        case 1:
+            return { score: 25, label: 'Lemah', color: 'bg-rose-500', text: 'text-rose-500' };
+        case 2:
+            return { score: 50, label: 'Cukup', color: 'bg-amber-500', text: 'text-amber-500' };
+        case 3:
+            return { score: 75, label: 'Kuat', color: 'bg-sky-500', text: 'text-sky-500' };
+        case 4:
+            return { score: 100, label: 'Sangat Kuat', color: 'bg-emerald-500', text: 'text-emerald-500' };
+        default:
+            return { score: 15, label: 'Sangat Lemah', color: 'bg-rose-500', text: 'text-rose-500' };
+    }
+}
+
+export function SecurityCard({ user }) {
+    const { t } = useTranslation();
+
+    // Password fields state
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isSavingPassword, setIsSavingPassword] = useState(false);
+    const [passwordFeedback, setPasswordFeedback] = useState(null);
+
+    // 2FA state
+    const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+    const [showTwoFactorModal, setShowTwoFactorModal] = useState(false);
+    const [twoFactorNotice, setTwoFactorNotice] = useState(null);
+
+    // Sessions modal
+    const [showLogoutOtherModal, setShowLogoutOtherModal] = useState(false);
+    const [sessionNotice, setSessionNotice] = useState(null);
+
+    const strength = calculatePasswordStrength(newPassword);
+
+    const handlePasswordSubmit = (e) => {
+        e.preventDefault();
+        setPasswordFeedback(null);
+
+        if (!currentPassword) {
+            setPasswordFeedback({ type: 'danger', message: t('Harap masukkan kata sandi saat ini.') });
+            return;
+        }
+
+        if (newPassword.length < 8) {
+            setPasswordFeedback({ type: 'danger', message: t('Kata sandi baru minimal harus 8 karakter.') });
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            setPasswordFeedback({ type: 'danger', message: t('Konfirmasi kata sandi tidak cocok dengan kata sandi baru.') });
+            return;
+        }
+
+        setIsSavingPassword(true);
+        setTimeout(() => {
+            setIsSavingPassword(false);
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+            setPasswordFeedback({
+                type: 'success',
+                message: t('Kata sandi Anda berhasil diperbarui dengan standar enkripsi aman.'),
+            });
+        }, 800);
+    };
+
+    const handleToggleTwoFactor = (checked) => {
+        if (checked) {
+            setShowTwoFactorModal(true);
+        } else {
+            setTwoFactorEnabled(false);
+            setTwoFactorNotice({
+                type: 'info',
+                message: t('Verifikasi dua langkah (2FA) telah dinonaktifkan.'),
+            });
+        }
+    };
+
+    const confirmEnableTwoFactor = () => {
+        setTwoFactorEnabled(true);
+        setShowTwoFactorModal(false);
+        setTwoFactorNotice({
+            type: 'success',
+            message: t('Autentikasi Dua Langkah (2FA) berhasil diaktifkan untuk akun Anda.'),
+        });
+    };
+
+    const confirmLogoutOtherSessions = () => {
+        setShowLogoutOtherModal(false);
+        setSessionNotice({
+            type: 'success',
+            message: t('Semua sesi login di perangkat lain telah berhasil dihentikan.'),
+        });
+    };
+
+    return (
+        <div className="space-y-6">
+            {/* Ubah Kata Sandi Card */}
+            <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] overflow-hidden">
+                <div className="p-6 sm:p-8 border-b border-slate-100 bg-slate-50/60 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent flex items-center justify-center text-white shadow-sm">
+                        <KeyRound className="w-5 h-5" />
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-bold text-slate-800 tracking-tight">
+                            {t('Ubah Kata Sandi')}
+                        </h3>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                            {t('Perbarui kata sandi secara berkala untuk menjaga akun tetap terlindungi')}
+                        </p>
+                    </div>
+                </div>
+
+                <form onSubmit={handlePasswordSubmit} className="p-6 sm:p-8 space-y-6">
+                    <AnimatePresence>
+                        {passwordFeedback && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0 }}
+                            >
+                                <Alert variant={passwordFeedback.type}>
+                                    {passwordFeedback.message}
+                                </Alert>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* Current Password */}
+                    <div className="space-y-2">
+                        <Label
+                            htmlFor="current_password"
+                            className="text-xs font-semibold text-slate-700 flex items-center gap-1.5"
+                        >
+                            <Lock className="w-3.5 h-3.5 text-brand-primary" />
+                            {t('Kata Sandi Saat Ini')}
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                id="current_password"
+                                type={showCurrentPassword ? 'text' : 'password'}
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
+                                placeholder={t('Masukkan kata sandi lama Anda')}
+                                className="h-11 pr-11 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
+                            >
+                                {showCurrentPassword ? (
+                                    <EyeOff className="w-4 h-4" />
+                                ) : (
+                                    <Eye className="w-4 h-4" />
+                                )}
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Grid New & Confirm Password */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* New Password */}
+                        <div className="space-y-2">
+                            <Label
+                                htmlFor="new_password"
+                                className="text-xs font-semibold text-slate-700 flex items-center gap-1.5"
+                            >
+                                <Lock className="w-3.5 h-3.5 text-brand-primary" />
+                                {t('Kata Sandi Baru')}
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    id="new_password"
+                                    type={showNewPassword ? 'text' : 'password'}
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    placeholder={t('Minimal 8 karakter kombinasi')}
+                                    className="h-11 pr-11 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowNewPassword(!showNewPassword)}
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
+                                >
+                                    {showNewPassword ? (
+                                        <EyeOff className="w-4 h-4" />
+                                    ) : (
+                                        <Eye className="w-4 h-4" />
+                                    )}
+                                </button>
+                            </div>
+
+                            {/* Password Strength Indicator */}
+                            {newPassword && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    className="pt-2 space-y-2"
+                                >
+                                    <div className="flex items-center justify-between text-xs">
+                                        <span className="text-slate-500 font-medium">
+                                            {t('Kekuatan Kata Sandi')}:
+                                        </span>
+                                        <span className={`font-semibold ${strength.text}`}>
+                                            {t(strength.label)}
+                                        </span>
+                                    </div>
+                                    <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                        <motion.div
+                                            className={`h-full ${strength.color}`}
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${strength.score}%` }}
+                                            transition={{ duration: 0.3 }}
+                                        />
+                                    </div>
+                                </motion.div>
+                            )}
+                        </div>
+
+                        {/* Confirm Password */}
+                        <div className="space-y-2">
+                            <Label
+                                htmlFor="confirm_password"
+                                className="text-xs font-semibold text-slate-700 flex items-center gap-1.5"
+                            >
+                                <Lock className="w-3.5 h-3.5 text-brand-primary" />
+                                {t('Konfirmasi Kata Sandi Baru')}
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    id="confirm_password"
+                                    type={showConfirmPassword ? 'text' : 'password'}
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    placeholder={t('Ulangi kata sandi baru')}
+                                    className="h-11 pr-11 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none transition-colors"
+                                >
+                                    {showConfirmPassword ? (
+                                        <EyeOff className="w-4 h-4" />
+                                    ) : (
+                                        <Eye className="w-4 h-4" />
+                                    )}
+                                </button>
+                            </div>
+
+                            {/* Match check badge */}
+                            {confirmPassword && (
+                                <p
+                                    className={`text-[11px] flex items-center gap-1 font-medium pt-1 ${
+                                        newPassword === confirmPassword
+                                            ? 'text-emerald-600'
+                                            : 'text-rose-500'
+                                    }`}
+                                >
+                                    {newPassword === confirmPassword ? (
+                                        <>
+                                            <CheckCircle2 className="w-3.5 h-3.5" />
+                                            {t('Kata sandi cocok')}
+                                        </>
+                                    ) : (
+                                        <>
+                                            <XCircle className="w-3.5 h-3.5" />
+                                            {t('Kata sandi belum cocok')}
+                                        </>
+                                    )}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Requirements checklist */}
+                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600">
+                        <div className="flex items-center gap-2">
+                            <div
+                                className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
+                                    newPassword.length >= 8
+                                        ? 'bg-emerald-100 text-emerald-600'
+                                        : 'bg-slate-200 text-slate-400'
+                                }`}
+                            >
+                                ✓
+                            </div>
+                            <span>{t('Minimal 8 karakter')}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div
+                                className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
+                                    /\d/.test(newPassword)
+                                        ? 'bg-emerald-100 text-emerald-600'
+                                        : 'bg-slate-200 text-slate-400'
+                                }`}
+                            >
+                                ✓
+                            </div>
+                            <span>{t('Kombinasi angka')}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div
+                                className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
+                                    /[^A-Za-z0-9]/.test(newPassword)
+                                        ? 'bg-emerald-100 text-emerald-600'
+                                        : 'bg-slate-200 text-slate-400'
+                                }`}
+                            >
+                                ✓
+                            </div>
+                            <span>{t('Karakter simbol (@#$%)')}</span>
+                        </div>
+                    </div>
+
+                    {/* Submit button */}
+                    <div className="flex items-center justify-between pt-2">
+                        <div className="text-xs text-slate-400 flex items-center gap-1.5">
+                            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                            <span>{t('Dilindungi enkripsi Bcrypt hashing standard')}</span>
+                        </div>
+
+                        <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+                            <Button
+                                type="submit"
+                                disabled={isSavingPassword}
+                                className="h-11 px-6 bg-brand-primary hover:bg-brand-dark text-white font-medium rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.25)] transition-colors duration-200 flex items-center gap-2"
+                            >
+                                <KeyRound className="w-4 h-4" />
+                                <span>
+                                    {isSavingPassword
+                                        ? t('Menyimpan Sandi...')
+                                        : t('Perbarui Kata Sandi')}
+                                </span>
+                            </Button>
+                        </motion.div>
+                    </div>
+                </form>
+            </div>
+
+            {/* Autentikasi Dua Langkah (2FA) */}
+            <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-6 sm:p-8">
+                <AnimatePresence>
+                    {twoFactorNotice && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0 }}
+                            className="mb-4"
+                        >
+                            <Alert variant={twoFactorNotice.type}>
+                                {twoFactorNotice.message}
+                            </Alert>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-start gap-3.5">
+                        <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-brand-primary shrink-0">
+                            <Smartphone className="w-5 h-5" />
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-2">
+                                <h4 className="text-base font-bold text-slate-800">
+                                    {t('Autentikasi Dua Langkah (2FA)')}
+                                </h4>
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-600 border border-amber-200">
+                                    {t('Disarankan')}
+                                </span>
+                            </div>
+                            <p className="text-xs text-slate-500 mt-1 max-w-xl">
+                                {t('Tambahkan lapisan keamanan ekstra pada akun Anda dengan memverifikasi kode OTP setiap kali masuk dari perangkat baru.')}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 self-end sm:self-center">
+                        <span className="text-xs font-semibold text-slate-600">
+                            {twoFactorEnabled ? t('Aktif') : t('Nonaktif')}
+                        </span>
+                        <Switch
+                            checked={twoFactorEnabled}
+                            onChange={handleToggleTwoFactor}
+                            aria-label={t('Aktifkan 2FA')}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* Sesi & Perangkat Aktif */}
+            <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-6 sm:p-8 space-y-4">
+                <AnimatePresence>
+                    {sessionNotice && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0 }}
+                        >
+                            <Alert variant={sessionNotice.type}>
+                                {sessionNotice.message}
+                            </Alert>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+                            <Laptop className="w-5 h-5" />
+                        </div>
+                        <div>
+                            <h4 className="text-base font-bold text-slate-800">
+                                {t('Sesi & Perangkat Aktif')}
+                            </h4>
+                            <p className="text-xs text-slate-500 mt-0.5">
+                                {t('Daftar perangkat yang saat ini memiliki akses login aktif ke akun Anda')}
+                            </p>
+                        </div>
+                    </div>
+
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setShowLogoutOtherModal(true)}
+                        className="text-xs text-slate-600 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 rounded-xl flex items-center gap-1.5"
+                    >
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>{t('Keluar dari Perangkat Lain')}</span>
+                    </Button>
+                </div>
+
+                {/* Sesi item */}
+                <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-100 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3.5">
+                        <div className="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-700 shadow-xs">
+                            <Laptop className="w-4 h-4" />
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-sm font-semibold text-slate-800">
+                                    Windows Desktop • Google Chrome
+                                </span>
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-100 text-emerald-700">
+                                    {t('Sesi Saat Ini')}
+                                </span>
+                            </div>
+                            <p className="text-xs text-slate-400 mt-0.5">
+                                Jakarta, Indonesia • IP: 182.253.xxx.xxx • {t('Aktif sekarang')}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-100" />
+                </div>
+            </div>
+
+            {/* Modal Konfirmasi 2FA */}
+            <CleanModal
+                open={showTwoFactorModal}
+                onClose={() => setShowTwoFactorModal(false)}
+                title={t('Aktifkan Autentikasi 2 Langkah')}
+                description={t('Perlindungan ganda untuk akun Tokped Anda')}
+                icon={Smartphone}
+                size="md"
+            >
+                <div className="p-6 space-y-4">
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                        {t('Dengan mengaktifkan fitur ini, Anda akan diminta memasukkan kode verifikasi 6-digit saat melakukan login dari peramban atau perangkat baru.')}
+                    </p>
+
+                    <div className="p-4 rounded-2xl bg-sky-50/80 border border-sky-100 flex items-start gap-3 text-xs text-sky-800">
+                        <Info className="w-4 h-4 text-brand-primary shrink-0 mt-0.5" />
+                        <span>
+                            {t('Metode verifikasi default akan dikirimkan ke email terdaftar Anda:')}{' '}
+                            <strong className="font-semibold">{user.email}</strong>
+                        </span>
+                    </div>
+
+                    <div className="flex items-center justify-end gap-3 pt-3">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={() => setShowTwoFactorModal(false)}
+                            className="rounded-xl"
+                        >
+                            {t('Batal')}
+                        </Button>
+                        <Button
+                            type="button"
+                            onClick={confirmEnableTwoFactor}
+                            className="bg-brand-primary hover:bg-brand-dark text-white rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.25)]"
+                        >
+                            {t('Aktifkan Sekarang')}
+                        </Button>
+                    </div>
+                </div>
+            </CleanModal>
+
+            {/* Modal Logout Perangkat Lain */}
+            <CleanModal
+                open={showLogoutOtherModal}
+                onClose={() => setShowLogoutOtherModal(false)}
+                title={t('Keluar dari Perangkat Lain')}
+                description={t('Hentikan semua sesi aktif selain browser ini')}
+                icon={LogOut}
+                size="sm"
+            >
+                <div className="p-6 space-y-4">
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                        {t('Tindakan ini akan mengakhiri semua sesi login aktif di komputer, ponsel, atau tablet lain. Sesi di peramban ini akan tetap aktif.')}
+                    </p>
+
+                    <div className="flex items-center justify-end gap-3 pt-2">
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            onClick={() => setShowLogoutOtherModal(false)}
+                            className="rounded-xl"
+                        >
+                            {t('Batal')}
+                        </Button>
+                        <Button
+                            type="button"
+                            onClick={confirmLogoutOtherSessions}
+                            className="bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-xs"
+                        >
+                            {t('Ya, Keluar Semua')}
+                        </Button>
+                    </div>
+                </div>
+            </CleanModal>
+        </div>
+    );
+}

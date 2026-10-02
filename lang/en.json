@@ -63,5 +63,19 @@
     "Data profil Anda terlindungi dengan standar keamanan privasi.": "Your profile data is protected by privacy security standards.",
     "TTL": "Birth Details",
     "Alamat": "Address",
-    "Terakhir Diperbarui": "Last Updated"
+    "Terakhir Diperbarui": "Last Updated",
+    "Pengaturan Akun": "Account Settings",
+    "Kelola preferensi akun, keamanan kata sandi, notifikasi, dan privasi Anda": "Manage account preferences, password security, notifications, and privacy",
+    "Keamanan & Sandi": "Security & Password",
+    "Preferensi & Tampilan": "Preferences & Display",
+    "Notifikasi": "Notifications",
+    "Privasi & Akun": "Privacy & Accounts",
+    "Ubah Kata Sandi": "Change Password",
+    "Kata Sandi Saat Ini": "Current Password",
+    "Kata Sandi Baru": "New Password",
+    "Konfirmasi Kata Sandi Baru": "Confirm New Password",
+    "Autentikasi Dua Langkah (2FA)": "Two-Factor Authentication (2FA)",
+    "Sesi & Perangkat Aktif": "Active Sessions & Devices",
+    "Zona Bahaya": "Danger Zone",
+    "Unduh Salinan Data Akun": "Download Account Data Copy"
 }
