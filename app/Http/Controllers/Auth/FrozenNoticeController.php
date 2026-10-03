@@ -10,9 +10,9 @@ use Inertia\Response;
 
 class FrozenNoticeController extends Controller
 {
-    /**
-     * Display the frozen account notice page.
-     */
+    
+
+
     public function __invoke(Request $request): Response|RedirectResponse
     {
         $user = $request->user();

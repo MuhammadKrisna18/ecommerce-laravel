@@ -51,7 +51,7 @@ class UserSellerService implements UserSellerServiceInterface
                 'address' => $user->address ?: $dto->store_address,
             ]);
 
-            /** @var User $updatedUser */
+            
             $updatedUser = $this->userRepository->find($user->id);
 
             return $updatedUser;

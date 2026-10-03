@@ -7,9 +7,9 @@ use PHPUnit\Framework\TestCase;
 
 class UpdateSettingsDTOTest extends TestCase
 {
-    /**
-     * EP: Normal population with complete data
-     */
+    
+
+
     public function test_dto_populated_from_complete_array(): void
     {
         $payload = [
@@ -29,9 +29,9 @@ class UpdateSettingsDTOTest extends TestCase
         $this->assertEquals('id', $dto->app_language);
     }
 
-    /**
-     * BVA & EP: Filtering null values vs empty string
-     */
+    
+
+
     public function test_to_filtered_array_excludes_null_and_preserves_values(): void
     {
         $dto = new UpdateSettingsDTO;
@@ -45,9 +45,9 @@ class UpdateSettingsDTOTest extends TestCase
         $this->assertArrayNotHasKey('store_description', $filtered);
     }
 
-    /**
-     * EP: Boundary check for unknown properties (unrecognized input partition)
-     */
+    
+
+
     public function test_dto_ignores_unknown_properties(): void
     {
         $payload = [

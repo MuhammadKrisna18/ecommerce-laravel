@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Repositories\Contracts\SettingRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Repositories\SettingRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\ProductRepository;
 use App\Services\Admin\AdminUserManagementService;
 use App\Services\Admin\AdminUserQueryService;
 use App\Services\Admin\AdminUserService;
@@ -22,7 +24,9 @@ use App\Services\Contracts\User\UserProfileServiceInterface;
 use App\Services\Contracts\User\UserSellerServiceInterface;
 use App\Services\Contracts\User\UserServiceInterface as RoleUserServiceInterface;
 use App\Services\Contracts\UserServiceInterface;
+use App\Services\Contracts\ProductQueryServiceInterface;
 use App\Services\SettingService;
+use App\Services\ProductQueryService;
 use App\Services\User\UserAvatarService;
 use App\Services\User\UserPasswordService;
 use App\Services\User\UserPreferenceService;
@@ -37,30 +41,34 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        // Settings bindings
+        
         $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
         $this->app->bind(SettingServiceInterface::class, SettingService::class);
 
-        // User repository binding
+        
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
 
-        // Granular Admin Services
+        
+        $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
+        $this->app->bind(ProductQueryServiceInterface::class, ProductQueryService::class);
+
+        
         $this->app->bind(AdminUserQueryServiceInterface::class, AdminUserQueryService::class);
         $this->app->bind(AdminUserManagementServiceInterface::class, AdminUserManagementService::class);
 
-        // Granular User Services
+        
         $this->app->bind(UserProfileServiceInterface::class, UserProfileService::class);
         $this->app->bind(UserAvatarServiceInterface::class, UserAvatarService::class);
         $this->app->bind(UserPasswordServiceInterface::class, UserPasswordService::class);
         $this->app->bind(UserPreferenceServiceInterface::class, UserPreferenceService::class);
         $this->app->bind(UserSellerServiceInterface::class, UserSellerService::class);
 
-        // Role-based service bindings
+        
         $this->app->bind(AdminUserServiceInterface::class, AdminUserService::class);
         $this->app->bind(RoleUserServiceInterface::class, RoleUserService::class);
         $this->app->bind(AuthServiceInterface::class, AuthService::class);
 
-        // Unified service binding for backward compatibility
+        
         $this->app->bind(UserServiceInterface::class, UserService::class);
     }
 

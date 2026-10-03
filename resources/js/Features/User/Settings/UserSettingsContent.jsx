@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatedTab } from '@/Components/ui/AnimatedTab';
 import {
     ShieldCheck,
     KeyRound,
@@ -173,13 +174,7 @@ export function UserSettingsContent({ user, authProvider, locale }) {
 
             {/* Tab Contents with Framer Motion AnimatePresence */}
             <AnimatePresence mode="wait">
-                <motion.div
-                    key={activeTab}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -12 }}
-                    transition={{ duration: 0.25 }}
-                >
+                <AnimatedTab tabKey={activeTab}>
                     {activeTab === 'security' && <SecurityCard user={user} />}
                     {activeTab === 'seller' && <SellerUpgradeCard user={user} />}
                     {activeTab === 'preferences' && <PreferencesCard locale={locale} />}
@@ -187,7 +182,7 @@ export function UserSettingsContent({ user, authProvider, locale }) {
                     {activeTab === 'privacy' && (
                         <PrivacyAndDangerCard user={user} authProvider={authProvider} />
                     )}
-                </motion.div>
+                </AnimatedTab>
             </AnimatePresence>
         </div>
     );

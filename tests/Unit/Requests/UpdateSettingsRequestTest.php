@@ -17,9 +17,9 @@ class UpdateSettingsRequestTest extends TestCase
         return Validator::make($data, $request->rules());
     }
 
-    /**
-     * BVA & EP: Store Name (nullable, string, max:255)
-     */
+    
+
+
     public function test_store_name_boundary_valid_at_255_chars(): void
     {
         $data = [SettingKey::STORE_NAME => str_repeat('a', 255)];
@@ -44,9 +44,9 @@ class UpdateSettingsRequestTest extends TestCase
         $this->assertFalse($validator->errors()->has(SettingKey::STORE_NAME));
     }
 
-    /**
-     * BVA & EP: Store Description (nullable, string, max:1000)
-     */
+    
+
+
     public function test_store_description_boundary_valid_at_1000_chars(): void
     {
         $data = [SettingKey::STORE_DESCRIPTION => str_repeat('b', 1000)];
@@ -63,9 +63,9 @@ class UpdateSettingsRequestTest extends TestCase
         $this->assertTrue($validator->errors()->has(SettingKey::STORE_DESCRIPTION));
     }
 
-    /**
-     * BVA & EP: Contact Phone (nullable, string, max:20)
-     */
+    
+
+
     public function test_contact_phone_boundary_valid_at_20_chars(): void
     {
         $data = [SettingKey::CONTACT_PHONE => str_repeat('1', 20)];
@@ -82,9 +82,9 @@ class UpdateSettingsRequestTest extends TestCase
         $this->assertTrue($validator->errors()->has(SettingKey::CONTACT_PHONE));
     }
 
-    /**
-     * EP: Contact Email (nullable, email, max:255)
-     */
+    
+
+
     public function test_contact_email_valid_partition(): void
     {
         $data = [SettingKey::CONTACT_EMAIL => 'support@ecommerce.test'];
@@ -101,9 +101,9 @@ class UpdateSettingsRequestTest extends TestCase
         $this->assertTrue($validator->errors()->has(SettingKey::CONTACT_EMAIL));
     }
 
-    /**
-     * EP: App Language (nullable, in:id,en,es)
-     */
+    
+
+
     public function test_app_language_valid_equivalence_partitions(): void
     {
         foreach (AppLocale::values() as $locale) {

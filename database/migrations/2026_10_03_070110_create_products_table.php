@@ -6,9 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    
+
+
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('category')->nullable();
             $table->decimal('price', 15, 2);
             $table->integer('stock')->default(0);
-            $table->string('status')->default('active'); // active, inactive, out_of_stock
+            $table->string('status')->default('active'); 
             $table->integer('sold')->default(0);
             $table->string('image')->nullable();
             $table->text('description')->nullable();
@@ -27,9 +27,9 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    
+
+
     public function down(): void
     {
         Schema::dropIfExists('products');

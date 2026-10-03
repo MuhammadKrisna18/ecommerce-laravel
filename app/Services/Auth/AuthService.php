@@ -22,7 +22,7 @@ class AuthService implements AuthServiceInterface
 
     public function registerUser(RegisterUserDTO $dto): User
     {
-        /** @var User $user */
+        
         $user = $this->userRepository->create([
             'name' => $dto->name,
             'nickname' => $dto->nickname,
@@ -42,7 +42,7 @@ class AuthService implements AuthServiceInterface
             return $user;
         }
 
-        // Generate unique nickname candidate
+        
         $baseNickname = Str::slug(explode('@', $dto->email)[0], '');
         if (empty($baseNickname)) {
             $baseNickname = 'user';
@@ -54,7 +54,7 @@ class AuthService implements AuthServiceInterface
             $counter++;
         }
 
-        /** @var User $newUser */
+        
         $newUser = $this->userRepository->create([
             'name' => $dto->name,
             'nickname' => $nickname,

@@ -3,7 +3,7 @@ import UserLayout from '@/Layouts/UserLayout';
 import { UserDashboardContent } from '@/Features/User/Dashboard/UserDashboardContent';
 import { useTranslation } from '@/Hooks/useTranslation';
 
-export default function UserDashboard() {
+export default function UserDashboard({ products = [] }) {
     const { t } = useTranslation();
 
     return (
@@ -20,7 +20,7 @@ export default function UserDashboard() {
             }
         >
             <Head title={t('Dashboard Pengguna')} />
-            <UserDashboardContent />
+            <UserDashboardContent products={products} />
         </UserLayout>
     );
 }

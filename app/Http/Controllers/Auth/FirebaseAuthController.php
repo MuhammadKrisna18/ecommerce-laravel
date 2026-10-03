@@ -19,16 +19,16 @@ class FirebaseAuthController extends Controller
         $this->authService = $authService;
     }
 
-    /**
-     * Authenticate or register a user through Firebase Auth.
-     */
+    
+
+
     public function authenticate(FirebaseLoginRequest $request): JsonResponse
     {
         try {
             $dto = FirebaseAuthDTO::fromArray($request->validated());
             $user = $this->authService->findOrCreateFromFirebase($dto);
 
-            // Log the user in to the Laravel session
+            
             Auth::login($user, true);
             $request->session()->regenerate();
 

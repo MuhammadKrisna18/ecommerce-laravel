@@ -15,9 +15,9 @@ class LoginRequestTest extends TestCase
         return Validator::make($data, $request->rules());
     }
 
-    /**
-     * EP: Email (required, string, email)
-     */
+    
+
+
     public function test_email_valid_partition(): void
     {
         $data = [
@@ -50,9 +50,9 @@ class LoginRequestTest extends TestCase
         $this->assertTrue($validator->errors()->has('email'));
     }
 
-    /**
-     * BVA & EP: Password (required, string)
-     */
+    
+
+
     public function test_password_valid_partition(): void
     {
         $data = [

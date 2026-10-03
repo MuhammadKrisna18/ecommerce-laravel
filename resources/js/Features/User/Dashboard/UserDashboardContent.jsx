@@ -2,12 +2,13 @@ import { motion } from 'framer-motion';
 import { Sparkles, ShoppingBag, Clock } from 'lucide-react';
 import { useAuth } from '@/Hooks/useAuth';
 import { useTranslation } from '@/Hooks/useTranslation';
+import { ProductCard } from '@/Features/Product/ProductCard';
 
 /**
  * User dashboard widgets / content area.
  * Rendered by Pages/User/Dashboard.jsx.
  */
-export function UserDashboardContent() {
+export function UserDashboardContent({ products = [] }) {
     const { t } = useTranslation();
     const { user } = useAuth();
 
@@ -84,27 +85,36 @@ export function UserDashboardContent() {
                 </div>
             </motion.div>
 
-            {/* Placeholder / coming soon */}
+            {/* Products Grid */}
             <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.16, ease: [0.16, 1, 0.3, 1] }}
+                className="space-y-4"
             >
-                <div className="rounded-2xl border border-dashed border-slate-200 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.02)] p-12 text-center">
-                    <div className="w-16 h-16 mx-auto rounded-2xl bg-brand-accent/20 border border-brand-primary/20 flex items-center justify-center text-brand-primary mb-4 shadow-sm">
-                        <ShoppingBag className="w-8 h-8" />
-                    </div>
-                    <h3 className="text-lg font-bold text-slate-800 tracking-tight">
-                        {t('Halaman Dashboard User Masih Kosong')}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-slate-500 mt-2 max-w-md mx-auto leading-relaxed">
-                        {t('Belum ada modul atau aktivitas yang ditampilkan saat ini. Modul pesanan, riwayat belanja, dan fitur user lainnya dapat ditambahkan pada langkah berikutnya.')}
-                    </p>
-                    <div className="mt-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 font-medium">
-                        <Clock className="w-3.5 h-3.5 text-brand-primary" />
-                        <span>{t('Status: Siap untuk pengembangan modul selanjutnya')}</span>
-                    </div>
+                <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-slate-800">{t('Rekomendasi Produk')}</h3>
                 </div>
+
+                {products.length === 0 ? (
+                    <div className="rounded-2xl border border-dashed border-slate-200 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.02)] p-12 text-center">
+                        <div className="w-16 h-16 mx-auto rounded-2xl bg-brand-accent/20 border border-brand-primary/20 flex items-center justify-center text-brand-primary mb-4 shadow-sm">
+                            <ShoppingBag className="w-8 h-8" />
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-800 tracking-tight">
+                            {t('Belum ada produk')}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-slate-500 mt-2 max-w-md mx-auto leading-relaxed">
+                            {t('Belum ada produk yang ditambahkan oleh penjual saat ini.')}
+                        </p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                        {products.map((product) => (
+                            <ProductCard key={product.id} product={product} />
+                        ))}
+                    </div>
+                )}
             </motion.div>
         </div>
     );

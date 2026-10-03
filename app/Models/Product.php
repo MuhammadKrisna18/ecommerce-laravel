@@ -19,6 +19,13 @@ class Product extends Model
         'description',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'status' => \App\Enums\ProductStatus::class,
+        ];
+    }
+
     public function store()
     {
         return $this->belongsTo(Store::class);

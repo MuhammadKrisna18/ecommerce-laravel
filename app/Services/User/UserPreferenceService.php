@@ -24,7 +24,7 @@ class UserPreferenceService implements UserPreferenceServiceInterface
 
         session(['locale' => $dto->locale]);
 
-        /** @var User $updatedUser */
+        
         $updatedUser = $this->userRepository->find($user->id);
 
         return $updatedUser;

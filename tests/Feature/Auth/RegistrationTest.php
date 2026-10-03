@@ -36,7 +36,7 @@ class RegistrationTest extends TestCase
 
     public function test_registration_fails_when_nickname_already_taken_case_insensitively(): void
     {
-        // Pengguna pertama mendaftar dengan nama panggilan 'Krisna'
+        
         $firstResponse = $this->post('/register', [
             'name' => 'Muhammad Krisna',
             'nickname' => 'Krisna',
@@ -45,10 +45,10 @@ class RegistrationTest extends TestCase
         ]);
         $firstResponse->assertRedirect(route('user.dashboard', absolute: false));
 
-        // Logout pengguna pertama agar request kedua tidak terhalang middleware 'guest'
+        
         $this->post('/logout');
 
-        // Pengguna kedua mendaftar dengan variasi huruf besar/kecil 'kRiSNA'
+        
         $response = $this->post('/register', [
             'name' => 'Krisna Lain',
             'nickname' => 'kRiSNA',

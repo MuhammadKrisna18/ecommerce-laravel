@@ -10,7 +10,8 @@ Platform E-Commerce modern berbasis **Laravel 12**, **Inertia.js**, dan **React*
 
 Sistem mendukung alur multi-role secara komprehensif:
 - **Admin**: Mengelola pengaturan toko, memantau statistik pengguna, serta mengawasi dan mengelola akun pengguna (tindakan pembekuan akun kustom dan penghapusan akun permanen dari database dengan verifikasi kode keamanan).
-- **User (Pelanggan)**: Melakukan registrasi mandiri dari portal login atau Google Firebase Auth, masuk ke dashboard pengguna khusus, mengelola profil dan avatar, mengatur preferensi bahasa antarmuka, memperbarui kata sandi mandiri, mengelola sesi aktif, serta terproteksi oleh sistem pembekuan akun terintegrasi.
+- **Seller (Penjual)**: Membuka toko (*Store*), menambahkan daftar produk jualan ke etalase, dan memantau pesanan di Dashboard Seller khusus.
+- **User (Pelanggan)**: Melakukan registrasi mandiri dari portal login atau Google Firebase Auth, masuk ke dashboard pengguna khusus untuk melihat daftar produk, mengelola profil dan avatar, mengatur preferensi bahasa antarmuka, memperbarui kata sandi mandiri, mengelola sesi aktif, serta terproteksi oleh sistem pembekuan akun terintegrasi.
 
 ---
 
@@ -71,11 +72,22 @@ Sistem mendukung alur multi-role secara komprehensif:
 
 ---
 
+### 🏪 Area Penjual / Seller Portal (`/seller`)
+- **Dashboard Seller (`/seller/dashboard`)**: Pemantauan ringkas untuk toko.
+- **Manajemen Produk (`/seller/products`)**:
+  - Menambah produk dengan informasi *SKU* otomatis.
+  - Memasukkan kategori, harga, deskripsi, dan sisa stok.
+  - Menghapus produk dari etalase.
+  - Status produk dikelola secara ketat berbasis *Enum* (`ProductStatus`).
+
+---
+
 ### 🛍️ Area Pengguna / User Portal
 
 #### 1. Dashboard Pengguna (`/user/dashboard`)
 - Tampilan salam personalisasi (*welcome banner*) berbasis nama panggilan (`nickname`) pengguna.
 - Ringkasan profil singkat, alamat pengiriman, dan status modul pengguna yang terintegrasi rapi dengan navbar dan sidebar.
+- Menampilkan **Daftar Rekomendasi Produk** secara grid dari seluruh toko, dilindungi dari masalah *N+1 Query*.
 
 #### 2. Modul Profil Pengguna (`/user/profile`)
 - **Informasi Pribadi**: Mengelola nama lengkap, nama panggilan/username unik, email (read-only), tanggal lahir, tempat lahir, dan alamat lengkap tempat tinggal.
@@ -178,14 +190,19 @@ Aplikasi ini mengadopsi pola **Granular Layered Architecture** tingkat lanjut (E
 1. **Admin Services**:
    - `AdminUserQueryServiceInterface` ➔ `AdminUserQueryService`: Menangani pembacaan data, filter pencarian pengguna, dan statistik admin.
    - `AdminUserManagementServiceInterface` ➔ `AdminUserManagementService`: Menangani mutasi akun pengguna (pembekuan, pembatalan pembekuan, penghapusan akun).
-2. **User Services**:
-   - `UserProfileServiceInterface` ➔ `UserProfileService`: Menangani pembaruan data informasi pribadi profil pengguna.
-   - `UserAvatarServiceInterface` ➔ `UserAvatarService`: Menangani proses upload dan penghapusan berkas foto profil.
-   - `UserPasswordServiceInterface` ➔ `UserPasswordService`: Menangani verifikasi kata sandi saat ini dan pembaruan kata sandi baru.
-   - `UserPreferenceServiceInterface` ➔ `UserPreferenceService`: Menangani pembaruan dan persistensi preferensi bahasa (*locale*) akun pengguna.
-3. **Core & General Services**:
+2. **User & Seller Services**:
+   - `UserProfileServiceInterface` ➔ `UserProfileService`: Menangani pembaruan data profil pengguna.
+   - `UserAvatarServiceInterface` ➔ `UserAvatarService`: Menangani proses upload dan penghapusan foto profil.
+   - `UserPasswordServiceInterface` ➔ `UserPasswordService`: Menangani verifikasi dan pembaruan kata sandi.
+   - `UserPreferenceServiceInterface` ➔ `UserPreferenceService`: Menangani pembaruan bahasa akun pengguna.
+   - `UserSellerServiceInterface` ➔ `UserSellerService`: Mengubah akun menjadi Seller dan meresmikan Toko.
+3. **Product & Core Services**:
+   - `ProductQueryServiceInterface` ➔ `ProductQueryService`: Bertanggung jawab penuh melayani permintaan *query* produk dengan optimal (N+1 safe) ke Frontend.
    - `AuthServiceInterface` ➔ `AuthService`: Menangani autentikasi registrasi dan otorisasi sesi.
-   - `SettingServiceInterface` ➔ `SettingService`: Menangani konfigurasi dan pengaturan umum toko.
+   - `SettingServiceInterface` ➔ `SettingService`: Menangani konfigurasi toko.
+
+### Component-based Frontend (React/Inertia):
+Frontend dibangun menggunakan **Atomic Design** dengan *Component-based architecture*, dimana `<div>` rumit beserta *utility class* Tailwind CSS yang panjang diabstraksikan ke dalam *Reusable UI Components* seperti `<AnimatedTab>`, `<FadeInContainer>`, dan `<ProductCard>` untuk memastikan *Clean Code* di sisi React.
 
 ---
 

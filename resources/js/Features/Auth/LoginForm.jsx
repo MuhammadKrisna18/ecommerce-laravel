@@ -5,6 +5,7 @@ import { ShieldCheck, Mail, Lock, Eye, EyeOff, ArrowRight, Sparkles } from 'luci
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
+import { FadeInContainer } from '@/Components/ui/FadeInContainer';
 import { signInWithGoogle } from '@/lib/firebase';
 
 export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
@@ -89,12 +90,7 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
 
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-[440px]"
-        >
+        <FadeInContainer className="w-full max-w-[440px]">
             <div className="relative rounded-2xl bg-white border border-slate-200/80 p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] transition-all duration-300">
                 {/* Top Header Accent */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[3px] bg-gradient-to-r from-transparent via-brand-primary to-transparent" />
@@ -311,7 +307,7 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                     </p>
                 </div>
             </div>
-        </motion.div>
+        </FadeInContainer>
     );
 }
 

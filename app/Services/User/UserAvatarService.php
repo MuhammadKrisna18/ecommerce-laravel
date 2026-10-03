@@ -29,7 +29,7 @@ class UserAvatarService implements UserAvatarServiceInterface
             'avatar' => $path,
         ]);
 
-        /** @var User $updatedUser */
+        
         $updatedUser = $this->userRepository->find($user->id);
 
         return $updatedUser;
@@ -45,7 +45,7 @@ class UserAvatarService implements UserAvatarServiceInterface
             'avatar' => null,
         ]);
 
-        /** @var User $updatedUser */
+        
         $updatedUser = $this->userRepository->find($user->id);
 
         return $updatedUser;

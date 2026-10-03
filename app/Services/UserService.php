@@ -14,9 +14,9 @@ use App\Services\User\UserService as RoleUserService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 
-/**
- * Unified facade service maintaining backward compatibility across roles.
- */
+
+
+
 class UserService implements UserServiceInterface
 {
     protected AdminUserService $adminUserService;
@@ -35,7 +35,7 @@ class UserService implements UserServiceInterface
         $this->authService = $authService;
     }
 
-    // ── Auth Operations ──────────────────────────────────────────────────────────
+    
 
     public function registerUser(RegisterUserDTO $dto): User
     {
@@ -47,7 +47,7 @@ class UserService implements UserServiceInterface
         return $this->authService->findOrCreateFromFirebase($dto);
     }
 
-    // ── Admin Operations ─────────────────────────────────────────────────────────
+    
 
     public function getUserList(string $role = 'user'): array
     {
@@ -79,7 +79,7 @@ class UserService implements UserServiceInterface
         return $this->adminUserService->deleteUser($user);
     }
 
-    // ── User Operations ──────────────────────────────────────────────────────────
+    
 
     public function updateProfile(User $user, UpdateProfileDTO $dto): User
     {

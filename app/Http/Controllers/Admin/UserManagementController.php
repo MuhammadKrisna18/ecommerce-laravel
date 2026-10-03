@@ -14,9 +14,9 @@ use Illuminate\Http\RedirectResponse;
 
 class UserManagementController extends Controller
 {
-    /**
-     * Freeze a user account with custom duration.
-     */
+    
+
+
     public function freeze(
         FreezeUserRequest $request,
         User $user,
@@ -34,9 +34,9 @@ class UserManagementController extends Controller
         ]));
     }
 
-    /**
-     * Unfreeze a user account immediately.
-     */
+    
+
+
     public function unfreeze(
         User $user,
         UnfreezeUserAction $action
@@ -48,9 +48,9 @@ class UserManagementController extends Controller
         ]));
     }
 
-    /**
-     * Permanently delete a user account from the database.
-     */
+    
+
+
     public function destroy(
         DeleteUserRequest $request,
         User $user,

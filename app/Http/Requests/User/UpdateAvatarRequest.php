@@ -18,7 +18,7 @@ class UpdateAvatarRequest extends FormRequest
                 'required',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
-                'max:2048', // 2MB max
+                'max:2048', 
             ],
         ];
     }

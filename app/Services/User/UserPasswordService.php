@@ -22,7 +22,7 @@ class UserPasswordService implements UserPasswordServiceInterface
             'password' => Hash::make($newPassword),
         ]);
 
-        /** @var User $updatedUser */
+        
         $updatedUser = $this->userRepository->find($user->id);
 
         return $updatedUser;

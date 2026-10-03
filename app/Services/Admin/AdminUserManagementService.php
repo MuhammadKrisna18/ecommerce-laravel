@@ -35,7 +35,7 @@ class AdminUserManagementService implements AdminUserManagementServiceInterface
             'frozen_reason' => $dto->reason,
         ]);
 
-        /** @var User $updatedUser */
+        
         $updatedUser = $this->userRepository->find($user->id);
 
         return $updatedUser;
@@ -48,7 +48,7 @@ class AdminUserManagementService implements AdminUserManagementServiceInterface
             'frozen_reason' => null,
         ]);
 
-        /** @var User $updatedUser */
+        
         $updatedUser = $this->userRepository->find($user->id);
 
         return $updatedUser;
