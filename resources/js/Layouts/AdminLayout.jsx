@@ -34,7 +34,7 @@ export default function AdminLayout({ header, children }) {
                     navItems={navItems}
                     brandIcon={Store}
                     brandLabel={t('Panel Manajemen')}
-                    mobileTitle="Tokped Admin"
+                    mobileTitle="K-Tienda Admin"
                     isMobileOpen={isSidebarOpen}
                     onMobileClose={() => setIsSidebarOpen(false)}
                 />

@@ -176,7 +176,7 @@ export function SettingsForm({ settings }) {
                                     type="text"
                                     value={data.store_name}
                                     onChange={(e) => setData('store_name', e.target.value)}
-                                    placeholder="Contoh: Tokopedia Official Store"
+                                    placeholder="Contoh: K-Tienda Official Store"
                                     className={inputCls}
                                 />
                             </FieldRow>

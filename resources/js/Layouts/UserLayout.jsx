@@ -52,7 +52,7 @@ export default function UserLayout({ header, children }) {
                     navItems={navItems}
                     brandIcon={ShoppingBag}
                     brandLabel={t('Area Pengguna')}
-                    mobileTitle="Tokped User"
+                    mobileTitle="K-Tienda User"
                     isMobileOpen={isSidebarOpen}
                     onMobileClose={() => setIsSidebarOpen(false)}
                 />

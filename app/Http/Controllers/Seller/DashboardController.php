@@ -13,8 +13,13 @@ class DashboardController extends Controller
     {
         $user = $request->user()->loadMissing('store');
 
+        $stats = [];
+        $quickOrders = [];
+
         return Inertia::render('Seller/Dashboard/Index', [
             'store' => $user->store,
+            'stats' => $stats,
+            'quickOrders' => $quickOrders,
         ]);
     }
 }

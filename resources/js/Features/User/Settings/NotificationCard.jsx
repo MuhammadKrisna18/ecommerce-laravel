@@ -109,7 +109,7 @@ export function NotificationCard() {
                             <NotificationRow
                                 icon={Tag}
                                 title={t('Promo, Diskon & Flash Sale')}
-                                description={t('Informasi penawaran harga spesial, kupon cashback Tokped, dan diskon produk favorit Anda.')}
+                                description={t('Informasi penawaran harga spesial, kupon cashback K-Tienda en Línea, dan diskon produk favorit Anda.')}
                                 checked={settings.promotions}
                                 onChange={handleToggle('promotions')}
                             />

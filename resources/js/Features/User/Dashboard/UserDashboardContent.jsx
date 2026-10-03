@@ -28,7 +28,7 @@ export function UserDashboardContent() {
                     <div className="relative z-10 space-y-3 max-w-2xl">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 border border-white/30 text-white text-xs font-semibold backdrop-blur-sm">
                             <Sparkles className="w-3.5 h-3.5 text-brand-accent" />
-                            <span>{t('Area Pengguna Tokped')}</span>
+                            <span>{t('Area Pengguna K-Tienda en Línea')}</span>
                         </div>
                         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
                             {t('Halo')}, <span>{displayName}</span> 👋

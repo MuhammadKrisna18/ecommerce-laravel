@@ -31,21 +31,7 @@ class SettingsController extends Controller
         $users = $this->adminUserService->getPaginatedUsers(15);
 
         return Inertia::render('Admin/Settings/Index', [
-            'settings' => $settings,
             'users' => $users,
         ]);
-    }
-
-    public function update(
-        UpdateSettingsRequest $request,
-        UpdateSettingsAction $updateSettingsAction
-    ): RedirectResponse {
-        $dto = UpdateSettingsDTO::fromArray($request->validated());
-
-        if ($updateSettingsAction->execute($dto)) {
-            return redirect()->back()->with('success', __('Pengaturan berhasil disimpan.'));
-        }
-
-        return redirect()->back()->with('error', __('Gagal menyimpan pengaturan.'));
     }
 }

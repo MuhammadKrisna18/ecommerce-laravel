@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn () => redirect()->route('login'));
 
-// ── Admin routes ─────────────────────────────────────────────────────────────
 Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.')
@@ -15,10 +14,6 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])
             ->name('settings.index');
 
-        Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])
-            ->name('settings.update');
-
-        // User account control routes
         Route::post('/users/{user}/freeze', [\App\Http\Controllers\Admin\UserManagementController::class, 'freeze'])
             ->name('users.freeze');
         Route::post('/users/{user}/unfreeze', [\App\Http\Controllers\Admin\UserManagementController::class, 'unfreeze'])
@@ -27,12 +22,10 @@ Route::middleware(['auth', 'verified', 'admin'])
             ->name('users.destroy');
     });
 
-// ── Frozen Notice route ──────────────────────────────────────────────────────
 Route::get('/account/frozen', \App\Http\Controllers\Auth\FrozenNoticeController::class)
     ->name('frozen.notice')
     ->middleware(['auth']);
 
-// ── User routes ───────────────────────────────────────────────────────────────
 Route::middleware(['auth', 'verified', 'user'])
     ->prefix('user')
     ->name('user.')
@@ -67,6 +60,8 @@ Route::middleware(['auth', 'verified', 'seller'])
             ->name('dashboard');
         Route::get('/products', [\App\Http\Controllers\Seller\ProductController::class, 'index'])
             ->name('products.index');
+        Route::post('/products', [\App\Http\Controllers\Seller\ProductController::class, 'store'])
+            ->name('products.store');
         Route::get('/settings', [\App\Http\Controllers\Seller\SettingsController::class, 'index'])
             ->name('settings.index');
     });

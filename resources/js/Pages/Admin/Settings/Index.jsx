@@ -1,11 +1,11 @@
 import { Head } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { SettingsForm } from '@/Features/Admin/Settings/SettingsForm';
+
 import { UserManagementList } from '@/Features/Admin/Settings/UserManagementList';
 import { useTranslation } from '@/Hooks/useTranslation';
 import { Sliders } from 'lucide-react';
 
-export default function SettingsIndex({ settings, users }) {
+export default function SettingsIndex({ users }) {
     const { t } = useTranslation();
 
     return (
@@ -25,8 +25,6 @@ export default function SettingsIndex({ settings, users }) {
             <Head title={t('Pengaturan & Manajemen Akun')} />
 
             <div className="max-w-5xl mx-auto space-y-8">
-                {/* Toko & Konfigurasi Umum */}
-                <SettingsForm settings={settings} />
 
                 {/* Manajemen Pengguna (Bekukan & Hapus Akun) */}
                 <UserManagementList users={users} />

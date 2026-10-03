@@ -82,7 +82,7 @@ export function PreferencesCard({ locale: initialLocale }) {
                             {t('Preferensi & Tampilan')}
                         </h3>
                         <p className="text-xs text-slate-500 mt-0.5">
-                            {t('Pilih bahasa utama yang ingin Anda gunakan untuk menjelajahi platform Tokped')}
+                            {t('Pilih bahasa utama yang ingin Anda gunakan untuk menjelajahi platform K-Tienda en Línea')}
                         </p>
                     </div>
                 </div>

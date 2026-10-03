@@ -1,4 +1,4 @@
-# 🛍️ Tokped E-Commerce Enterprise Platform
+# 🛍️ K-Tienda en Línea Enterprise Platform
 
 Platform E-Commerce modern berbasis **Laravel 12**, **Inertia.js**, dan **React** yang dirancang dengan standar arsitektur kelas enterprise, fokus pada performa tinggi, pengalaman pengguna (UI/UX) yang intuitif, pemisahan peran yang tegas (**Admin & User**), lokalisasi multibahasa penuh (**i18n**), serta sistem keamanan autentikasi yang ketat.
 
@@ -6,7 +6,7 @@ Platform E-Commerce modern berbasis **Laravel 12**, **Inertia.js**, dan **React*
 
 ## 📖 1. Deskripsi Aplikasi
 
-**Tokped E-Commerce** adalah sistem pengelolaan platform belanja daring (*e-commerce*) dengan panel administrasi modern dan area pengguna (*User*). Aplikasi ini memadukan keandalan arsitektur backend Laravel dengan kelincahan antarmuka SPA (*Single Page Application*) dari React via Inertia.js.
+**K-Tienda en Línea** adalah sistem pengelolaan platform belanja daring (*e-commerce*) dengan panel administrasi modern dan area pengguna (*User*). Aplikasi ini memadukan keandalan arsitektur backend Laravel dengan kelincahan antarmuka SPA (*Single Page Application*) dari React via Inertia.js.
 
 Sistem mendukung alur multi-role secara komprehensif:
 - **Admin**: Mengelola pengaturan toko, memantau statistik pengguna, serta mengawasi dan mengelola akun pengguna (tindakan pembekuan akun kustom dan penghapusan akun permanen dari database dengan verifikasi kode keamanan).

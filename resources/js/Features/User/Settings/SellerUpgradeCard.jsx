@@ -156,13 +156,13 @@ export function SellerUpgradeCard({ user }) {
                     <div className="space-y-3 max-w-2xl">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/20 text-white text-xs font-semibold backdrop-blur-sm">
                             <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                            <span>{t('Program Mitra Penjual Tokped')}</span>
+                            <span>{t('Program Mitra Penjual K-Tienda en Línea')}</span>
                         </div>
                         <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
                             {t('Buka Toko Gratis & Mulai Berjualan')}
                         </h2>
                         <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed">
-                            {t('Ubah akun belanja Anda menjadi akun penjual untuk menjangkau jutaan pembeli aktif di Tokped dengan fasilitas pengiriman lengkap dan sistem penjualan yang mudah.')}
+                            {t('Ubah akun belanja Anda menjadi akun penjual untuk menjangkau jutaan pembeli aktif di K-Tienda en Línea dengan fasilitas pengiriman lengkap dan sistem penjualan yang mudah.')}
                         </p>
                     </div>
 
@@ -208,7 +208,7 @@ export function SellerUpgradeCard({ user }) {
                             </p>
                         )}
                         <p className="text-xs text-slate-500">
-                            {t('Anda telah terdaftar sebagai mitra penjual Tokped. Kelola produk, pesanan pembeli, dan pengaturan toko Anda melalui Seller Portal.')}
+                            {t('Anda telah terdaftar sebagai mitra penjual K-Tienda en Línea. Kelola produk, pesanan pembeli, dan pengaturan toko Anda melalui Seller Portal.')}
                         </p>
                     </div>
                     <div className="pt-2">
@@ -217,7 +217,7 @@ export function SellerUpgradeCard({ user }) {
                             className="inline-flex items-center bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold px-6 py-2.5 shadow-sm transition-colors"
                         >
                             <Store className="w-4 h-4 mr-2" />
-                            {t('Buka Tokped Seller Center')}
+                            {t('Buka K-Tienda en Línea Seller Center')}
                         </Link>
                     </div>
                 </div>
@@ -277,7 +277,7 @@ export function SellerUpgradeCard({ user }) {
                                         <p className="text-[11px] text-slate-400">
                                             {t('Tautan toko')}:{' '}
                                             <span className="font-mono text-emerald-600 font-semibold">
-                                                tokped.test/store/{storeSlug}
+                                                k-tienda.test/store/{storeSlug}
                                             </span>
                                         </p>
                                     )}
@@ -465,7 +465,7 @@ export function SellerUpgradeCard({ user }) {
                                 <span className="text-xs text-slate-600 leading-relaxed">
                                     {t('Saya menyatakan bahwa data yang saya isi adalah benar dan menyetujui')}{' '}
                                     <span className="font-semibold text-emerald-600 hover:underline">
-                                        {t('Syarat & Ketentuan Penjual Tokped')}
+                                        {t('Syarat & Ketentuan Penjual K-Tienda en Línea')}
                                     </span>
                                     .{' '}
                                     {t('Saya bersedia mematuhi aturan perdagangan produk resmi dan standar layanan pelanggan platform.')}
@@ -504,7 +504,7 @@ export function SellerUpgradeCard({ user }) {
             >
                 <div className="p-6 space-y-4">
                     <p className="text-sm text-slate-600 leading-relaxed">
-                        {t('Anda akan mengajukan perubahan akun reguler menjadi akun Penjual Tokped dengan data berikut:')}
+                        {t('Anda akan mengajukan perubahan akun reguler menjadi akun Penjual K-Tienda en Línea dengan data berikut:')}
                     </p>
 
                     <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-3 text-xs">

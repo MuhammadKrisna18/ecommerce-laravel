@@ -71,7 +71,7 @@ export function DashboardWidgets({ users = [], stats = {} }) {
                         <div className="space-y-2 max-w-2xl">
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 border border-white/30 text-white text-xs font-semibold backdrop-blur-sm">
                                 <Sparkles className="w-3.5 h-3.5 text-brand-accent" />
-                                <span>Tokped E-Commerce Enterprise Suite</span>
+                                <span>K-Tienda en Línea Enterprise Suite</span>
                             </div>
                             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
                                 Selamat Datang Kembali, <span>{user?.name}</span>
@@ -137,11 +137,11 @@ export function DashboardWidgets({ users = [], stats = {} }) {
                                 <span>{t('Daftar User')}</span>
                             </div>
                             <p className="text-xs text-slate-500">
-                                Data pengguna terdaftar dalam sistem (Role: User)
+                                Data pengguna terdaftar dalam sistem
                             </p>
                         </div>
                         <span className="self-start sm:self-auto px-3 py-1 text-xs font-semibold rounded-full bg-brand-primary/10 text-brand-primary">
-                            Total: {users.length} User
+                            Total: {users.length} Akun
                         </span>
                     </div>
 

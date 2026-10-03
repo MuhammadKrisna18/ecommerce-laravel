@@ -160,7 +160,7 @@ export function AppSidebar({
                 </div>
                 <div className="flex flex-col">
                     <span className="font-bold text-base tracking-tight text-slate-900">
-                        Tokped Commerce
+                        K-Tienda en Línea
                     </span>
                     <span className="text-[11px] font-semibold text-brand-primary flex items-center gap-1">
                         <BrandIcon className="w-3 h-3 text-brand-primary" />

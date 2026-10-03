@@ -17,9 +17,9 @@ class AdminUserQueryService implements AdminUserQueryServiceInterface
         $this->userRepository = $userRepository;
     }
 
-    public function getUserList(string $role = UserRole::USER->value): array
+    public function getUserList(?string $role = null): array
     {
-        $users = $this->userRepository->getUsersByRole($role);
+        $users = $role ? $this->userRepository->getUsersByRole($role) : $this->userRepository->all();
 
         return $users->map(fn (User $user) => [
             'id' => $user->id,

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Head } from '@inertiajs/react';
+import { Head, useForm, router } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Package,
@@ -20,63 +20,18 @@ import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 import { CleanModal } from '@/Components/ui/CleanModal';
 import { useTranslation } from '@/Hooks/useTranslation';
+import { useFlash } from '@/Hooks/useFlash';
 
-export default function SellerProductsIndex({ store }) {
+export default function SellerProductsIndex({ store, products = [] }) {
     const { t } = useTranslation();
-
-    const [products, setProducts] = useState([
-        {
-            id: 1,
-            name: 'Earphone Bluetooth TWS Wireless Stereo',
-            sku: 'EPH-BT-01',
-            category: 'Elektronik & Gadget',
-            price: 189000,
-            stock: 35,
-            status: 'active',
-            sold: 84,
-            image: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=150&auto=format&fit=crop&q=80',
-        },
-        {
-            id: 2,
-            name: 'Kaos Polos Cotton Combed 30s Premium',
-            sku: 'KOS-CC-02',
-            category: 'Fashion & Pakaian',
-            price: 45000,
-            stock: 120,
-            status: 'active',
-            sold: 230,
-            image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=150&auto=format&fit=crop&q=80',
-        },
-        {
-            id: 3,
-            name: 'Mouse Gaming RGB Optical Silent Click',
-            sku: 'MOU-RGB-03',
-            category: 'Elektronik & Gadget',
-            price: 210000,
-            stock: 0,
-            status: 'out_of_stock',
-            sold: 45,
-            image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=150&auto=format&fit=crop&q=80',
-        },
-        {
-            id: 4,
-            name: 'Botol Minum Tumbler Stainless 500ml',
-            sku: 'TUM-SS-04',
-            category: 'Perlengkapan Rumah Tangga',
-            price: 75000,
-            stock: 4,
-            status: 'active',
-            sold: 19,
-            image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=150&auto=format&fit=crop&q=80',
-        },
-    ]);
+    const { success, error } = useFlash();
 
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTab, setSelectedTab] = useState('all');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [deleteCandidate, setDeleteCandidate] = useState(null);
 
-    const [newProduct, setNewProduct] = useState({
+    const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
         name: '',
         category: store?.categories?.[0] || 'Elektronik & Gadget',
         price: '',
@@ -84,7 +39,16 @@ export default function SellerProductsIndex({ store }) {
         description: '',
     });
 
-    const [formErrors, setFormErrors] = useState({});
+    const handleCreateProduct = (e) => {
+        e.preventDefault();
+        post(route('seller.products.store'), {
+            onSuccess: () => {
+                setIsAddModalOpen(false);
+                reset();
+                clearErrors();
+            }
+        });
+    };
 
     const filteredProducts = products.filter((p) => {
         const matchesSearch =
@@ -97,57 +61,12 @@ export default function SellerProductsIndex({ store }) {
         return matchesSearch;
     });
 
-    const handleCreateProduct = (e) => {
-        e.preventDefault();
-        const errors = {};
-
-        if (!newProduct.name.trim()) errors.name = t('Nama produk wajib diisi');
-        if (!newProduct.price || Number(newProduct.price) <= 0) errors.price = t('Harga harus lebih dari 0');
-        if (newProduct.stock === '' || Number(newProduct.stock) < 0) errors.stock = t('Stok tidak boleh negatif');
-
-        if (Object.keys(errors).length > 0) {
-            setFormErrors(errors);
-            return;
-        }
-
-        const createdItem = {
-            id: Date.now(),
-            name: newProduct.name,
-            sku: `PRD-${Math.floor(1000 + Math.random() * 9000)}`,
-            category: newProduct.category,
-            price: Number(newProduct.price),
-            stock: Number(newProduct.stock),
-            status: Number(newProduct.stock) > 0 ? 'active' : 'out_of_stock',
-            sold: 0,
-            image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&auto=format&fit=crop&q=80',
-        };
-
-        setProducts([createdItem, ...products]);
-        setIsAddModalOpen(false);
-        setNewProduct({
-            name: '',
-            category: store?.categories?.[0] || 'Elektronik & Gadget',
-            price: '',
-            stock: '',
-            description: '',
-        });
-        setFormErrors({});
-    };
-
     const handleToggleStatus = (id) => {
-        setProducts(
-            products.map((p) => {
-                if (p.id === id) {
-                    const nextStatus = p.status === 'active' ? 'inactive' : 'active';
-                    return { ...p, status: nextStatus };
-                }
-                return p;
-            })
-        );
+        alert(t('Fitur toggle status akan segera tersedia.'));
     };
 
     const handleDeleteProduct = (id) => {
-        setProducts(products.filter((p) => p.id !== id));
+        alert(t('Fitur hapus produk akan segera tersedia.'));
         setDeleteCandidate(null);
     };
 
@@ -249,7 +168,7 @@ export default function SellerProductsIndex({ store }) {
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-3">
                                                     <img
-                                                        src={product.image}
+                                                        src={product.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&auto=format&fit=crop&q=80'}
                                                         alt={product.name}
                                                         className="w-12 h-12 rounded-xl object-cover border border-slate-200 shrink-0"
                                                     />
@@ -356,12 +275,12 @@ export default function SellerProductsIndex({ store }) {
                         <Input
                             id="prod_name"
                             type="text"
-                            value={newProduct.name}
-                            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                            value={data.name}
+                            onChange={(e) => setData('name', e.target.value)}
                             placeholder={t('Contoh: Earphone Bluetooth TWS Pro Original')}
-                            className={`h-11 rounded-xl bg-white border ${formErrors.name ? 'border-rose-400' : 'border-slate-200'}`}
+                            className={`h-11 rounded-xl bg-white border ${errors.name ? 'border-rose-400' : 'border-slate-200'}`}
                         />
-                        {formErrors.name && <p className="text-xs text-rose-500 font-medium">{formErrors.name}</p>}
+                        {errors.name && <p className="text-xs text-rose-500 font-medium">{errors.name}</p>}
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -372,8 +291,8 @@ export default function SellerProductsIndex({ store }) {
                             <Input
                                 id="prod_cat"
                                 type="text"
-                                value={newProduct.category}
-                                onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+                                value={data.category}
+                                onChange={(e) => setData('category', e.target.value)}
                                 className="h-11 rounded-xl bg-white border-slate-200"
                             />
                         </div>
@@ -385,12 +304,12 @@ export default function SellerProductsIndex({ store }) {
                             <Input
                                 id="prod_price"
                                 type="number"
-                                value={newProduct.price}
-                                onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+                                value={data.price}
+                                onChange={(e) => setData('price', e.target.value)}
                                 placeholder="150000"
-                                className={`h-11 rounded-xl bg-white border ${formErrors.price ? 'border-rose-400' : 'border-slate-200'}`}
+                                className={`h-11 rounded-xl bg-white border ${errors.price ? 'border-rose-400' : 'border-slate-200'}`}
                             />
-                            {formErrors.price && <p className="text-xs text-rose-500 font-medium">{formErrors.price}</p>}
+                            {errors.price && <p className="text-xs text-rose-500 font-medium">{errors.price}</p>}
                         </div>
                     </div>
 
@@ -401,12 +320,12 @@ export default function SellerProductsIndex({ store }) {
                         <Input
                             id="prod_stock"
                             type="number"
-                            value={newProduct.stock}
-                            onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
+                            value={data.stock}
+                            onChange={(e) => setData('stock', e.target.value)}
                             placeholder="50"
-                            className={`h-11 rounded-xl bg-white border ${formErrors.stock ? 'border-rose-400' : 'border-slate-200'}`}
+                            className={`h-11 rounded-xl bg-white border ${errors.stock ? 'border-rose-400' : 'border-slate-200'}`}
                         />
-                        {formErrors.stock && <p className="text-xs text-rose-500 font-medium">{formErrors.stock}</p>}
+                        {errors.stock && <p className="text-xs text-rose-500 font-medium">{errors.stock}</p>}
                     </div>
 
                     <div className="space-y-1.5">
@@ -416,8 +335,8 @@ export default function SellerProductsIndex({ store }) {
                         <textarea
                             id="prod_desc"
                             rows={3}
-                            value={newProduct.description}
-                            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+                            value={data.description}
+                            onChange={(e) => setData('description', e.target.value)}
                             placeholder={t('Jelaskan keunggulan, spesifikasi, dan kelengkapan produk...')}
                             className="w-full rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-sm"
                         />
@@ -434,9 +353,10 @@ export default function SellerProductsIndex({ store }) {
                         </Button>
                         <Button
                             type="submit"
+                            disabled={processing}
                             className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-sm px-6 text-xs font-semibold"
                         >
-                            {t('Simpan Produk')}
+                            {processing ? t('Menyimpan...') : t('Simpan Produk')}
                         </Button>
                     </div>
                 </form>

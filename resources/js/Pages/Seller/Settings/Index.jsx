@@ -174,7 +174,7 @@ export default function SellerSettingsIndex({ store }) {
                                     <p className="text-[11px] text-slate-400">
                                         {t('Tautan toko')}:{' '}
                                         <span className="font-mono text-emerald-600 font-semibold">
-                                            tokped.test/store/{storeSlug}
+                                            k-tienda.test/store/{storeSlug}
                                         </span>
                                     </p>
                                 </div>
@@ -336,7 +336,7 @@ export default function SellerSettingsIndex({ store }) {
                                     <div className="space-y-1">
                                         <h4 className="text-xs font-bold text-slate-800">{t('Rekening Pencairan Dana Penjualan')}</h4>
                                         <p className="text-[11px] text-slate-600 leading-relaxed">
-                                            {t('Seluruh hasil penjualan dari produk yang telah selesai dikirim akan dikreditkan ke saldo Tokped dan dapat ditarik ke rekening ini kapan saja.')}
+                                            {t('Seluruh hasil penjualan dari produk yang telah selesai dikirim akan dikreditkan ke saldo K-Tienda en Línea dan dapat ditarik ke rekening ini kapan saja.')}
                                         </p>
                                     </div>
                                 </div>

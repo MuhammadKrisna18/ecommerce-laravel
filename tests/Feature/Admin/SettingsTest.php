@@ -33,19 +33,19 @@ class SettingsTest extends TestCase
         $admin = User::factory()->create(['role' => 'admin']);
 
         $response = $this->actingAs($admin)->post(route('admin.settings.update'), [
-            'store_name' => 'Tokped Official Store',
-            'contact_email' => 'support@tokped.test',
+            'store_name' => 'K-Tienda Official Store',
+            'contact_email' => 'support@k-tienda.test',
             'app_language' => 'id',
         ]);
 
         $response->assertSessionHas('success');
         $this->assertDatabaseHas('settings', [
             'key' => 'store_name',
-            'value' => 'Tokped Official Store',
+            'value' => 'K-Tienda Official Store',
         ]);
         $this->assertDatabaseHas('settings', [
             'key' => 'contact_email',
-            'value' => 'support@tokped.test',
+            'value' => 'support@k-tienda.test',
         ]);
     }
 }

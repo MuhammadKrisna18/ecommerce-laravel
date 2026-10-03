@@ -19,7 +19,7 @@ class DashboardController extends Controller
 
     public function index(): Response
     {
-        $users = $this->adminUserService->getUserList(UserRole::USER->value);
+        $users = $this->adminUserService->getUserList();
         $stats = $this->adminUserService->getDashboardStats();
 
         return Inertia::render('Admin/Dashboard', [

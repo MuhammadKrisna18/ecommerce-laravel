@@ -17,69 +17,15 @@ import SellerLayout from '@/Layouts/SellerLayout';
 import { Button } from '@/Components/ui/button';
 import { useTranslation } from '@/Hooks/useTranslation';
 
-export default function SellerDashboard({ store }) {
+const ICONS = {
+    Package,
+    ShoppingBag,
+    TrendingUp,
+    Users
+};
+
+export default function SellerDashboard({ store, stats = [], quickOrders = [] }) {
     const { t } = useTranslation();
-
-    const stats = [
-        {
-            label: t('Total Produk Aktif'),
-            value: '12',
-            subtext: t('+2 ditambahkan minggu ini'),
-            icon: Package,
-            color: 'text-emerald-600 bg-emerald-50 border-emerald-200',
-        },
-        {
-            label: t('Pesanan Baru'),
-            value: '4',
-            subtext: t('Perlu segera diproses'),
-            icon: ShoppingBag,
-            color: 'text-blue-600 bg-blue-50 border-blue-200',
-        },
-        {
-            label: t('Estimasi Pendapatan'),
-            value: 'Rp 3.850.000',
-            subtext: t('+18% dari bulan lalu'),
-            icon: TrendingUp,
-            color: 'text-amber-600 bg-amber-50 border-amber-200',
-        },
-        {
-            label: t('Pengunjung Toko'),
-            value: '248',
-            subtext: t('Dalam 7 hari terakhir'),
-            icon: Users,
-            color: 'text-purple-600 bg-purple-50 border-purple-200',
-        },
-    ];
-
-    const quickOrders = [
-        {
-            id: 'ORD-9821',
-            buyer: 'Andi Pratama',
-            product: 'Earphone Bluetooth TWS Pro',
-            qty: 1,
-            total: 'Rp 189.000',
-            status: t('Perlu Dikirim'),
-            time: '10 menit lalu',
-        },
-        {
-            id: 'ORD-9820',
-            buyer: 'Siti Rahma',
-            product: 'Kaos Polos Cotton Combed 30s',
-            qty: 3,
-            total: 'Rp 135.000',
-            status: t('Perlu Dikirim'),
-            time: '1 jam lalu',
-        },
-        {
-            id: 'ORD-9818',
-            buyer: 'Bambang Tri',
-            product: 'Mouse Gaming RGB Silent Click',
-            qty: 1,
-            total: 'Rp 210.000',
-            status: t('Sedang Dikirim'),
-            time: '3 jam lalu',
-        },
-    ];
 
     return (
         <SellerLayout header={<h1 className="text-xl font-bold text-slate-800">{t('Dashboard Toko')}</h1>}>
@@ -106,7 +52,7 @@ export default function SellerDashboard({ store }) {
                                     </span>
                                 </div>
                                 <p className="text-xs text-slate-300">
-                                    {store?.city ? `${t('Kota Operasional')}: ${store.city}` : t('Selamat datang di Seller Center Tokped')}
+                                    {store?.city ? `${t('Kota Operasional')}: ${store.city}` : t('Selamat datang di Seller Center K-Tienda en Línea')}
                                 </p>
                             </div>
                         </div>
@@ -134,7 +80,7 @@ export default function SellerDashboard({ store }) {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {stats.map((item, idx) => {
-                        const Icon = item.icon;
+                        const Icon = ICONS[item.icon] || Package;
                         return (
                             <motion.div
                                 key={idx}
@@ -196,7 +142,7 @@ export default function SellerDashboard({ store }) {
                         <div className="space-y-3">
                             <div className="flex items-center gap-2 text-slate-800 font-bold text-base">
                                 <Sparkles className="w-4 h-4 text-emerald-600" />
-                                <span>{t('Tips Penjualan Tokped')}</span>
+                                <span>{t('Tips Penjualan K-Tienda en Línea')}</span>
                             </div>
                             <p className="text-xs text-slate-500 leading-relaxed">
                                 {t('Upload foto produk dengan pencahayaan terang dan beri deskripsi lengkap untuk meningkatkan konversi penjualan toko Anda hingga 35%.')}

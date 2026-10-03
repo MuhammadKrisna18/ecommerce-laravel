@@ -26,7 +26,7 @@ class FrozenNoticeController extends Controller
             'frozenUntil' => $user->frozen_until?->translatedFormat('d F Y, H:i').' WIB',
             'durationText' => $user->frozen_duration_text ?? __('Sedang berlangsung'),
             'reason' => $user->frozen_reason ?: __('Pelanggaran ketentuan atau kebijakan komunitas.'),
-            'supportEmail' => config('mail.from.address', 'support@tokped.test'),
+            'supportEmail' => config('mail.from.address', 'support@k-tienda.test'),
         ]);
     }
 }

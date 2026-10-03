@@ -78,6 +78,6 @@ class SettingsController extends Controller
 
         $upgradeToSellerAction->execute($request->user(), $dto);
 
-        return redirect()->back()->with('success', __('Selamat! Akun Anda berhasil diubah menjadi akun Seller Tokped.'));
+        return redirect()->back()->with('success', __('Selamat! Akun Anda berhasil diubah menjadi akun Seller K-Tienda en Línea.'));
     }
 }

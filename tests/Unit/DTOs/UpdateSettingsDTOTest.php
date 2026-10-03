@@ -13,18 +13,18 @@ class UpdateSettingsDTOTest extends TestCase
     public function test_dto_populated_from_complete_array(): void
     {
         $payload = [
-            'store_name' => 'Tokped Store',
+            'store_name' => 'K-Tienda Store',
             'store_description' => 'Toko Resmi',
-            'contact_email' => 'admin@tokped.test',
+            'contact_email' => 'admin@k-tienda.test',
             'contact_phone' => '08123456789',
             'app_language' => 'id',
         ];
 
         $dto = UpdateSettingsDTO::fromArray($payload);
 
-        $this->assertEquals('Tokped Store', $dto->store_name);
+        $this->assertEquals('K-Tienda Store', $dto->store_name);
         $this->assertEquals('Toko Resmi', $dto->store_description);
-        $this->assertEquals('admin@tokped.test', $dto->contact_email);
+        $this->assertEquals('admin@k-tienda.test', $dto->contact_email);
         $this->assertEquals('08123456789', $dto->contact_phone);
         $this->assertEquals('id', $dto->app_language);
     }

@@ -40,7 +40,7 @@ export default function SellerLayout({ header, children }) {
                     navItems={navItems}
                     brandIcon={Store}
                     brandLabel={t('Seller Center')}
-                    mobileTitle="Tokped Seller"
+                    mobileTitle="K-Tienda Seller"
                     isMobileOpen={isSidebarOpen}
                     onMobileClose={() => setIsSidebarOpen(false)}
                 />

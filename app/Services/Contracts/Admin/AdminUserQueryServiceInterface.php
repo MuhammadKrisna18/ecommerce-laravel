@@ -6,7 +6,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface AdminUserQueryServiceInterface
 {
-    public function getUserList(string $role = 'user'): array;
+    public function getUserList(?string $role = null): array;
 
     public function getDashboardStats(): array;
 

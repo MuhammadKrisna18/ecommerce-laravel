@@ -8,7 +8,7 @@ export default function FrozenNotice({
     frozenUntil = '15 Oktober 2026, 12:00 WIB',
     durationText = '2 Minggu',
     reason = 'Aktivitas akun mencurigakan atau pelanggaran ketentuan layanan komunitas.',
-    supportEmail = 'help@tokped.test',
+    supportEmail = 'help@k-tienda.test',
 }) {
     const handleLogout = () => {
         // Form submit logout

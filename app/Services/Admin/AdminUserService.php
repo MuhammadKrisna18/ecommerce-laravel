@@ -23,7 +23,7 @@ class AdminUserService implements AdminUserServiceInterface
         $this->managementService = $managementService;
     }
 
-    public function getUserList(string $role = UserRole::USER->value): array
+    public function getUserList(?string $role = null): array
     {
         return $this->queryService->getUserList($role);
     }
