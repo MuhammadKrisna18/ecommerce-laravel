@@ -18,7 +18,7 @@ class IsAdmin
 
         if (! $user->isAdmin()) {
             if ($user->isUser() && $request->routeIs('admin.dashboard')) {
-                return redirect()->route('user.dashboard');
+                return redirect()->route('dashboard');
             }
 
             abort(403, __('Akses tidak diizinkan.'));

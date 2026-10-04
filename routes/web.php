@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => redirect()->route('login'));
+Route::get('/', [\App\Http\Controllers\User\DashboardController::class, 'index'])
+    ->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
@@ -30,8 +31,6 @@ Route::middleware(['auth', 'verified', 'user'])
     ->prefix('user')
     ->name('user.')
     ->group(function () {
-        Route::get('/dashboard', [\App\Http\Controllers\User\DashboardController::class, 'index'])
-            ->name('dashboard');
 
         Route::get('/profile', [\App\Http\Controllers\User\ProfileController::class, 'edit'])
             ->name('profile.edit');

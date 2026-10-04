@@ -34,7 +34,7 @@ class FirebaseAuthController extends Controller
 
             $targetUrl = $user->is_frozen
                 ? route('frozen.notice')
-                : ($user->isAdmin() ? route('admin.dashboard') : route('user.dashboard'));
+                : ($user->isAdmin() ? route('admin.dashboard') : route('dashboard'));
 
             return response()->json([
                 'status' => 'success',

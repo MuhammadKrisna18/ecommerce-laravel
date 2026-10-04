@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('frozen.notice');
         }
 
-        $targetRoute = ($user && $user->isAdmin()) ? route('admin.dashboard') : route('user.dashboard');
+        $targetRoute = ($user && $user->isAdmin()) ? route('admin.dashboard') : route('dashboard');
 
         return redirect()->intended($targetRoute);
     }
@@ -46,6 +46,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('status', __('Anda telah berhasil keluar. Sesi Anda telah berakhir.'));
+        return redirect()->route('dashboard')->with('status', __('Anda telah berhasil keluar. Sesi Anda telah berakhir.'));
     }
 }

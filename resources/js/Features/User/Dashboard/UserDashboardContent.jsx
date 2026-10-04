@@ -2,8 +2,9 @@ import { motion } from 'framer-motion';
 import { Sparkles, ShoppingBag, Clock } from 'lucide-react';
 import { useAuth } from '@/Hooks/useAuth';
 import { useTranslation } from '@/Hooks/useTranslation';
+import { useState } from 'react';
 import { ProductCard } from '@/Features/Product/ProductCard';
-
+import { ProductDetailModal } from '@/Features/User/Dashboard/ProductDetailModal';
 /**
  * User dashboard widgets / content area.
  * Rendered by Pages/User/Dashboard.jsx.
@@ -11,6 +12,7 @@ import { ProductCard } from '@/Features/Product/ProductCard';
 export function UserDashboardContent({ products = [] }) {
     const { t } = useTranslation();
     const { user } = useAuth();
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
     const displayName = user?.nickname || user?.name || 'Pengguna';
 
@@ -31,59 +33,75 @@ export function UserDashboardContent({ products = [] }) {
                             <Sparkles className="w-3.5 h-3.5 text-brand-accent" />
                             <span>{t('Area Pengguna K-Tienda en Línea')}</span>
                         </div>
-                        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-                            {t('Halo')}, <span>{displayName}</span> 👋
-                        </h1>
-                        <p className="text-sm text-sky-100 leading-relaxed">
-                            {t('Akun Anda telah aktif sebagai')}{' '}
-                            <strong className="text-white underline decoration-brand-accent underline-offset-4 font-bold">
-                                {t('User')}
-                            </strong>
-                            .{' '}
-                            {t('Halaman ini disiapkan untuk fitur belanja, transaksi, dan aktivitas Anda selanjutnya.')}
-                        </p>
+                        {user ? (
+                            <>
+                                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                                    {t('Halo')}, <span>{displayName}</span> 👋
+                                </h1>
+                                <p className="text-sm text-sky-100 leading-relaxed">
+                                    {t('Akun Anda telah aktif sebagai')}{' '}
+                                    <strong className="text-white underline decoration-brand-accent underline-offset-4 font-bold">
+                                        {t('User')}
+                                    </strong>
+                                    .{' '}
+                                    {t('Halaman ini disiapkan untuk fitur belanja, transaksi, dan aktivitas Anda selanjutnya.')}
+                                </p>
+                            </>
+                        ) : (
+                            <>
+                                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                                    {t('Halo')}, <span>{t('Pengunjung')}</span> 👋
+                                </h1>
+                                <p className="text-sm text-sky-100 leading-relaxed">
+                                    {t('Anda sedang menjelajah sebagai Anonymous.')}{' '}
+                                    {t('Silakan login untuk dapat melakukan transaksi dan fitur lainnya.')}
+                                </p>
+                            </>
+                        )}
                     </div>
                 </div>
             </motion.div>
 
             {/* Profile Overview Card */}
-            <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-            >
-                <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                    <div className="flex items-center gap-4">
-                        {user?.avatar_url ? (
-                            <img
-                                src={user.avatar_url}
-                                alt={user.name}
-                                className="w-16 h-16 rounded-2xl object-cover border border-slate-200 shadow-sm"
-                            />
-                        ) : (
-                            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-primary to-brand-accent text-white font-extrabold text-2xl flex items-center justify-center shadow-sm">
-                                {user?.name?.charAt(0).toUpperCase()}
+            {user && (
+                <motion.div
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+                >
+                    <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                        <div className="flex items-center gap-4">
+                            {user?.avatar_url ? (
+                                <img
+                                    src={user.avatar_url}
+                                    alt={user.name}
+                                    className="w-16 h-16 rounded-2xl object-cover border border-slate-200 shadow-sm"
+                                />
+                            ) : (
+                                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-primary to-brand-accent text-white font-extrabold text-2xl flex items-center justify-center shadow-sm">
+                                    {user?.name?.charAt(0).toUpperCase()}
+                                </div>
+                            )}
+                            <div>
+                                <h3 className="text-lg font-bold text-slate-800">{user?.name}</h3>
+                                <p className="text-xs text-brand-primary font-medium">
+                                    {user?.nickname ? `@${user.nickname}` : user?.email}
+                                </p>
+                                <p className="text-xs text-slate-400 mt-1">
+                                    {user?.address ? user.address : t('Alamat belum diatur')}
+                                </p>
                             </div>
-                        )}
-                        <div>
-                            <h3 className="text-lg font-bold text-slate-800">{user?.name}</h3>
-                            <p className="text-xs text-brand-primary font-medium">
-                                {user?.nickname ? `@${user.nickname}` : user?.email}
-                            </p>
-                            <p className="text-xs text-slate-400 mt-1">
-                                {user?.address ? user.address : t('Alamat belum diatur')}
-                            </p>
                         </div>
-                    </div>
 
-                    <a
-                        href={route('user.profile.edit')}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all"
-                    >
-                        <span>{t('Ubah Profil')}</span>
-                    </a>
-                </div>
-            </motion.div>
+                        <a
+                            href={route('user.profile.edit')}
+                            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all"
+                        >
+                            <span>{t('Ubah Profil')}</span>
+                        </a>
+                    </div>
+                </motion.div>
+            )}
 
             {/* Products Grid */}
             <motion.div
@@ -111,11 +129,21 @@ export function UserDashboardContent({ products = [] }) {
                 ) : (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                         {products.map((product) => (
-                            <ProductCard key={product.id} product={product} />
+                            <ProductCard 
+                                key={product.id} 
+                                product={product} 
+                                onClick={() => setSelectedProduct(product)}
+                            />
                         ))}
                     </div>
                 )}
             </motion.div>
+        
+            <ProductDetailModal 
+                product={selectedProduct} 
+                isOpen={!!selectedProduct} 
+                onClose={() => setSelectedProduct(null)} 
+            />
         </div>
     );
 }

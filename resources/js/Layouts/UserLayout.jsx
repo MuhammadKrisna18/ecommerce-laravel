@@ -16,22 +16,26 @@ export default function UserLayout({ header, children }) {
     const navItems = [
         {
             name: t('Dashboard'),
-            href: route('user.dashboard'),
+            href: route('dashboard'),
             icon: LayoutDashboard,
-            active: route().current('user.dashboard'),
+            active: route().current('dashboard'),
         },
-        {
-            name: t('Profil Saya'),
-            href: route('user.profile.edit'),
-            icon: UserIcon,
-            active: route().current('user.profile.*'),
-        },
-        {
-            name: t('Pengaturan'),
-            href: route('user.settings.index'),
-            icon: Settings,
-            active: route().current('user.settings.*'),
-        },
+        ...(auth?.user
+            ? [
+                  {
+                      name: t('Profil Saya'),
+                      href: route('user.profile.edit'),
+                      icon: UserIcon,
+                      active: route().current('user.profile.*'),
+                  },
+                  {
+                      name: t('Pengaturan'),
+                      href: route('user.settings.index'),
+                      icon: Settings,
+                      active: route().current('user.settings.*'),
+                  },
+              ]
+            : []),
         ...(isSeller
             ? [
                   {
@@ -72,15 +76,24 @@ export default function UserLayout({ header, children }) {
                                     <span>{t('Toko Saya')}</span>
                                 </Link>
                             )}
-                            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-accent/20 border border-brand-primary/30 text-xs text-brand-primary">
-                                <UserIcon className="w-3.5 h-3.5 text-brand-primary" />
-                                <span>
-                                    {t('Role')}:{' '}
-                                    <strong className="text-slate-800 font-semibold capitalize">
-                                        {auth.user.role === 'admin' ? t('Admin') : auth.user.role === 'seller' ? t('Seller') : t('User')}
-                                    </strong>
-                                </span>
-                            </div>
+                            {auth?.user ? (
+                                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-accent/20 border border-brand-primary/30 text-xs text-brand-primary">
+                                    <UserIcon className="w-3.5 h-3.5 text-brand-primary" />
+                                    <span>
+                                        {t('Role')}:{' '}
+                                        <strong className="text-slate-800 font-semibold capitalize">
+                                            {auth.user.role === 'admin' ? t('Admin') : auth.user.role === 'seller' ? t('Seller') : t('User')}
+                                        </strong>
+                                    </span>
+                                </div>
+                            ) : (
+                                <Link
+                                    href={route('login')}
+                                    className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-brand-primary hover:bg-brand-accent text-white text-xs font-semibold transition-all shadow-sm"
+                                >
+                                    <span>{t('Login')}</span>
+                                </Link>
+                            )}
                         </div>
                     }
                 />

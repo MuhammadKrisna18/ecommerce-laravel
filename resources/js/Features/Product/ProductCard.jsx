@@ -1,11 +1,14 @@
 import { ShoppingBag } from 'lucide-react';
 import { useTranslation } from '@/Hooks/useTranslation';
 
-export function ProductCard({ product }) {
+export function ProductCard({ product, onClick }) {
     const { t } = useTranslation();
 
     return (
-        <div className="group flex flex-col bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-md hover:border-brand-primary/30 transition-all duration-300">
+        <div 
+            onClick={onClick}
+            className="group flex flex-col bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-md hover:border-brand-primary/30 transition-all duration-300 cursor-pointer"
+        >
             <div className="relative aspect-square bg-slate-100 overflow-hidden">
                 <img
                     src={product.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=80'}

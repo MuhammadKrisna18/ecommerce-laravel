@@ -57,7 +57,7 @@ export default function SellerLayout({ header, children }) {
                             </span>
 
                             <Link
-                                href={route('user.dashboard')}
+                                href={route('dashboard')}
                                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-xs font-semibold text-slate-700 transition-all shadow-xs"
                             >
                                 <ShoppingBag className="w-3.5 h-3.5 text-brand-primary" />
