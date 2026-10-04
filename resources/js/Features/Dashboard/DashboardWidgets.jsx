@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from '@/Hooks/useTranslation';
 import { useAuth } from '@/Hooks/useAuth';
+import { router } from '@inertiajs/react';
 
 export function DashboardWidgets({ users = [], stats = {} }) {
     const { t } = useTranslation();
@@ -174,7 +175,8 @@ export function DashboardWidgets({ users = [], stats = {} }) {
                                         {users.map((user, index) => (
                                             <tr 
                                                 key={user.id}
-                                                className="hover:bg-slate-50/70 transition-colors group"
+                                                className="hover:bg-slate-50/70 transition-colors group cursor-pointer"
+                                                onClick={() => router.get(route('admin.users.show', user.id))}
                                             >
                                                 <td className="py-4 px-6 text-slate-400 text-xs">
                                                     {index + 1}

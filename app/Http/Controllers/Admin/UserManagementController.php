@@ -17,6 +17,19 @@ class UserManagementController extends Controller
     
 
 
+    public function show(User $user): \Inertia\Response
+    {
+        if ($user->isSeller()) {
+            $user->load(['store.products']);
+        } else {
+            $user->load(['store']);
+        }
+
+        return \Inertia\Inertia::render('Admin/Users/Show', [
+            'user' => clone $user,
+        ]);
+    }
+
     public function freeze(
         FreezeUserRequest $request,
         User $user,

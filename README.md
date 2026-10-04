@@ -73,12 +73,17 @@ Sistem mendukung alur multi-role secara komprehensif:
 ---
 
 ### 🏪 Area Penjual / Seller Portal (`/seller`)
-- **Dashboard Seller (`/seller/dashboard`)**: Pemantauan ringkas untuk toko.
+- **Dashboard Seller (`/seller/dashboard`)**: Pemantauan ringkas untuk toko (statistik performa, pesanan, dsb).
 - **Manajemen Produk (`/seller/products`)**:
   - Menambah produk dengan informasi *SKU* otomatis.
-  - Memasukkan kategori, harga, deskripsi, dan sisa stok.
-  - Menghapus produk dari etalase.
+  - Memasukkan kategori, harga, deskripsi, gambar produk, dan sisa stok.
+  - Mengubah dan menghapus produk dari etalase.
   - Status produk dikelola secara ketat berbasis *Enum* (`ProductStatus`).
+- **Pengaturan Toko (`/seller/settings`)**:
+  - Mengelola profil dan informasi dasar toko (Nama Toko, Deskripsi, Slogan, Kategori Utama).
+  - Mengatur alamat gudang/pengiriman dan preferensi layanan kurir ekspedisi.
+  - Mengonfigurasi rekening bank untuk pencairan dana penjualan.
+  - Opsi untuk meliburkan atau mengaktifkan status operasional toko.
 
 ---
 
@@ -117,6 +122,9 @@ Pusat pengaturan akun terpadu dengan navigasi tab mulus (*smooth tab transition*
     - Saluran komunikasi: *Notifikasi Email* dan *Push Notifikasi Peramban*.
 - **Akun Tertaut & Integrasi (`PrivacyAndDangerCard`)**:
   - Informasi status tautan login sosial Google (Firebase Auth).
+- **Upgrade Akun ke Penjual (`SellerUpgradeCard`)**:
+  - Fitur bagi pelanggan (*User*) reguler yang ingin membuka toko (upgrade ke akun *Seller*).
+  - Pendaftaran dengan mengisi detail informasi dasar toko yang langsung diproses melalui otorisasi khusus menggunakan `UserSellerService`, mengubah Role secara instan.
 
 ---
 

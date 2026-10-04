@@ -15,6 +15,8 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])
             ->name('settings.index');
 
+        Route::get('/users/{user}', [\App\Http\Controllers\Admin\UserManagementController::class, 'show'])
+            ->name('users.show');
         Route::post('/users/{user}/freeze', [\App\Http\Controllers\Admin\UserManagementController::class, 'freeze'])
             ->name('users.freeze');
         Route::post('/users/{user}/unfreeze', [\App\Http\Controllers\Admin\UserManagementController::class, 'unfreeze'])
