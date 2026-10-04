@@ -21,6 +21,7 @@ import { useTranslation } from '@/Hooks/useTranslation';
 import { useFlash } from '@/Hooks/useFlash';
 import { CreateProductModal } from '@/Features/Seller/Products/CreateProductModal';
 import { DeleteProductModal } from '@/Features/Seller/Products/DeleteProductModal';
+import { formatCurrency } from '@/lib/format';
 
 export default function SellerProductsIndex({ store, products = [] }) {
     const { t } = useTranslation();
@@ -51,16 +52,10 @@ export default function SellerProductsIndex({ store, products = [] }) {
         setDeleteCandidate(null);
     };
 
-    const formatCurrency = (val) => {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-            minimumFractionDigits: 0,
-        }).format(val);
-    };
-
     return (
-        <SellerLayout header={<h1 className="text-xl font-bold text-slate-800">{t('Katalog & Produk')}</h1>}>
+        <SellerLayout
+            header={<h1 className="text-xl font-bold text-slate-800">{t('Katalog & Produk')}</h1>}
+        >
             <Head title={t('Katalog & Manajemen Produk - Seller Center')} />
 
             <div className="max-w-6xl mx-auto space-y-6 pb-12">
@@ -70,7 +65,9 @@ export default function SellerProductsIndex({ store, products = [] }) {
                             {t('Katalog Produk')}
                         </h2>
                         <p className="text-xs text-slate-500 mt-1">
-                            {t('Kelola daftar barang jualan, ketersediaan stok, dan harga produk toko Anda')}
+                            {t(
+                                'Kelola daftar barang jualan, ketersediaan stok, dan harga produk toko Anda'
+                            )}
                         </p>
                     </div>
 
@@ -89,9 +86,23 @@ export default function SellerProductsIndex({ store, products = [] }) {
                         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 md:pb-0">
                             {[
                                 { id: 'all', label: t('Semua'), count: products.length },
-                                { id: 'active', label: t('Aktif'), count: products.filter((p) => p.status === 'active' && p.stock > 0).length },
-                                { id: 'out_of_stock', label: t('Stok Habis'), count: products.filter((p) => p.stock === 0).length },
-                                { id: 'inactive', label: t('Nonaktif'), count: products.filter((p) => p.status === 'inactive').length },
+                                {
+                                    id: 'active',
+                                    label: t('Aktif'),
+                                    count: products.filter(
+                                        (p) => p.status === 'active' && p.stock > 0
+                                    ).length,
+                                },
+                                {
+                                    id: 'out_of_stock',
+                                    label: t('Stok Habis'),
+                                    count: products.filter((p) => p.stock === 0).length,
+                                },
+                                {
+                                    id: 'inactive',
+                                    label: t('Nonaktif'),
+                                    count: products.filter((p) => p.status === 'inactive').length,
+                                },
                             ].map((tab) => (
                                 <button
                                     key={tab.id}
@@ -104,7 +115,9 @@ export default function SellerProductsIndex({ store, products = [] }) {
                                     }`}
                                 >
                                     <span>{tab.label}</span>
-                                    <span className="text-[11px] opacity-75 font-mono">({tab.count})</span>
+                                    <span className="text-[11px] opacity-75 font-mono">
+                                        ({tab.count})
+                                    </span>
                                 </button>
                             ))}
                         </div>
@@ -145,11 +158,17 @@ export default function SellerProductsIndex({ store, products = [] }) {
                                     </tr>
                                 ) : (
                                     filteredProducts.map((product) => (
-                                        <tr key={product.id} className="hover:bg-slate-50/50 transition-colors">
+                                        <tr
+                                            key={product.id}
+                                            className="hover:bg-slate-50/50 transition-colors"
+                                        >
                                             <td className="py-4 px-6">
                                                 <div className="flex items-center gap-3">
                                                     <img
-                                                        src={product.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&auto=format&fit=crop&q=80'}
+                                                        src={
+                                                            product.image ||
+                                                            'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&auto=format&fit=crop&q=80'
+                                                        }
                                                         alt={product.name}
                                                         className="w-12 h-12 rounded-xl object-cover border border-slate-200 shrink-0"
                                                     />
@@ -178,7 +197,9 @@ export default function SellerProductsIndex({ store, products = [] }) {
 
                                             <td className="py-4 px-4">
                                                 <div className="flex items-center gap-1.5">
-                                                    <span className={`font-semibold ${product.stock === 0 ? 'text-rose-600' : product.stock < 5 ? 'text-amber-600' : 'text-slate-800'}`}>
+                                                    <span
+                                                        className={`font-semibold ${product.stock === 0 ? 'text-rose-600' : product.stock < 5 ? 'text-amber-600' : 'text-slate-800'}`}
+                                                    >
                                                         {product.stock}
                                                     </span>
                                                     {product.stock === 0 && (
@@ -199,21 +220,28 @@ export default function SellerProductsIndex({ store, products = [] }) {
                                                     type="button"
                                                     onClick={() => handleToggleStatus(product.id)}
                                                     className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold border transition-colors cursor-pointer ${
-                                                        product.status === 'active' && product.stock > 0
+                                                        product.status === 'active' &&
+                                                        product.stock > 0
                                                             ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                                                             : product.stock === 0
-                                                            ? 'bg-rose-50 text-rose-700 border-rose-200'
-                                                            : 'bg-slate-100 text-slate-500 border-slate-200'
+                                                              ? 'bg-rose-50 text-rose-700 border-rose-200'
+                                                              : 'bg-slate-100 text-slate-500 border-slate-200'
                                                     }`}
                                                 >
-                                                    {product.status === 'active' && product.stock > 0 && <CheckCircle2 className="w-3 h-3" />}
-                                                    {product.status !== 'active' && <XCircle className="w-3 h-3" />}
+                                                    {product.status === 'active' &&
+                                                        product.stock > 0 && (
+                                                            <CheckCircle2 className="w-3 h-3" />
+                                                        )}
+                                                    {product.status !== 'active' && (
+                                                        <XCircle className="w-3 h-3" />
+                                                    )}
                                                     <span>
-                                                        {product.status === 'active' && product.stock > 0
+                                                        {product.status === 'active' &&
+                                                        product.stock > 0
                                                             ? t('Aktif')
                                                             : product.stock === 0
-                                                            ? t('Habis')
-                                                            : t('Nonaktif')}
+                                                              ? t('Habis')
+                                                              : t('Nonaktif')}
                                                     </span>
                                                 </button>
                                             </td>
@@ -240,16 +268,16 @@ export default function SellerProductsIndex({ store, products = [] }) {
                 </div>
             </div>
 
-            <CreateProductModal 
-                isOpen={isAddModalOpen} 
-                onClose={() => setIsAddModalOpen(false)} 
-                defaultCategory={store?.categories?.[0]} 
+            <CreateProductModal
+                isOpen={isAddModalOpen}
+                onClose={() => setIsAddModalOpen(false)}
+                defaultCategory={store?.categories?.[0]}
             />
 
-            <DeleteProductModal 
-                product={deleteCandidate} 
-                onClose={() => setDeleteCandidate(null)} 
-                onDelete={handleDeleteProduct} 
+            <DeleteProductModal
+                product={deleteCandidate}
+                onClose={() => setDeleteCandidate(null)}
+                onDelete={handleDeleteProduct}
             />
         </SellerLayout>
     );

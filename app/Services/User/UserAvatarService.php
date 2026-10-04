@@ -29,7 +29,6 @@ class UserAvatarService implements UserAvatarServiceInterface
             'avatar' => $path,
         ]);
 
-        
         $updatedUser = $this->userRepository->find($user->id);
 
         return $updatedUser;
@@ -45,7 +44,6 @@ class UserAvatarService implements UserAvatarServiceInterface
             'avatar' => null,
         ]);
 
-        
         $updatedUser = $this->userRepository->find($user->id);
 
         return $updatedUser;

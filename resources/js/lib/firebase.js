@@ -12,31 +12,26 @@ const firebaseConfig = {
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase App (Singleton pattern)
 export const firebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize Auth
 export const auth = getAuth(firebaseApp);
 
-// Providers
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
     prompt: 'select_account',
 });
 
-// Analytics (safe client-side check)
 export let analytics = null;
 if (typeof window !== 'undefined') {
-    isSupported().then((supported) => {
-        if (supported) {
-            analytics = getAnalytics(firebaseApp);
-        }
-    }).catch(() => {
-        // Ignore analytics initialization failure in non-supported environments
-    });
+    isSupported()
+        .then((supported) => {
+            if (supported) {
+                analytics = getAnalytics(firebaseApp);
+            }
+        })
+        .catch(() => {});
 }
 
-// Clean helper service functions
 export const signInWithGoogle = async () => {
     try {
         const result = await signInWithPopup(auth, googleProvider);

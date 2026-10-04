@@ -36,18 +36,6 @@ class AdminUserQueryService implements AdminUserQueryServiceInterface
         ])->toArray();
     }
 
-    public function getDashboardStats(): array
-    {
-        $totalUsers = $this->userRepository->countByRole(UserRole::USER->value);
-        $totalAdmins = $this->userRepository->countByRole(UserRole::ADMIN->value);
-
-        return [
-            'total_users' => $totalUsers,
-            'total_admins' => $totalAdmins,
-            'total_accounts' => $totalUsers + $totalAdmins,
-        ];
-    }
-
     public function getPaginatedUsers(int $perPage = 15): LengthAwarePaginator
     {
         return $this->userRepository->getPaginatedNonAdminUsers($perPage);

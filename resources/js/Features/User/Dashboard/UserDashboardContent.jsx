@@ -5,10 +5,7 @@ import { useTranslation } from '@/Hooks/useTranslation';
 import { useState } from 'react';
 import { ProductCard } from '@/Features/Product/ProductCard';
 import { ProductDetailModal } from '@/Features/User/Dashboard/ProductDetailModal';
-/**
- * User dashboard widgets / content area.
- * Rendered by Pages/User/Dashboard.jsx.
- */
+
 export function UserDashboardContent({ products = [] }) {
     const { t } = useTranslation();
     const { user } = useAuth();
@@ -18,7 +15,6 @@ export function UserDashboardContent({ products = [] }) {
 
     return (
         <div className="space-y-8">
-            {/* Welcome Card */}
             <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -44,7 +40,9 @@ export function UserDashboardContent({ products = [] }) {
                                         {t('User')}
                                     </strong>
                                     .{' '}
-                                    {t('Halaman ini disiapkan untuk fitur belanja, transaksi, dan aktivitas Anda selanjutnya.')}
+                                    {t(
+                                        'Halaman ini disiapkan untuk fitur belanja, transaksi, dan aktivitas Anda selanjutnya.'
+                                    )}
                                 </p>
                             </>
                         ) : (
@@ -54,7 +52,9 @@ export function UserDashboardContent({ products = [] }) {
                                 </h1>
                                 <p className="text-sm text-sky-100 leading-relaxed">
                                     {t('Anda sedang menjelajah sebagai Anonymous.')}{' '}
-                                    {t('Silakan login untuk dapat melakukan transaksi dan fitur lainnya.')}
+                                    {t(
+                                        'Silakan login untuk dapat melakukan transaksi dan fitur lainnya.'
+                                    )}
                                 </p>
                             </>
                         )}
@@ -62,7 +62,6 @@ export function UserDashboardContent({ products = [] }) {
                 </div>
             </motion.div>
 
-            {/* Profile Overview Card */}
             {user && (
                 <motion.div
                     initial={{ opacity: 0, y: 16 }}
@@ -103,7 +102,6 @@ export function UserDashboardContent({ products = [] }) {
                 </motion.div>
             )}
 
-            {/* Products Grid */}
             <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -129,20 +127,20 @@ export function UserDashboardContent({ products = [] }) {
                 ) : (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                         {products.map((product) => (
-                            <ProductCard 
-                                key={product.id} 
-                                product={product} 
+                            <ProductCard
+                                key={product.id}
+                                product={product}
                                 onClick={() => setSelectedProduct(product)}
                             />
                         ))}
                     </div>
                 )}
             </motion.div>
-        
-            <ProductDetailModal 
-                product={selectedProduct} 
-                isOpen={!!selectedProduct} 
-                onClose={() => setSelectedProduct(null)} 
+
+            <ProductDetailModal
+                product={selectedProduct}
+                isOpen={!!selectedProduct}
+                onClose={() => setSelectedProduct(null)}
             />
         </div>
     );

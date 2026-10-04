@@ -11,11 +11,11 @@ use App\Http\Requests\Admin\DeleteUserRequest;
 use App\Http\Requests\Admin\FreezeUserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UserManagementController extends Controller
 {
-    
-
 
     public function show(User $user): \Inertia\Response
     {
@@ -47,9 +47,6 @@ class UserManagementController extends Controller
         ]));
     }
 
-    
-
-
     public function unfreeze(
         User $user,
         UnfreezeUserAction $action
@@ -60,9 +57,6 @@ class UserManagementController extends Controller
             'name' => $user->name,
         ]));
     }
-
-    
-
 
     public function destroy(
         DeleteUserRequest $request,
@@ -79,5 +73,13 @@ class UserManagementController extends Controller
         return redirect()->back()->with('success', __('Akun :name berhasil dihapus permanen dari database.', [
             'name' => $userName,
         ]));
+    }
+
+    public function generateVerificationCode(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $code = strtoupper(Str::random(4));
+        $request->session()->put('admin_verification_code', $code);
+
+        return response()->json(['code' => $code]);
     }
 }

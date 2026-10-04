@@ -22,7 +22,6 @@ class UserPasswordService implements UserPasswordServiceInterface
             'password' => Hash::make($newPassword),
         ]);
 
-        
         $updatedUser = $this->userRepository->find($user->id);
 
         return $updatedUser;

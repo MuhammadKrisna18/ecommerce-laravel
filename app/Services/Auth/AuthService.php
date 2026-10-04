@@ -42,7 +42,6 @@ class AuthService implements AuthServiceInterface
             return $user;
         }
 
-        
         $baseNickname = Str::slug(explode('@', $dto->email)[0], '');
         if (empty($baseNickname)) {
             $baseNickname = 'user';
@@ -54,7 +53,6 @@ class AuthService implements AuthServiceInterface
             $counter++;
         }
 
-        
         $newUser = $this->userRepository->create([
             'name' => $dto->name,
             'nickname' => $nickname,

@@ -9,7 +9,6 @@ export function PrivacyAndDangerCard({ user, authProvider }) {
 
     return (
         <div className="space-y-6">
-            {/* Akun Tertaut (Google & Kredensial) */}
             <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] overflow-hidden">
                 <div className="p-6 sm:p-8 border-b border-slate-100 bg-slate-50/60 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent flex items-center justify-center text-white shadow-sm">
@@ -20,13 +19,14 @@ export function PrivacyAndDangerCard({ user, authProvider }) {
                             {t('Akun Tertaut & Integrasi')}
                         </h3>
                         <p className="text-xs text-slate-500 mt-0.5">
-                            {t('Kelola integrasi login sosial Google dan status otorisasi pihak ketiga')}
+                            {t(
+                                'Kelola integrasi login sosial Google dan status otorisasi pihak ketiga'
+                            )}
                         </p>
                     </div>
                 </div>
 
                 <div className="p-6 sm:p-8 space-y-4">
-                    {/* Google Firebase card */}
                     <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/80 border border-slate-100 flex items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
                             <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 flex items-center justify-center shadow-xs shrink-0">
@@ -67,8 +67,12 @@ export function PrivacyAndDangerCard({ user, authProvider }) {
                                 </div>
                                 <p className="text-xs text-slate-400 mt-0.5">
                                     {isGoogleConnected
-                                        ? t('Akun Google tertaut untuk kemudahan login dengan satu klik.')
-                                        : t('Tautkan akun Google Anda untuk login cepat tanpa mengetik kata sandi.')}
+                                        ? t(
+                                              'Akun Google tertaut untuk kemudahan login dengan satu klik.'
+                                          )
+                                        : t(
+                                              'Tautkan akun Google Anda untuk login cepat tanpa mengetik kata sandi.'
+                                          )}
                                 </p>
                             </div>
                         </div>
@@ -86,4 +90,3 @@ export function PrivacyAndDangerCard({ user, authProvider }) {
         </div>
     );
 }
-

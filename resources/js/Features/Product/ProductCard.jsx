@@ -1,17 +1,21 @@
 import { ShoppingBag } from 'lucide-react';
 import { useTranslation } from '@/Hooks/useTranslation';
+import { formatCurrency } from '@/lib/format';
 
 export function ProductCard({ product, onClick }) {
     const { t } = useTranslation();
 
     return (
-        <div 
+        <div
             onClick={onClick}
             className="group flex flex-col bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm hover:shadow-md hover:border-brand-primary/30 transition-all duration-300 cursor-pointer"
         >
             <div className="relative aspect-square bg-slate-100 overflow-hidden">
                 <img
-                    src={product.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=80'}
+                    src={
+                        product.image ||
+                        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=80'
+                    }
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -33,7 +37,7 @@ export function ProductCard({ product, onClick }) {
                     <span>{product.store?.name || t('Toko')}</span>
                 </div>
                 <div className="text-lg font-extrabold text-brand-primary mt-1">
-                    Rp {new Intl.NumberFormat('id-ID').format(product.price)}
+                    {formatCurrency(product.price)}
                 </div>
             </div>
         </div>

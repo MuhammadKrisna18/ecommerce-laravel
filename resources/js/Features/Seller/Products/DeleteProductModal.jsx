@@ -17,8 +17,8 @@ export function DeleteProductModal({ product, onClose, onDelete }) {
         >
             <div className="p-6 space-y-4">
                 <p className="text-xs text-slate-600 leading-relaxed">
-                    {t('Apakah Anda yakin ingin menghapus produk')}{' '}
-                    <strong>{product?.name}</strong>? {t('Tindakan ini tidak dapat dibatalkan.')}
+                    {t('Apakah Anda yakin ingin menghapus produk')} <strong>{product?.name}</strong>
+                    ? {t('Tindakan ini tidak dapat dibatalkan.')}
                 </p>
 
                 <div className="flex items-center justify-end gap-3 pt-2">

@@ -29,7 +29,6 @@ export default function ProfileEdit({ user }) {
             <Head title={t('Profil Pengguna')} />
 
             <div className="max-w-4xl mx-auto space-y-6">
-                {/* Flash Messages */}
                 <AnimatePresence>
                     {success && (
                         <motion.div
@@ -51,7 +50,6 @@ export default function ProfileEdit({ user }) {
                     )}
                 </AnimatePresence>
 
-                {/* Avatar Card */}
                 <motion.div
                     initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -60,7 +58,6 @@ export default function ProfileEdit({ user }) {
                     <AvatarUploadCard user={user} />
                 </motion.div>
 
-                {/* Profile Form Card */}
                 <motion.div
                     initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}

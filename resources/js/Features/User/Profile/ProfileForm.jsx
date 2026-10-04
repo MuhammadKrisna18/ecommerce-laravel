@@ -2,16 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/Components/ui/button';
 import { EditProfileModal } from '@/Features/User/Profile/EditProfileModal';
-import {
-    User,
-    AtSign,
-    Calendar,
-    MapPin,
-    Home,
-    Mail,
-    Edit3,
-    ShieldCheck,
-} from 'lucide-react';
+import { User, AtSign, Calendar, MapPin, Home, Mail, Edit3, ShieldCheck } from 'lucide-react';
 import { useTranslation } from '@/Hooks/useTranslation';
 
 function InfoItem({ icon: Icon, label, value, helper }) {
@@ -44,7 +35,6 @@ export function ProfileForm({ user }) {
     return (
         <>
             <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] overflow-hidden">
-                {/* Header */}
                 <div className="p-6 sm:p-8 border-b border-slate-100 bg-slate-50/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent flex items-center justify-center text-white shadow-sm">
@@ -55,12 +45,13 @@ export function ProfileForm({ user }) {
                                 {t('Informasi Pribadi')}
                             </h3>
                             <p className="text-xs text-slate-500 mt-0.5">
-                                {t('Kelola data diri, identitas username, dan alamat pengiriman Anda.')}
+                                {t(
+                                    'Kelola data diri, identitas username, dan alamat pengiriman Anda.'
+                                )}
                             </p>
                         </div>
                     </div>
 
-                    {/* Edit button in header */}
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                         <Button
                             type="button"
@@ -73,14 +64,9 @@ export function ProfileForm({ user }) {
                     </motion.div>
                 </div>
 
-                {/* Body Details */}
                 <div className="p-6 sm:p-8 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <InfoItem
-                            icon={User}
-                            label={t('Nama Lengkap')}
-                            value={user.name}
-                        />
+                        <InfoItem icon={User} label={t('Nama Lengkap')} value={user.name} />
 
                         <InfoItem
                             icon={AtSign}
@@ -113,22 +99,24 @@ export function ProfileForm({ user }) {
                                 icon={Home}
                                 label={t('Alamat Lengkap')}
                                 value={user.address}
-                                helper={t('Alamat lengkap tempat tinggal untuk pengiriman pesanan Anda')}
+                                helper={t(
+                                    'Alamat lengkap tempat tinggal untuk pengiriman pesanan Anda'
+                                )}
                             />
                         </div>
                     </div>
                 </div>
 
-                {/* Footer */}
                 <div className="p-6 sm:p-8 border-t border-slate-100 bg-slate-50/60 flex items-center justify-between gap-4">
                     <div className="text-xs text-slate-500 flex items-center gap-1.5">
                         <ShieldCheck className="w-4 h-4 text-brand-primary" />
-                        <span>{t('Data profil Anda terlindungi dengan standar keamanan privasi.')}</span>
+                        <span>
+                            {t('Data profil Anda terlindungi dengan standar keamanan privasi.')}
+                        </span>
                     </div>
                 </div>
             </div>
 
-            {/* Pop Card Modal for Editing Profile */}
             <EditProfileModal
                 open={isEditModalOpen}
                 onClose={() => setIsEditModalOpen(false)}

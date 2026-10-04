@@ -18,11 +18,6 @@ class UniqueNicknameIgnoreCase implements ValidationRule
         $this->ignoreUserId = $ignoreUserId;
     }
 
-    
-
-
-
-
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (! is_string($value) || trim($value) === '') {

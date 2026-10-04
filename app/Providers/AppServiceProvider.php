@@ -8,10 +8,12 @@ use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Repositories\SettingRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\ProductRepository;
+use App\Services\Admin\AdminDashboardService;
 use App\Services\Admin\AdminUserManagementService;
 use App\Services\Admin\AdminUserQueryService;
 use App\Services\Admin\AdminUserService;
 use App\Services\Auth\AuthService;
+use App\Services\Contracts\Admin\AdminDashboardServiceInterface;
 use App\Services\Contracts\Admin\AdminUserManagementServiceInterface;
 use App\Services\Contracts\Admin\AdminUserQueryServiceInterface;
 use App\Services\Contracts\Admin\AdminUserServiceInterface;
@@ -23,7 +25,6 @@ use App\Services\Contracts\User\UserPreferenceServiceInterface;
 use App\Services\Contracts\User\UserProfileServiceInterface;
 use App\Services\Contracts\User\UserSellerServiceInterface;
 use App\Services\Contracts\User\UserServiceInterface as RoleUserServiceInterface;
-use App\Services\Contracts\UserServiceInterface;
 use App\Services\Contracts\ProductQueryServiceInterface;
 use App\Services\SettingService;
 use App\Services\ProductQueryService;
@@ -33,7 +34,6 @@ use App\Services\User\UserPreferenceService;
 use App\Services\User\UserProfileService;
 use App\Services\User\UserSellerService;
 use App\Services\User\UserService as RoleUserService;
-use App\Services\UserService;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
@@ -45,31 +45,24 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
         $this->app->bind(SettingServiceInterface::class, SettingService::class);
 
-        
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
 
-        
         $this->app->bind(ProductRepositoryInterface::class, ProductRepository::class);
         $this->app->bind(ProductQueryServiceInterface::class, ProductQueryService::class);
 
-        
         $this->app->bind(AdminUserQueryServiceInterface::class, AdminUserQueryService::class);
         $this->app->bind(AdminUserManagementServiceInterface::class, AdminUserManagementService::class);
+        $this->app->bind(AdminDashboardServiceInterface::class, AdminDashboardService::class);
 
-        
         $this->app->bind(UserProfileServiceInterface::class, UserProfileService::class);
         $this->app->bind(UserAvatarServiceInterface::class, UserAvatarService::class);
         $this->app->bind(UserPasswordServiceInterface::class, UserPasswordService::class);
         $this->app->bind(UserPreferenceServiceInterface::class, UserPreferenceService::class);
         $this->app->bind(UserSellerServiceInterface::class, UserSellerService::class);
 
-        
         $this->app->bind(AdminUserServiceInterface::class, AdminUserService::class);
         $this->app->bind(RoleUserServiceInterface::class, RoleUserService::class);
         $this->app->bind(AuthServiceInterface::class, AuthService::class);
-
-        
-        $this->app->bind(UserServiceInterface::class, UserService::class);
     }
 
     public function boot(): void

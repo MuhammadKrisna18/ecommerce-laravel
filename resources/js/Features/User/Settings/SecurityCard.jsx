@@ -20,6 +20,7 @@ import { Alert } from '@/Components/ui/alert';
 import { Spinner } from '@/Components/ui/spinner';
 import { useTranslation } from '@/Hooks/useTranslation';
 import { useFlash } from '@/Hooks/useFlash';
+import { LogoutOtherSessionsModal } from '@/Features/User/Settings/Modals/LogoutOtherSessionsModal';
 
 function calculatePasswordStrength(pass) {
     if (!pass) return { score: 0, label: 'Kosong', color: 'bg-slate-200', text: 'text-slate-400' };
@@ -37,9 +38,19 @@ function calculatePasswordStrength(pass) {
         case 3:
             return { score: 75, label: 'Kuat', color: 'bg-sky-500', text: 'text-sky-500' };
         case 4:
-            return { score: 100, label: 'Sangat Kuat', color: 'bg-emerald-500', text: 'text-emerald-500' };
+            return {
+                score: 100,
+                label: 'Sangat Kuat',
+                color: 'bg-emerald-500',
+                text: 'text-emerald-500',
+            };
         default:
-            return { score: 15, label: 'Sangat Lemah', color: 'bg-rose-500', text: 'text-rose-500' };
+            return {
+                score: 15,
+                label: 'Sangat Lemah',
+                color: 'bg-rose-500',
+                text: 'text-rose-500',
+            };
     }
 }
 
@@ -47,24 +58,14 @@ export function SecurityCard({ user }) {
     const { t } = useTranslation();
     const { success: flashSuccess, error: flashError } = useFlash();
 
-    // Visibility toggles
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    // Sessions modal
     const [showLogoutOtherModal, setShowLogoutOtherModal] = useState(false);
     const [sessionNotice, setSessionNotice] = useState(null);
 
-    // Inertia form for password update
-    const {
-        data,
-        setData,
-        put,
-        processing,
-        errors,
-        reset,
-    } = useForm({
+    const { data, setData, put, processing, errors, reset } = useForm({
         current_password: '',
         password: '',
         password_confirmation: '',
@@ -92,7 +93,6 @@ export function SecurityCard({ user }) {
 
     return (
         <div className="space-y-6">
-            {/* Ubah Kata Sandi Card */}
             <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] overflow-hidden">
                 <div className="p-6 sm:p-8 border-b border-slate-100 bg-slate-50/60 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent flex items-center justify-center text-white shadow-sm">
@@ -103,13 +103,14 @@ export function SecurityCard({ user }) {
                             {t('Ubah Kata Sandi')}
                         </h3>
                         <p className="text-xs text-slate-500 mt-0.5">
-                            {t('Perbarui kata sandi secara berkala untuk menjaga akun tetap terlindungi')}
+                            {t(
+                                'Perbarui kata sandi secara berkala untuk menjaga akun tetap terlindungi'
+                            )}
                         </p>
                     </div>
                 </div>
 
                 <form onSubmit={handlePasswordSubmit} className="p-6 sm:p-8 space-y-6">
-                    {/* Flash messages from backend */}
                     <AnimatePresence>
                         {flashSuccess && (
                             <motion.div
@@ -131,7 +132,6 @@ export function SecurityCard({ user }) {
                         )}
                     </AnimatePresence>
 
-                    {/* Current Password */}
                     <div className="space-y-2">
                         <Label
                             htmlFor="current_password"
@@ -170,9 +170,7 @@ export function SecurityCard({ user }) {
                         )}
                     </div>
 
-                    {/* Grid New & Confirm Password */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* New Password */}
                         <div className="space-y-2">
                             <Label
                                 htmlFor="password"
@@ -210,7 +208,6 @@ export function SecurityCard({ user }) {
                                 </p>
                             )}
 
-                            {/* Password Strength Indicator */}
                             {data.password && (
                                 <motion.div
                                     initial={{ opacity: 0, height: 0 }}
@@ -237,7 +234,6 @@ export function SecurityCard({ user }) {
                             )}
                         </div>
 
-                        {/* Confirm Password */}
                         <div className="space-y-2">
                             <Label
                                 htmlFor="password_confirmation"
@@ -251,10 +247,14 @@ export function SecurityCard({ user }) {
                                     id="password_confirmation"
                                     type={showConfirmPassword ? 'text' : 'password'}
                                     value={data.password_confirmation}
-                                    onChange={(e) => setData('password_confirmation', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('password_confirmation', e.target.value)
+                                    }
                                     placeholder={t('Ulangi kata sandi baru')}
                                     className={`h-11 pr-11 bg-white text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm ${
-                                        errors.password_confirmation ? 'border-rose-400' : 'border-slate-200'
+                                        errors.password_confirmation
+                                            ? 'border-rose-400'
+                                            : 'border-slate-200'
                                     }`}
                                 />
                                 <button
@@ -275,7 +275,6 @@ export function SecurityCard({ user }) {
                                 </p>
                             )}
 
-                            {/* Match check badge */}
                             {data.password_confirmation && (
                                 <p
                                     className={`text-[11px] flex items-center gap-1 font-medium pt-1 ${
@@ -300,7 +299,6 @@ export function SecurityCard({ user }) {
                         </div>
                     </div>
 
-                    {/* Requirements checklist */}
                     <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600">
                         <div className="flex items-center gap-2">
                             <div
@@ -340,7 +338,6 @@ export function SecurityCard({ user }) {
                         </div>
                     </div>
 
-                    {/* Submit button */}
                     <div className="flex items-center justify-between pt-2">
                         <div className="text-xs text-slate-400 flex items-center gap-1.5">
                             <ShieldCheck className="w-4 h-4 text-emerald-500" />
@@ -370,8 +367,6 @@ export function SecurityCard({ user }) {
                 </form>
             </div>
 
-
-            {/* Sesi & Perangkat Aktif */}
             <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] p-6 sm:p-8 space-y-4">
                 <AnimatePresence>
                     {sessionNotice && (
@@ -380,9 +375,7 @@ export function SecurityCard({ user }) {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0 }}
                         >
-                            <Alert variant={sessionNotice.type}>
-                                {sessionNotice.message}
-                            </Alert>
+                            <Alert variant={sessionNotice.type}>{sessionNotice.message}</Alert>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -397,7 +390,9 @@ export function SecurityCard({ user }) {
                                 {t('Sesi & Perangkat Aktif')}
                             </h4>
                             <p className="text-xs text-slate-500 mt-0.5">
-                                {t('Daftar perangkat yang saat ini memiliki akses login aktif ke akun Anda')}
+                                {t(
+                                    'Daftar perangkat yang saat ini memiliki akses login aktif ke akun Anda'
+                                )}
                             </p>
                         </div>
                     </div>
@@ -413,7 +408,6 @@ export function SecurityCard({ user }) {
                     </Button>
                 </div>
 
-                {/* Sesi item */}
                 <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-100 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3.5">
                         <div className="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-700 shadow-xs">
@@ -437,43 +431,11 @@ export function SecurityCard({ user }) {
                 </div>
             </div>
 
-
-            {/* Modal Logout Perangkat Lain */}
-            <CleanModal
-                open={showLogoutOtherModal}
+            <LogoutOtherSessionsModal
+                isOpen={showLogoutOtherModal}
                 onClose={() => setShowLogoutOtherModal(false)}
-                title={t('Keluar dari Semua Perangkat Lain')}
-                description={t('Keluar dari Perangkat Lain')}
-                icon={LogOut}
-                size="sm"
-            >
-                <div className="p-6 space-y-4">
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                        {t('Tindakan ini akan mengakhiri semua sesi login aktif di komputer, ponsel, atau browser lain kecuali perangkat ini.')}
-                    </p>
-                    <p className="text-xs text-slate-500 font-medium">
-                        {t('Apakah Anda yakin ingin melanjutkan?')}
-                    </p>
-
-                    <div className="flex items-center justify-end gap-3 pt-2">
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            onClick={() => setShowLogoutOtherModal(false)}
-                            className="rounded-xl"
-                        >
-                            {t('Batal')}
-                        </Button>
-                        <Button
-                            type="button"
-                            onClick={confirmLogoutOtherSessions}
-                            className="bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-xs"
-                        >
-                            {t('Ya, Keluarkan Perangkat Lain')}
-                        </Button>
-                    </div>
-                </div>
-            </CleanModal>
+                onConfirm={confirmLogoutOtherSessions}
+            />
         </div>
     );
 }

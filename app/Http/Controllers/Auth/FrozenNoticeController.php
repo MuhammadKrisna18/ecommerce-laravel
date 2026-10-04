@@ -10,8 +10,6 @@ use Inertia\Response;
 
 class FrozenNoticeController extends Controller
 {
-    
-
 
     public function __invoke(Request $request): Response|RedirectResponse
     {

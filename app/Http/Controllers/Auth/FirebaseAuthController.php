@@ -19,16 +19,12 @@ class FirebaseAuthController extends Controller
         $this->authService = $authService;
     }
 
-    
-
-
     public function authenticate(FirebaseLoginRequest $request): JsonResponse
     {
         try {
             $dto = FirebaseAuthDTO::fromArray($request->validated());
             $user = $this->authService->findOrCreateFromFirebase($dto);
 
-            
             Auth::login($user, true);
             $request->session()->regenerate();
 

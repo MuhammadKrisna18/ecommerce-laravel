@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-    Globe,
-    Check,
-    SlidersHorizontal,
-    Loader2,
-} from 'lucide-react';
+import { Globe, Check, SlidersHorizontal, Loader2 } from 'lucide-react';
 import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
 import { CleanModal } from '@/Components/ui/CleanModal';
@@ -72,7 +67,6 @@ export function PreferencesCard({ locale: initialLocale }) {
     return (
         <div className="space-y-6">
             <div className="rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] overflow-hidden">
-                {/* Header */}
                 <div className="p-6 sm:p-8 border-b border-slate-100 bg-slate-50/60 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent flex items-center justify-center text-white shadow-sm">
                         <SlidersHorizontal className="w-5 h-5" />
@@ -82,7 +76,9 @@ export function PreferencesCard({ locale: initialLocale }) {
                             {t('Preferensi & Tampilan')}
                         </h3>
                         <p className="text-xs text-slate-500 mt-0.5">
-                            {t('Pilih bahasa utama yang ingin Anda gunakan untuk menjelajahi platform K-Tienda en Línea')}
+                            {t(
+                                'Pilih bahasa utama yang ingin Anda gunakan untuk menjelajahi platform K-Tienda en Línea'
+                            )}
                         </p>
                     </div>
                 </div>
@@ -100,7 +96,6 @@ export function PreferencesCard({ locale: initialLocale }) {
                         )}
                     </AnimatePresence>
 
-                    {/* Bahasa Antarmuka */}
                     <div className="space-y-3">
                         <Label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
                             <Globe className="w-3.5 h-3.5 text-brand-primary" />
@@ -127,7 +122,9 @@ export function PreferencesCard({ locale: initialLocale }) {
                                                 <p className="text-sm font-bold text-slate-800">
                                                     {lang.name}
                                                 </p>
-                                                <p className="text-xs text-slate-400">{lang.native}</p>
+                                                <p className="text-xs text-slate-400">
+                                                    {lang.native}
+                                                </p>
                                             </div>
                                         </div>
                                         {isSelected && (
@@ -143,7 +140,6 @@ export function PreferencesCard({ locale: initialLocale }) {
                 </div>
             </div>
 
-            {/* Modal Konfirmasi Ubah Bahasa */}
             <CleanModal
                 open={showLangModal}
                 onClose={() => setShowLangModal(false)}
@@ -156,7 +152,9 @@ export function PreferencesCard({ locale: initialLocale }) {
                     <p className="text-sm text-slate-600 leading-relaxed mb-6">
                         {t('Apakah Anda yakin ingin mengubah bahasa sistem menjadi')}{' '}
                         <strong className="font-semibold text-brand-primary">
-                            {{ id: t('Indonesia'), en: t('Inggris'), es: t('Spanyol') }[pendingLocale] || pendingLocale}
+                            {{ id: t('Indonesia'), en: t('Inggris'), es: t('Spanyol') }[
+                                pendingLocale
+                            ] || pendingLocale}
                         </strong>
                         ?
                     </p>
@@ -178,7 +176,9 @@ export function PreferencesCard({ locale: initialLocale }) {
                             className="bg-brand-primary hover:bg-brand-dark text-white rounded-xl shadow-[0_4px_15px_rgba(0,147,203,0.25)] transition-colors flex items-center gap-2"
                         >
                             {isUpdatingLocale && <Loader2 className="w-4 h-4 animate-spin" />}
-                            <span>{isUpdatingLocale ? t('Menyimpan...') : t('Ya, Ubah Bahasa')}</span>
+                            <span>
+                                {isUpdatingLocale ? t('Menyimpan...') : t('Ya, Ubah Bahasa')}
+                            </span>
                         </Button>
                     </div>
                 </div>

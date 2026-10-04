@@ -16,4 +16,8 @@ interface UserRepositoryInterface extends RepositoryInterface
     public function countByRole(string $role): int;
 
     public function getPaginatedNonAdminUsers(int $perPage = 15): \Illuminate\Contracts\Pagination\LengthAwarePaginator;
+
+    public function getLatestUsers(int $limit): \Illuminate\Database\Eloquent\Collection;
+
+    public function countRegisteredInMonth(int $year, int $month): int;
 }

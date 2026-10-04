@@ -8,10 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IsUser
 {
-    
-
-
-
 
     public function handle(Request $request, Closure $next): Response
     {

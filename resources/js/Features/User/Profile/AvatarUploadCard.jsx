@@ -18,13 +18,11 @@ export function AvatarUploadCard({ user }) {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // Validation max 2MB
         if (file.size > 2 * 1024 * 1024) {
             setErrorMessage(t('Ukuran file maksimal 2MB.'));
             return;
         }
 
-        // Validate image mime
         if (!['image/jpeg', 'image/png', 'image/jpg', 'image/webp'].includes(file.type)) {
             setErrorMessage(t('Format gambar harus JPG, PNG, atau WEBP.'));
             return;
@@ -101,7 +99,6 @@ export function AvatarUploadCard({ user }) {
 
             <div className="p-6 sm:p-8">
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-                    {/* Avatar Display */}
                     <div className="relative group shrink-0">
                         <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl overflow-hidden border-2 border-dashed border-brand-primary/40 bg-slate-50 p-1 flex items-center justify-center shadow-inner">
                             {currentAvatarUrl ? (
@@ -117,7 +114,6 @@ export function AvatarUploadCard({ user }) {
                             )}
                         </div>
 
-                        {/* Quick pick button overlay */}
                         <button
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
@@ -128,12 +124,9 @@ export function AvatarUploadCard({ user }) {
                         </button>
                     </div>
 
-                    {/* Controls & Actions */}
                     <div className="flex-1 space-y-4 text-center sm:text-left">
                         <div>
-                            <h4 className="text-base font-bold text-slate-800">
-                                {user?.name}
-                            </h4>
+                            <h4 className="text-base font-bold text-slate-800">{user?.name}</h4>
                             <p className="text-xs text-slate-500">
                                 {user?.nickname ? `@${user.nickname}` : user?.email}
                             </p>

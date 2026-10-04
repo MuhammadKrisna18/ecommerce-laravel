@@ -15,7 +15,6 @@ class DeleteUserRequest extends FormRequest
     {
         return [
             'confirmation_code' => ['required', 'string', 'size:4'],
-            'expected_code' => ['required', 'string', 'size:4'],
         ];
     }
 
@@ -23,10 +22,14 @@ class DeleteUserRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             $input = $this->input('confirmation_code');
-            $expected = $this->input('expected_code');
+            $expected = session('admin_verification_code');
 
             if ($input && $expected && strtoupper($input) !== strtoupper($expected)) {
                 $validator->errors()->add('confirmation_code', __('Kode verifikasi salah. Harap ketik ulang 4 karakter yang ditampilkan.'));
+            }
+
+            if ($input && $expected && strtoupper($input) === strtoupper($expected) && !$validator->errors()->any()) {
+                session()->forget('admin_verification_code');
             }
         });
     }

@@ -26,7 +26,6 @@ class UserProfileService implements UserProfileServiceInterface
             'address' => $dto->address ?: null,
         ]);
 
-        
         $updatedUser = $this->userRepository->find($user->id);
 
         return $updatedUser;

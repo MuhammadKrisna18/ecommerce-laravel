@@ -60,14 +60,11 @@ export function UserSettingsContent({ user, authProvider, locale }) {
 
     return (
         <div className="max-w-5xl mx-auto space-y-8">
-            {/* Top Banner: User Security & Status Overview */}
             <div className="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-6 sm:p-8 shadow-xl relative overflow-hidden">
-                {/* Decorative background glow */}
                 <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-brand-primary/20 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute left-1/3 -top-10 w-48 h-48 bg-brand-accent/15 rounded-full blur-2xl pointer-events-none" />
 
                 <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                    {/* User Profile Snippet */}
                     <div className="flex items-center gap-4">
                         {user?.avatar_url ? (
                             <img
@@ -88,7 +85,11 @@ export function UserSettingsContent({ user, authProvider, locale }) {
                                 </h3>
                                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-primary/20 text-brand-accent border border-brand-accent/30">
                                     <UserCheck className="w-3 h-3" />
-                                    {user?.role === 'admin' ? t('Admin') : user?.role === 'seller' ? t('Seller') : t('User')}
+                                    {user?.role === 'admin'
+                                        ? t('Admin')
+                                        : user?.role === 'seller'
+                                          ? t('Seller')
+                                          : t('User')}
                                 </span>
                             </div>
 
@@ -107,7 +108,6 @@ export function UserSettingsContent({ user, authProvider, locale }) {
                         </div>
                     </div>
 
-                    {/* Security Health Score Card */}
                     <div className="w-full md:w-auto p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 space-y-2 min-w-[240px]">
                         <div className="flex items-center justify-between gap-4">
                             <span className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
@@ -128,7 +128,6 @@ export function UserSettingsContent({ user, authProvider, locale }) {
                 </div>
             </div>
 
-            {/* Navigation Tabs */}
             <div className="flex items-center gap-2 p-1.5 bg-slate-100/80 backdrop-blur-sm rounded-2xl border border-slate-200/80 overflow-x-auto no-scrollbar">
                 {tabs.map((tab) => {
                     const Icon = tab.icon;
@@ -153,7 +152,9 @@ export function UserSettingsContent({ user, authProvider, locale }) {
                                 />
                             )}
                             <span className="relative z-10 flex items-center gap-2">
-                                <Icon className={`w-4 h-4 ${isActive ? 'text-brand-primary' : 'text-slate-400'}`} />
+                                <Icon
+                                    className={`w-4 h-4 ${isActive ? 'text-brand-primary' : 'text-slate-400'}`}
+                                />
                                 <span>{tab.name}</span>
                                 {tab.badge && (
                                     <span
@@ -172,7 +173,6 @@ export function UserSettingsContent({ user, authProvider, locale }) {
                 })}
             </div>
 
-            {/* Tab Contents with Framer Motion AnimatePresence */}
             <AnimatePresence mode="wait">
                 <AnimatedTab tabKey={activeTab}>
                     {activeTab === 'security' && <SecurityCard user={user} />}

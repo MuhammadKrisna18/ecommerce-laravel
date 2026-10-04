@@ -5,20 +5,11 @@ import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
 import { Spinner } from '@/Components/ui/spinner';
-import {
-    User,
-    AtSign,
-    Calendar,
-    MapPin,
-    Home,
-    Save,
-    ShieldCheck,
-    Mail,
-    X,
-} from 'lucide-react';
+import { User, AtSign, Calendar, MapPin, Home, Save, ShieldCheck, Mail, X } from 'lucide-react';
 import { useTranslation } from '@/Hooks/useTranslation';
 
-const inputCls = "h-11 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm";
+const inputCls =
+    'h-11 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm';
 
 function FormField({ id, icon: Icon, label, error, children, helper }) {
     return (
@@ -75,7 +66,6 @@ export function EditProfileModal({ open, onClose, user }) {
             <form onSubmit={submit}>
                 <div className="p-6 sm:p-8 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Nama Lengkap */}
                         <FormField
                             id="modal_name"
                             icon={User}
@@ -93,7 +83,6 @@ export function EditProfileModal({ open, onClose, user }) {
                             />
                         </FormField>
 
-                        {/* Nama Panggilan / Username */}
                         <FormField
                             id="modal_nickname"
                             icon={AtSign}
@@ -112,7 +101,6 @@ export function EditProfileModal({ open, onClose, user }) {
                             />
                         </FormField>
 
-                        {/* Email (Read Only) */}
                         <FormField
                             id="modal_email"
                             icon={Mail}
@@ -128,7 +116,6 @@ export function EditProfileModal({ open, onClose, user }) {
                             />
                         </FormField>
 
-                        {/* Tempat Lahir */}
                         <FormField
                             id="modal_birth_place"
                             icon={MapPin}
@@ -145,7 +132,6 @@ export function EditProfileModal({ open, onClose, user }) {
                             />
                         </FormField>
 
-                        {/* Tanggal Lahir */}
                         <FormField
                             id="modal_birth_date"
                             icon={Calendar}
@@ -162,7 +148,6 @@ export function EditProfileModal({ open, onClose, user }) {
                         </FormField>
                     </div>
 
-                    {/* Alamat Lengkap */}
                     <FormField
                         id="modal_address"
                         icon={Home}
@@ -181,11 +166,12 @@ export function EditProfileModal({ open, onClose, user }) {
                     </FormField>
                 </div>
 
-                {/* Footer Actions */}
                 <div className="p-6 sm:p-8 border-t border-slate-100 bg-slate-50/60 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <div className="text-xs text-slate-500 flex items-center gap-1.5">
                         <ShieldCheck className="w-4 h-4 text-brand-primary" />
-                        <span>{t('Data profil Anda terlindungi dengan standar keamanan privasi.')}</span>
+                        <span>
+                            {t('Data profil Anda terlindungi dengan standar keamanan privasi.')}
+                        </span>
                     </div>
 
                     <div className="flex items-center gap-3 w-full sm:w-auto justify-end">

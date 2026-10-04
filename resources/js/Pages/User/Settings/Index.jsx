@@ -16,7 +16,9 @@ export default function UserSettingsIndex({ user, authProvider, locale }) {
                         {t('Pengaturan Akun')}
                     </h2>
                     <span className="text-xs text-slate-500 font-normal">
-                        {t('Kelola preferensi akun, keamanan kata sandi, notifikasi, dan privasi Anda')}
+                        {t(
+                            'Kelola preferensi akun, keamanan kata sandi, notifikasi, dan privasi Anda'
+                        )}
                     </span>
                 </div>
             }

@@ -8,10 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EnsureAccountNotFrozen
 {
-    
-
-
-
 
     public function handle(Request $request, Closure $next): Response
     {

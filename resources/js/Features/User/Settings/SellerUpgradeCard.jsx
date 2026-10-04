@@ -19,26 +19,26 @@ import { Button } from '@/Components/ui/button';
 import { CleanModal } from '@/Components/ui/CleanModal';
 import { Spinner } from '@/Components/ui/spinner';
 import { useTranslation } from '@/Hooks/useTranslation';
+import { useSellerUpgrade } from '@/Features/User/Settings/Hooks/useSellerUpgrade';
+import { ConfirmSellerUpgradeModal } from '@/Features/User/Settings/Modals/ConfirmSellerUpgradeModal';
 
 export function SellerUpgradeCard({ user }) {
     const { t } = useTranslation();
 
     const isAlreadySeller = user?.role === 'seller';
 
-    const [formData, setFormData] = useState({
-        store_name: user?.store?.name || '',
-        categories: user?.store?.categories || ['electronics'],
-        description: user?.store?.description || '',
-        owner_name: user?.name || '',
-        phone: user?.store?.phone || '',
-        city: user?.store?.city || '',
-        store_address: user?.store?.address || user?.address || '',
-        agree_terms: false,
-    });
-
-    const [formErrors, setFormErrors] = useState({});
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const {
+        formData,
+        formErrors,
+        isSubmitting,
+        showConfirmModal,
+        setShowConfirmModal,
+        storeSlug,
+        handleInputChange,
+        handleCategoryToggle,
+        handleOpenConfirmation,
+        handleConfirmSubmit,
+    } = useSellerUpgrade(user);
 
     const categoryOptions = [
         { value: 'electronics', label: t('Elektronik & Gadget') },
@@ -49,102 +49,6 @@ export function SellerUpgradeCard({ user }) {
         { value: 'hobbies_toys', label: t('Hobi, Mainan & Koleksi') },
         { value: 'automotive', label: t('Otomotif & Aksesoris') },
     ];
-
-    const storeSlug = formData.store_name
-        ? formData.store_name
-              .toLowerCase()
-              .replace(/[^a-z0-9]+/g, '-')
-              .replace(/^-+|-+$/g, '')
-        : 'nama-toko-anda';
-
-    const handleInputChange = (field, value) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
-        if (formErrors[field]) {
-            setFormErrors((prev) => ({ ...prev, [field]: null }));
-        }
-    };
-
-    const handleCategoryToggle = (value) => {
-        setFormData((prev) => {
-            const exists = prev.categories.includes(value);
-            let nextCategories;
-            if (exists) {
-                nextCategories = prev.categories.filter((cat) => cat !== value);
-            } else {
-                nextCategories = [...prev.categories, value];
-            }
-            return { ...prev, categories: nextCategories };
-        });
-
-        if (formErrors.categories) {
-            setFormErrors((prev) => ({ ...prev, categories: null }));
-        }
-    };
-
-    const validateForm = () => {
-        const errors = {};
-        const trimmedStoreName = formData.store_name.trim();
-
-        if (!trimmedStoreName) {
-            errors.store_name = t('Nama toko wajib diisi');
-        } else if (trimmedStoreName.length < 4) {
-            errors.store_name = t('Nama toko minimal 4 karakter');
-        } else if (!/^[\p{L}\s]+$/u.test(trimmedStoreName)) {
-            errors.store_name = t('Nama toko hanya boleh berisi huruf');
-        }
-
-        if (!formData.categories || formData.categories.length === 0) {
-            errors.categories = t('Pilih minimal satu kategori produk');
-        }
-
-        if (!formData.owner_name.trim()) {
-            errors.owner_name = t('Nama pemilik toko wajib diisi');
-        }
-
-        if (!formData.phone.trim()) {
-            errors.phone = t('Nomor telepon / WhatsApp wajib diisi');
-        } else if (formData.phone.trim().length < 9) {
-            errors.phone = t('Nomor telepon tidak valid');
-        }
-
-        if (!formData.city.trim()) {
-            errors.city = t('Kota atau kabupaten toko wajib diisi');
-        }
-
-        if (!formData.store_address.trim()) {
-            errors.store_address = t('Alamat lengkap penjemputan wajib diisi');
-        }
-
-        if (!formData.agree_terms) {
-            errors.agree_terms = t('Anda wajib menyetujui Syarat & Ketentuan Penjual');
-        }
-
-        setFormErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-
-    const handleOpenConfirmation = (e) => {
-        e.preventDefault();
-        if (validateForm()) {
-            setShowConfirmModal(true);
-        }
-    };
-
-    const handleConfirmSubmit = () => {
-        setIsSubmitting(true);
-        router.post(route('user.settings.seller.upgrade'), formData, {
-            preserveScroll: true,
-            onSuccess: () => {
-                setIsSubmitting(false);
-                setShowConfirmModal(false);
-            },
-            onError: (serverErrors) => {
-                setIsSubmitting(false);
-                setShowConfirmModal(false);
-                setFormErrors(serverErrors);
-            },
-        });
-    };
 
     return (
         <div className="space-y-6">
@@ -162,7 +66,9 @@ export function SellerUpgradeCard({ user }) {
                             {t('Buka Toko Gratis & Mulai Berjualan')}
                         </h2>
                         <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed">
-                            {t('Ubah akun belanja Anda menjadi akun penjual untuk menjangkau jutaan pembeli aktif di K-Tienda en Línea dengan fasilitas pengiriman lengkap dan sistem penjualan yang mudah.')}
+                            {t(
+                                'Ubah akun belanja Anda menjadi akun penjual untuk menjangkau jutaan pembeli aktif di K-Tienda en Línea dengan fasilitas pengiriman lengkap dan sistem penjualan yang mudah.'
+                            )}
                         </p>
                     </div>
 
@@ -208,7 +114,9 @@ export function SellerUpgradeCard({ user }) {
                             </p>
                         )}
                         <p className="text-xs text-slate-500">
-                            {t('Anda telah terdaftar sebagai mitra penjual K-Tienda en Línea. Kelola produk, pesanan pembeli, dan pengaturan toko Anda melalui Seller Portal.')}
+                            {t(
+                                'Anda telah terdaftar sebagai mitra penjual K-Tienda en Línea. Kelola produk, pesanan pembeli, dan pengaturan toko Anda melalui Seller Portal.'
+                            )}
                         </p>
                     </div>
                     <div className="pt-2">
@@ -236,7 +144,9 @@ export function SellerUpgradeCard({ user }) {
                                     {t('Formulir Pembukaan Toko')}
                                 </h3>
                                 <p className="text-xs text-slate-500 mt-0.5">
-                                    {t('Lengkapi data diri dan profil toko Anda untuk aktivasi akun penjual')}
+                                    {t(
+                                        'Lengkapi data diri dan profil toko Anda untuk aktivasi akun penjual'
+                                    )}
                                 </p>
                             </div>
                         </div>
@@ -256,17 +166,24 @@ export function SellerUpgradeCard({ user }) {
 
                             <div className="space-y-4">
                                 <div className="space-y-1.5">
-                                    <Label htmlFor="store_name" className="text-xs font-semibold text-slate-700">
+                                    <Label
+                                        htmlFor="store_name"
+                                        className="text-xs font-semibold text-slate-700"
+                                    >
                                         {t('Nama Toko')} <span className="text-rose-500">*</span>
                                     </Label>
                                     <Input
                                         id="store_name"
                                         type="text"
                                         value={formData.store_name}
-                                        onChange={(e) => handleInputChange('store_name', e.target.value)}
+                                        onChange={(e) =>
+                                            handleInputChange('store_name', e.target.value)
+                                        }
                                         placeholder={t('Contoh: Berkah Elektronik Official')}
                                         className={`h-11 rounded-xl bg-white border ${
-                                            formErrors.store_name ? 'border-rose-400' : 'border-slate-200'
+                                            formErrors.store_name
+                                                ? 'border-rose-400'
+                                                : 'border-slate-200'
                                         }`}
                                     />
                                     {formErrors.store_name ? (
@@ -296,7 +213,9 @@ export function SellerUpgradeCard({ user }) {
 
                                     <div className="flex flex-wrap gap-2 pt-1">
                                         {categoryOptions.map((cat) => {
-                                            const isSelected = formData.categories.includes(cat.value);
+                                            const isSelected = formData.categories.includes(
+                                                cat.value
+                                            );
                                             return (
                                                 <button
                                                     key={cat.value}
@@ -329,21 +248,30 @@ export function SellerUpgradeCard({ user }) {
                                         </p>
                                     ) : (
                                         <p className="text-[11px] text-slate-400">
-                                            {t('Pilih semua kategori barang yang akan Anda jual di toko ini')}
+                                            {t(
+                                                'Pilih semua kategori barang yang akan Anda jual di toko ini'
+                                            )}
                                         </p>
                                     )}
                                 </div>
 
                                 <div className="space-y-1.5">
-                                    <Label htmlFor="description" className="text-xs font-semibold text-slate-700">
+                                    <Label
+                                        htmlFor="description"
+                                        className="text-xs font-semibold text-slate-700"
+                                    >
                                         {t('Deskripsi / Slogan Toko')}
                                     </Label>
                                     <textarea
                                         id="description"
                                         rows={2}
                                         value={formData.description}
-                                        onChange={(e) => handleInputChange('description', e.target.value)}
-                                        placeholder={t('Contoh: Menyediakan berbagai gadget dan aksesoris original bergaransi resmi.')}
+                                        onChange={(e) =>
+                                            handleInputChange('description', e.target.value)
+                                        }
+                                        placeholder={t(
+                                            'Contoh: Menyediakan berbagai gadget dan aksesoris original bergaransi resmi.'
+                                        )}
                                         className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-sm"
                                     />
                                 </div>
@@ -360,17 +288,25 @@ export function SellerUpgradeCard({ user }) {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-1.5">
-                                    <Label htmlFor="owner_name" className="text-xs font-semibold text-slate-700">
-                                        {t('Nama Lengkap Pemilik')} <span className="text-rose-500">*</span>
+                                    <Label
+                                        htmlFor="owner_name"
+                                        className="text-xs font-semibold text-slate-700"
+                                    >
+                                        {t('Nama Lengkap Pemilik')}{' '}
+                                        <span className="text-rose-500">*</span>
                                     </Label>
                                     <Input
                                         id="owner_name"
                                         type="text"
                                         value={formData.owner_name}
-                                        onChange={(e) => handleInputChange('owner_name', e.target.value)}
+                                        onChange={(e) =>
+                                            handleInputChange('owner_name', e.target.value)
+                                        }
                                         placeholder={t('Nama lengkap pemilik')}
                                         className={`h-11 rounded-xl bg-white border ${
-                                            formErrors.owner_name ? 'border-rose-400' : 'border-slate-200'
+                                            formErrors.owner_name
+                                                ? 'border-rose-400'
+                                                : 'border-slate-200'
                                         }`}
                                     />
                                     {formErrors.owner_name && (
@@ -381,7 +317,10 @@ export function SellerUpgradeCard({ user }) {
                                 </div>
 
                                 <div className="space-y-1.5">
-                                    <Label htmlFor="phone" className="text-xs font-semibold text-slate-700">
+                                    <Label
+                                        htmlFor="phone"
+                                        className="text-xs font-semibold text-slate-700"
+                                    >
                                         {t('Nomor Telepon / WhatsApp Toko')}{' '}
                                         <span className="text-rose-500">*</span>
                                     </Label>
@@ -392,11 +331,15 @@ export function SellerUpgradeCard({ user }) {
                                         onChange={(e) => handleInputChange('phone', e.target.value)}
                                         placeholder="Contoh: 081234567890"
                                         className={`h-11 rounded-xl bg-white border ${
-                                            formErrors.phone ? 'border-rose-400' : 'border-slate-200'
+                                            formErrors.phone
+                                                ? 'border-rose-400'
+                                                : 'border-slate-200'
                                         }`}
                                     />
                                     {formErrors.phone && (
-                                        <p className="text-xs text-rose-500 font-medium">{formErrors.phone}</p>
+                                        <p className="text-xs text-rose-500 font-medium">
+                                            {formErrors.phone}
+                                        </p>
                                     )}
                                 </div>
                             </div>
@@ -412,8 +355,12 @@ export function SellerUpgradeCard({ user }) {
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div className="space-y-1.5">
-                                    <Label htmlFor="city" className="text-xs font-semibold text-slate-700">
-                                        {t('Kota / Kabupaten')} <span className="text-rose-500">*</span>
+                                    <Label
+                                        htmlFor="city"
+                                        className="text-xs font-semibold text-slate-700"
+                                    >
+                                        {t('Kota / Kabupaten')}{' '}
+                                        <span className="text-rose-500">*</span>
                                     </Label>
                                     <Input
                                         id="city"
@@ -426,12 +373,17 @@ export function SellerUpgradeCard({ user }) {
                                         }`}
                                     />
                                     {formErrors.city && (
-                                        <p className="text-xs text-rose-500 font-medium">{formErrors.city}</p>
+                                        <p className="text-xs text-rose-500 font-medium">
+                                            {formErrors.city}
+                                        </p>
                                     )}
                                 </div>
 
                                 <div className="md:col-span-2 space-y-1.5">
-                                    <Label htmlFor="store_address" className="text-xs font-semibold text-slate-700">
+                                    <Label
+                                        htmlFor="store_address"
+                                        className="text-xs font-semibold text-slate-700"
+                                    >
                                         {t('Alamat Lengkap Toko / Gudang')}{' '}
                                         <span className="text-rose-500">*</span>
                                     </Label>
@@ -439,10 +391,16 @@ export function SellerUpgradeCard({ user }) {
                                         id="store_address"
                                         type="text"
                                         value={formData.store_address}
-                                        onChange={(e) => handleInputChange('store_address', e.target.value)}
-                                        placeholder={t('Nama Jalan, Gedung, No. Rumah, RT/RW, Kecamatan')}
+                                        onChange={(e) =>
+                                            handleInputChange('store_address', e.target.value)
+                                        }
+                                        placeholder={t(
+                                            'Nama Jalan, Gedung, No. Rumah, RT/RW, Kecamatan'
+                                        )}
                                         className={`h-11 rounded-xl bg-white border ${
-                                            formErrors.store_address ? 'border-rose-400' : 'border-slate-200'
+                                            formErrors.store_address
+                                                ? 'border-rose-400'
+                                                : 'border-slate-200'
                                         }`}
                                     />
                                     {formErrors.store_address && (
@@ -459,16 +417,22 @@ export function SellerUpgradeCard({ user }) {
                                 <input
                                     type="checkbox"
                                     checked={formData.agree_terms}
-                                    onChange={(e) => handleInputChange('agree_terms', e.target.checked)}
+                                    onChange={(e) =>
+                                        handleInputChange('agree_terms', e.target.checked)
+                                    }
                                     className="mt-1 w-4 h-4 rounded text-emerald-600 border-slate-300 focus:ring-emerald-500"
                                 />
                                 <span className="text-xs text-slate-600 leading-relaxed">
-                                    {t('Saya menyatakan bahwa data yang saya isi adalah benar dan menyetujui')}{' '}
+                                    {t(
+                                        'Saya menyatakan bahwa data yang saya isi adalah benar dan menyetujui'
+                                    )}{' '}
                                     <span className="font-semibold text-emerald-600 hover:underline">
                                         {t('Syarat & Ketentuan Penjual K-Tienda en Línea')}
                                     </span>
                                     .{' '}
-                                    {t('Saya bersedia mematuhi aturan perdagangan produk resmi dan standar layanan pelanggan platform.')}
+                                    {t(
+                                        'Saya bersedia mematuhi aturan perdagangan produk resmi dan standar layanan pelanggan platform.'
+                                    )}
                                 </span>
                             </label>
                             {formErrors.agree_terms && (
@@ -493,86 +457,14 @@ export function SellerUpgradeCard({ user }) {
                     </div>
                 </form>
             )}
-
-            <CleanModal
-                open={showConfirmModal}
+            <ConfirmSellerUpgradeModal
+                isOpen={showConfirmModal}
                 onClose={() => setShowConfirmModal(false)}
-                title={t('Konfirmasi Pendaftaran Toko')}
-                description={t('Pastikan informasi toko Anda sudah tepat')}
-                icon={Store}
-                size="md"
-            >
-                <div className="p-6 space-y-4">
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                        {t('Anda akan mengajukan perubahan akun reguler menjadi akun Penjual K-Tienda en Línea dengan data berikut:')}
-                    </p>
-
-                    <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-3 text-xs">
-                        <div className="flex justify-between items-center">
-                            <span className="text-slate-500">{t('Nama Toko')}:</span>
-                            <strong className="text-slate-800 text-sm">{formData.store_name}</strong>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <span className="text-slate-500">{t('Nama Pemilik')}:</span>
-                            <span className="text-slate-700 font-medium">{formData.owner_name}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <span className="text-slate-500">{t('Telepon / WhatsApp')}:</span>
-                            <span className="text-slate-700 font-medium">{formData.phone}</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                            <span className="text-slate-500">{t('Kota Penjemputan')}:</span>
-                            <span className="text-slate-700 font-medium">{formData.city}</span>
-                        </div>
-                        <div className="space-y-1 pt-1 border-t border-emerald-200/60">
-                            <span className="text-slate-500">{t('Kategori Produk Terpilih')}:</span>
-                            <div className="flex flex-wrap gap-1 mt-1">
-                                {formData.categories.map((catVal) => {
-                                    const label = categoryOptions.find((c) => c.value === catVal)?.label;
-                                    return (
-                                        <span
-                                            key={catVal}
-                                            className="px-2 py-0.5 rounded-md bg-emerald-200/70 text-emerald-900 font-semibold text-[11px]"
-                                        >
-                                            {label}
-                                        </span>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center justify-end gap-3 pt-3">
-                        <Button
-                            type="button"
-                            variant="ghost"
-                            onClick={() => setShowConfirmModal(false)}
-                            disabled={isSubmitting}
-                            className="rounded-xl"
-                        >
-                            {t('Batal')}
-                        </Button>
-                        <Button
-                            type="button"
-                            onClick={handleConfirmSubmit}
-                            disabled={isSubmitting}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-[0_4px_15px_rgba(16,185,129,0.25)] flex items-center gap-2"
-                        >
-                            {isSubmitting ? (
-                                <>
-                                    <Spinner size="sm" color="white" />
-                                    <span>{t('Memproses Pendaftaran...')}</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Check className="w-4 h-4" />
-                                    <span>{t('Ya, Buka Toko Sekarang')}</span>
-                                </>
-                            )}
-                        </Button>
-                    </div>
-                </div>
-            </CleanModal>
+                formData={formData}
+                categoryOptions={categoryOptions}
+                isSubmitting={isSubmitting}
+                onConfirm={handleConfirmSubmit}
+            />
         </div>
     );
 }

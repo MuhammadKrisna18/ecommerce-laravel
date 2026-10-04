@@ -8,7 +8,5 @@ interface AdminUserQueryServiceInterface
 {
     public function getUserList(?string $role = null): array;
 
-    public function getDashboardStats(): array;
-
     public function getPaginatedUsers(int $perPage = 15): LengthAwarePaginator;
 }

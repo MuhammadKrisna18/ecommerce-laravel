@@ -21,8 +21,6 @@ import {
 import { useTranslation } from '@/Hooks/useTranslation';
 import { useFlash } from '@/Hooks/useFlash';
 
-// ─── FieldRow ────────────────────────────────────────────────────────────────
-
 function FieldRow({ id, icon: Icon, label, error, children }) {
     return (
         <div className="space-y-2">
@@ -38,8 +36,6 @@ function FieldRow({ id, icon: Icon, label, error, children }) {
         </div>
     );
 }
-
-// ─── LangConfirmModal ────────────────────────────────────────────────────────
 
 function LangConfirmModal({ open, pendingLang, onConfirm, onCancel, t }) {
     const langName = { id: t('Indonesia'), en: t('Inggris'), es: t('Spanyol') };
@@ -63,10 +59,10 @@ function LangConfirmModal({ open, pendingLang, onConfirm, onCancel, t }) {
                 </p>
 
                 <div className="flex items-center justify-end gap-3">
-                    <Button 
+                    <Button
                         type="button"
-                        variant="ghost" 
-                        onClick={onCancel} 
+                        variant="ghost"
+                        onClick={onCancel}
                         className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl"
                     >
                         {t('Batal')}
@@ -84,15 +80,9 @@ function LangConfirmModal({ open, pendingLang, onConfirm, onCancel, t }) {
     );
 }
 
-// ─── SettingsForm ─────────────────────────────────────────────────────────────
+const inputCls =
+    'h-11 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm';
 
-const inputCls = "h-11 bg-white border-slate-200 text-slate-800 placeholder:text-slate-400 focus:border-brand-primary focus:ring-1 focus:ring-brand-primary rounded-xl transition-all shadow-sm";
-
-/**
- * Settings form feature component.
- *
- * @param {{ settings: object }} props
- */
 export function SettingsForm({ settings }) {
     const { t } = useTranslation();
     const { success } = useFlash();
@@ -101,11 +91,11 @@ export function SettingsForm({ settings }) {
     const [pendingLang, setPendingLang] = useState('');
 
     const { data, setData, post, processing, errors } = useForm({
-        store_name:        settings.store_name        || '',
+        store_name: settings.store_name || '',
         store_description: settings.store_description || '',
-        contact_email:     settings.contact_email     || '',
-        contact_phone:     settings.contact_phone     || '',
-        app_language:      settings.app_language      || 'id',
+        contact_email: settings.contact_email || '',
+        contact_phone: settings.contact_phone || '',
+        app_language: settings.app_language || 'id',
     });
 
     const handleLanguageChange = (e) => {
@@ -130,7 +120,6 @@ export function SettingsForm({ settings }) {
 
     return (
         <>
-            {/* Flash success */}
             <AnimatePresence>
                 {success && (
                     <motion.div
@@ -143,7 +132,6 @@ export function SettingsForm({ settings }) {
                 )}
             </AnimatePresence>
 
-            {/* Form card */}
             <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -151,7 +139,6 @@ export function SettingsForm({ settings }) {
             >
                 <div className="relative rounded-3xl bg-white border border-slate-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.03)] overflow-hidden">
                     <form onSubmit={submit}>
-                        {/* Card header */}
                         <div className="p-6 sm:p-8 border-b border-slate-100 bg-slate-50/60">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent flex items-center justify-center text-white shadow-sm">
@@ -168,9 +155,13 @@ export function SettingsForm({ settings }) {
                             </div>
                         </div>
 
-                        {/* Card body */}
                         <div className="p-6 sm:p-8 space-y-6">
-                            <FieldRow id="store_name" icon={Store} label={t('Nama Toko')} error={errors.store_name}>
+                            <FieldRow
+                                id="store_name"
+                                icon={Store}
+                                label={t('Nama Toko')}
+                                error={errors.store_name}
+                            >
                                 <Input
                                     id="store_name"
                                     type="text"
@@ -181,7 +172,12 @@ export function SettingsForm({ settings }) {
                                 />
                             </FieldRow>
 
-                            <FieldRow id="store_description" icon={FileText} label={t('Deskripsi Singkat')} error={errors.store_description}>
+                            <FieldRow
+                                id="store_description"
+                                icon={FileText}
+                                label={t('Deskripsi Singkat')}
+                                error={errors.store_description}
+                            >
                                 <Input
                                     id="store_description"
                                     type="text"
@@ -193,7 +189,12 @@ export function SettingsForm({ settings }) {
                             </FieldRow>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                                <FieldRow id="contact_email" icon={Mail} label={t('Email Kontak')} error={errors.contact_email}>
+                                <FieldRow
+                                    id="contact_email"
+                                    icon={Mail}
+                                    label={t('Email Kontak')}
+                                    error={errors.contact_email}
+                                >
                                     <Input
                                         id="contact_email"
                                         type="email"
@@ -204,7 +205,12 @@ export function SettingsForm({ settings }) {
                                     />
                                 </FieldRow>
 
-                                <FieldRow id="contact_phone" icon={Phone} label={t('Nomor Telepon / WhatsApp')} error={errors.contact_phone}>
+                                <FieldRow
+                                    id="contact_phone"
+                                    icon={Phone}
+                                    label={t('Nomor Telepon / WhatsApp')}
+                                    error={errors.contact_phone}
+                                >
                                     <Input
                                         id="contact_phone"
                                         type="text"
@@ -215,7 +221,12 @@ export function SettingsForm({ settings }) {
                                     />
                                 </FieldRow>
 
-                                <FieldRow id="app_language" icon={Globe} label={t('Bahasa Sistem')} error={errors.app_language}>
+                                <FieldRow
+                                    id="app_language"
+                                    icon={Globe}
+                                    label={t('Bahasa Sistem')}
+                                    error={errors.app_language}
+                                >
                                     <div className="md:col-span-2">
                                         <select
                                             id="app_language"
@@ -223,19 +234,26 @@ export function SettingsForm({ settings }) {
                                             onChange={handleLanguageChange}
                                             className="w-full h-11 rounded-xl bg-white border border-slate-200 px-4 text-sm text-slate-800 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-all cursor-pointer shadow-sm"
                                         >
-                                            <option value="id" className="text-slate-800">Bahasa Indonesia</option>
-                                            <option value="en" className="text-slate-800">English (Inggris)</option>
-                                            <option value="es" className="text-slate-800">Español (Spanyol)</option>
+                                            <option value="id" className="text-slate-800">
+                                                Bahasa Indonesia
+                                            </option>
+                                            <option value="en" className="text-slate-800">
+                                                English (Inggris)
+                                            </option>
+                                            <option value="es" className="text-slate-800">
+                                                Español (Spanyol)
+                                            </option>
                                         </select>
                                         <p className="text-[11px] text-slate-400 mt-1.5">
-                                            {t('Mengubah bahasa akan memperbarui teks antarmuka di seluruh panel admin.')}
+                                            {t(
+                                                'Mengubah bahasa akan memperbarui teks antarmuka di seluruh panel admin.'
+                                            )}
                                         </p>
                                     </div>
                                 </FieldRow>
                             </div>
                         </div>
 
-                        {/* Card footer */}
                         <div className="p-6 sm:p-8 border-t border-slate-100 bg-slate-50/60 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div className="text-xs text-slate-500 flex items-center gap-1.5">
                                 <ShieldCheck className="w-4 h-4 text-brand-primary" />
@@ -266,12 +284,14 @@ export function SettingsForm({ settings }) {
                 </div>
             </motion.div>
 
-            {/* Language confirm modal */}
             <LangConfirmModal
                 open={showLangConfirm}
                 pendingLang={pendingLang}
                 onConfirm={confirmLanguageChange}
-                onCancel={() => { setPendingLang(''); setShowLangConfirm(false); }}
+                onCancel={() => {
+                    setPendingLang('');
+                    setShowLangConfirm(false);
+                }}
                 t={t}
             />
         </>

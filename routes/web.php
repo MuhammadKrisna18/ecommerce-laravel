@@ -23,6 +23,8 @@ Route::middleware(['auth', 'verified', 'admin'])
             ->name('users.unfreeze');
         Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserManagementController::class, 'destroy'])
             ->name('users.destroy');
+        Route::post('/users/generate-verification-code', [\App\Http\Controllers\Admin\UserManagementController::class, 'generateVerificationCode'])
+            ->name('users.generate-verification-code');
     });
 
 Route::get('/account/frozen', \App\Http\Controllers\Auth\FrozenNoticeController::class)
@@ -68,5 +70,4 @@ Route::middleware(['auth', 'verified', 'seller'])
     });
 
 require __DIR__.'/auth.php';
-
 

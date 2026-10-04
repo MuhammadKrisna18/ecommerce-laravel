@@ -43,4 +43,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             ->latest()
             ->paginate($perPage);
     }
+
+    public function getLatestUsers(int $limit): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->model->latest()->take($limit)->get();
+    }
+
+    public function countRegisteredInMonth(int $year, int $month): int
+    {
+        return $this->model->whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->count();
+    }
 }

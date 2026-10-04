@@ -49,13 +49,15 @@ export function RegisterForm({ onSwitchToLogin }) {
                 return;
             }
 
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const csrfToken = document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute('content');
             const res = await fetch(route('auth.firebase'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken || '',
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                 },
                 body: JSON.stringify({
                     id_token: idToken,
@@ -71,7 +73,12 @@ export function RegisterForm({ onSwitchToLogin }) {
             try {
                 data = JSON.parse(rawText);
             } catch (parseError) {
-                throw new Error('Respons server bukan JSON (Status ' + res.status + '): ' + rawText.slice(0, 120));
+                throw new Error(
+                    'Respons server bukan JSON (Status ' +
+                        res.status +
+                        '): ' +
+                        rawText.slice(0, 120)
+                );
             }
 
             if (res.ok && data.redirect_url) {
@@ -84,9 +91,7 @@ export function RegisterForm({ onSwitchToLogin }) {
             setFirebaseError('Koneksi ke Firebase gagal: ' + err.message);
             setIsGoogleLoading(false);
         }
-
     };
-
 
     return (
         <motion.div
@@ -97,10 +102,8 @@ export function RegisterForm({ onSwitchToLogin }) {
             className="w-full max-w-[460px]"
         >
             <div className="relative rounded-2xl bg-white border border-slate-200/80 p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] transition-all duration-300">
-                {/* Top Header Accent */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[3px] bg-gradient-to-r from-transparent via-brand-primary to-transparent" />
 
-                {/* Brand / Title Icon */}
                 <div className="flex flex-col items-center text-center mb-6">
                     <motion.div
                         whileHover={{ scale: 1.05, rotate: 5 }}
@@ -122,7 +125,6 @@ export function RegisterForm({ onSwitchToLogin }) {
                 </div>
 
                 <form onSubmit={submit} className="space-y-4">
-                    {/* Nama Lengkap */}
                     <div className="space-y-1.5">
                         <Label htmlFor="name" className="text-xs font-semibold text-slate-700">
                             Nama Lengkap
@@ -153,7 +155,6 @@ export function RegisterForm({ onSwitchToLogin }) {
                         )}
                     </div>
 
-                    {/* Nama Panggilan */}
                     <div className="space-y-1.5">
                         <Label htmlFor="nickname" className="text-xs font-semibold text-slate-700">
                             Nama Panggilan
@@ -184,7 +185,6 @@ export function RegisterForm({ onSwitchToLogin }) {
                         )}
                     </div>
 
-                    {/* Email */}
                     <div className="space-y-1.5">
                         <Label htmlFor="reg-email" className="text-xs font-semibold text-slate-700">
                             Alamat Email
@@ -216,9 +216,11 @@ export function RegisterForm({ onSwitchToLogin }) {
                         )}
                     </div>
 
-                    {/* Password */}
                     <div className="space-y-1.5">
-                        <Label htmlFor="reg-password" className="text-xs font-semibold text-slate-700">
+                        <Label
+                            htmlFor="reg-password"
+                            className="text-xs font-semibold text-slate-700"
+                        >
                             Kata Sandi
                         </Label>
                         <div className="relative group">
@@ -241,7 +243,11 @@ export function RegisterForm({ onSwitchToLogin }) {
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 transition-colors focus:outline-none"
                             >
-                                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                {showPassword ? (
+                                    <EyeOff className="w-4 h-4" />
+                                ) : (
+                                    <Eye className="w-4 h-4" />
+                                )}
                             </button>
                         </div>
                         {errors.password && (
@@ -255,7 +261,6 @@ export function RegisterForm({ onSwitchToLogin }) {
                         )}
                     </div>
 
-                    {/* Submit Button */}
                     <motion.div
                         whileHover={{ scale: 1.01 }}
                         whileTap={{ scale: 0.99 }}
@@ -281,11 +286,12 @@ export function RegisterForm({ onSwitchToLogin }) {
                     </motion.div>
                 </form>
 
-                {/* Google Firebase Register Divider & Button */}
                 <div className="mt-5 space-y-4">
                     <div className="relative flex items-center justify-center">
                         <div className="border-t border-slate-200 w-full" />
-                        <span className="bg-white px-3 text-xs text-slate-400 font-medium">atau daftar dengan</span>
+                        <span className="bg-white px-3 text-xs text-slate-400 font-medium">
+                            atau daftar dengan
+                        </span>
                         <div className="border-t border-slate-200 w-full" />
                     </div>
 
@@ -327,12 +333,10 @@ export function RegisterForm({ onSwitchToLogin }) {
                     </button>
                 </div>
 
-                {/* Switch to Login Link */}
                 <div className="mt-6 pt-5 border-t border-slate-100 text-center">
                     <p className="text-xs text-slate-500">
                         Sudah memiliki akun?{' '}
                         <button
-
                             type="button"
                             onClick={onSwitchToLogin}
                             className="text-brand-primary hover:text-brand-dark font-semibold hover:underline transition-colors focus:outline-none"

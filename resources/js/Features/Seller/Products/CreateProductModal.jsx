@@ -30,7 +30,7 @@ export function CreateProductModal({ isOpen, onClose, defaultCategory }) {
         post(route('seller.products.store'), {
             onSuccess: () => {
                 onClose();
-            }
+            },
         });
     };
 
@@ -56,7 +56,9 @@ export function CreateProductModal({ isOpen, onClose, defaultCategory }) {
                         placeholder={t('Contoh: Earphone Bluetooth TWS Pro Original')}
                         className={`h-11 rounded-xl bg-white border ${errors.name ? 'border-rose-400' : 'border-slate-200'}`}
                     />
-                    {errors.name && <p className="text-xs text-rose-500 font-medium">{errors.name}</p>}
+                    {errors.name && (
+                        <p className="text-xs text-rose-500 font-medium">{errors.name}</p>
+                    )}
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -74,7 +76,10 @@ export function CreateProductModal({ isOpen, onClose, defaultCategory }) {
                     </div>
 
                     <div className="space-y-1.5">
-                        <Label htmlFor="prod_price" className="text-xs font-semibold text-slate-700">
+                        <Label
+                            htmlFor="prod_price"
+                            className="text-xs font-semibold text-slate-700"
+                        >
                             {t('Harga Satuan (Rp)')} <span className="text-rose-500">*</span>
                         </Label>
                         <Input
@@ -85,7 +90,9 @@ export function CreateProductModal({ isOpen, onClose, defaultCategory }) {
                             placeholder="150000"
                             className={`h-11 rounded-xl bg-white border ${errors.price ? 'border-rose-400' : 'border-slate-200'}`}
                         />
-                        {errors.price && <p className="text-xs text-rose-500 font-medium">{errors.price}</p>}
+                        {errors.price && (
+                            <p className="text-xs text-rose-500 font-medium">{errors.price}</p>
+                        )}
                     </div>
                 </div>
 
@@ -101,7 +108,9 @@ export function CreateProductModal({ isOpen, onClose, defaultCategory }) {
                         placeholder="50"
                         className={`h-11 rounded-xl bg-white border ${errors.stock ? 'border-rose-400' : 'border-slate-200'}`}
                     />
-                    {errors.stock && <p className="text-xs text-rose-500 font-medium">{errors.stock}</p>}
+                    {errors.stock && (
+                        <p className="text-xs text-rose-500 font-medium">{errors.stock}</p>
+                    )}
                 </div>
 
                 <div className="space-y-1.5">
@@ -113,18 +122,15 @@ export function CreateProductModal({ isOpen, onClose, defaultCategory }) {
                         rows={3}
                         value={data.description}
                         onChange={(e) => setData('description', e.target.value)}
-                        placeholder={t('Jelaskan keunggulan, spesifikasi, dan kelengkapan produk...')}
+                        placeholder={t(
+                            'Jelaskan keunggulan, spesifikasi, dan kelengkapan produk...'
+                        )}
                         className="w-full rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-sm"
                     />
                 </div>
 
                 <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={onClose}
-                        className="rounded-xl"
-                    >
+                    <Button type="button" variant="ghost" onClick={onClose} className="rounded-xl">
                         {t('Batal')}
                     </Button>
                     <Button

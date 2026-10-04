@@ -17,7 +17,9 @@ export default function SettingsIndex({ users }) {
                         {t('Pengaturan & Manajemen')}
                     </h2>
                     <span className="text-xs text-slate-500 font-normal">
-                        {t('Konfigurasi toko, identitas layanan, serta kontrol manajemen akun pengguna')}
+                        {t(
+                            'Konfigurasi toko, identitas layanan, serta kontrol manajemen akun pengguna'
+                        )}
                     </span>
                 </div>
             }
@@ -25,8 +27,6 @@ export default function SettingsIndex({ users }) {
             <Head title={t('Pengaturan & Manajemen Akun')} />
 
             <div className="max-w-5xl mx-auto space-y-8">
-
-                {/* Manajemen Pengguna (Bekukan & Hapus Akun) */}
                 <UserManagementList users={users} />
             </div>
         </AdminLayout>

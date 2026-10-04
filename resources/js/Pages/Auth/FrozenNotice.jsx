@@ -11,11 +11,12 @@ export default function FrozenNotice({
     supportEmail = 'help@k-tienda.test',
 }) {
     const handleLogout = () => {
-        // Form submit logout
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = '/logout';
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute('content');
         if (csrfToken) {
             const input = document.createElement('input');
             input.type = 'hidden';
@@ -37,7 +38,6 @@ export default function FrozenNotice({
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 className="w-full max-w-lg bg-white rounded-3xl shadow-[0_25px_60px_rgba(0,0,0,0.35)] overflow-hidden border border-slate-100"
             >
-                {/* Header status */}
                 <div className="bg-gradient-to-r from-rose-500 via-rose-600 to-red-600 p-8 text-white text-center relative overflow-hidden">
                     <div className="absolute -top-12 -right-12 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
                     <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center mx-auto mb-4 shadow-lg border border-white/30">
@@ -47,49 +47,56 @@ export default function FrozenNotice({
                         Akun Anda Sedang Dibekukan
                     </h1>
                     <p className="text-rose-100 text-xs mt-1.5 max-w-sm mx-auto">
-                        Akses masuk dan transaksi ke akun Anda telah dinonaktifkan untuk sementara waktu oleh Administrator.
+                        Akses masuk dan transaksi ke akun Anda telah dinonaktifkan untuk sementara
+                        waktu oleh Administrator.
                     </p>
                 </div>
 
-                {/* Details Content */}
                 <div className="p-6 sm:p-8 space-y-6">
-                    {/* Greeting & Summary */}
                     <div className="text-center">
-                        <p className="text-xs text-slate-500">Halo, <strong className="text-slate-800 font-semibold">{userName}</strong></p>
+                        <p className="text-xs text-slate-500">
+                            Halo,{' '}
+                            <strong className="text-slate-800 font-semibold">{userName}</strong>
+                        </p>
                         <p className="text-xs text-slate-500 mt-1">
-                            Akun Anda dibekukan selama <span className="inline-block px-2.5 py-0.5 rounded-full font-bold bg-rose-50 text-rose-700 border border-rose-200 text-xs">{durationText}</span>
+                            Akun Anda dibekukan selama{' '}
+                            <span className="inline-block px-2.5 py-0.5 rounded-full font-bold bg-rose-50 text-rose-700 border border-rose-200 text-xs">
+                                {durationText}
+                            </span>
                         </p>
                     </div>
 
-                    {/* Information cards */}
                     <div className="space-y-3">
                         <div className="flex items-center gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
                             <div className="w-9 h-9 rounded-xl bg-amber-100/70 text-amber-700 flex items-center justify-center shrink-0">
                                 <Clock className="w-4 h-4" />
                             </div>
                             <div className="text-xs">
-                                <span className="text-slate-400 block font-medium">Batas Waktu Pembekuan:</span>
-                                <span className="text-slate-800 font-semibold text-sm">{frozenUntil}</span>
+                                <span className="text-slate-400 block font-medium">
+                                    Batas Waktu Pembekuan:
+                                </span>
+                                <span className="text-slate-800 font-semibold text-sm">
+                                    {frozenUntil}
+                                </span>
                             </div>
                         </div>
 
                         <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs space-y-1">
-                            <span className="text-slate-400 block font-medium">Alasan Pembekuan:</span>
-                            <p className="text-slate-700 leading-relaxed font-normal">
-                                {reason}
-                            </p>
+                            <span className="text-slate-400 block font-medium">
+                                Alasan Pembekuan:
+                            </span>
+                            <p className="text-slate-700 leading-relaxed font-normal">{reason}</p>
                         </div>
                     </div>
 
-                    {/* Notice alert */}
                     <div className="p-3.5 bg-amber-50 rounded-2xl border border-amber-200/80 flex items-start gap-2.5 text-xs text-amber-800 leading-snug">
                         <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                         <div>
-                            Setelah batas waktu berakhir, akun Anda akan otomatis dipulihkan kembali dan dapat bertransaksi seperti biasa.
+                            Setelah batas waktu berakhir, akun Anda akan otomatis dipulihkan kembali
+                            dan dapat bertransaksi seperti biasa.
                         </div>
                     </div>
 
-                    {/* Help & Support contact */}
                     <div className="p-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50/50 flex items-center justify-between gap-4">
                         <div className="flex items-center gap-2.5">
                             <HelpCircle className="w-4 h-4 text-brand-primary" />
@@ -106,7 +113,6 @@ export default function FrozenNotice({
                         </a>
                     </div>
 
-                    {/* Logout Button */}
                     <div className="pt-2">
                         <Button
                             type="button"

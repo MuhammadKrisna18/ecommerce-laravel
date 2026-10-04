@@ -1,17 +1,10 @@
 import { Link } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-    ChevronRight,
-    LogOut,
-    X,
-    AtSign,
-} from 'lucide-react';
+import { ChevronRight, LogOut, X, AtSign } from 'lucide-react';
 import { Button } from '@/Components/ui/button';
 import { useTranslation } from '@/Hooks/useTranslation';
 import { useLogout } from '@/Hooks/useLogout';
 import { cn } from '@/lib/utils';
-
-// ─── NavItem ────────────────────────────────────────────────────────────────
 
 function NavItem({ item, index, mobile = false }) {
     const Icon = item.icon;
@@ -27,7 +20,12 @@ function NavItem({ item, index, mobile = false }) {
                         : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
                 )}
             >
-                <Icon className={cn("w-4 h-4 mr-3", item.active ? "text-brand-primary" : "text-slate-400")} />
+                <Icon
+                    className={cn(
+                        'w-4 h-4 mr-3',
+                        item.active ? 'text-brand-primary' : 'text-slate-400'
+                    )}
+                />
                 {item.name}
             </Link>
         );
@@ -49,7 +47,14 @@ function NavItem({ item, index, mobile = false }) {
                 )}
             >
                 <div className="flex items-center">
-                    <Icon className={cn('w-4 h-4 mr-3 transition-colors', item.active ? 'text-brand-primary' : 'text-slate-400 group-hover:text-slate-600')} />
+                    <Icon
+                        className={cn(
+                            'w-4 h-4 mr-3 transition-colors',
+                            item.active
+                                ? 'text-brand-primary'
+                                : 'text-slate-400 group-hover:text-slate-600'
+                        )}
+                    />
                     <span>{item.name}</span>
                 </div>
                 {item.active && <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />}
@@ -58,15 +63,12 @@ function NavItem({ item, index, mobile = false }) {
     );
 }
 
-// ─── UserFooter ─────────────────────────────────────────────────────────────
-
 function UserFooter({ user, t }) {
     const logout = useLogout();
 
     return (
         <div className="p-4 border-t border-slate-100 bg-white">
             <div className="flex items-center gap-3 p-1 rounded-xl">
-                {/* Avatar */}
                 {user?.avatar_url ? (
                     <img
                         src={user.avatar_url}
@@ -79,7 +81,6 @@ function UserFooter({ user, t }) {
                     </div>
                 )}
 
-                {/* Info */}
                 <div className="flex flex-col min-w-0 flex-1">
                     <span className="text-sm font-semibold text-slate-800 truncate flex items-center gap-1.5">
                         {user?.name}
@@ -92,7 +93,10 @@ function UserFooter({ user, t }) {
                         </span>
                     )}
 
-                    <span className="text-[11px] text-slate-400 truncate mt-0.5" title={user?.email}>
+                    <span
+                        className="text-[11px] text-slate-400 truncate mt-0.5"
+                        title={user?.email}
+                    >
                         {user?.email}
                     </span>
                 </div>
@@ -109,8 +113,6 @@ function UserFooter({ user, t }) {
         </div>
     );
 }
-
-// ─── MobileFooter ────────────────────────────────────────────────────────────
 
 function MobileFooter({ t }) {
     const logout = useLogout();
@@ -129,11 +131,6 @@ function MobileFooter({ t }) {
     );
 }
 
-// ─── AppSidebar ─────────────────────────────────────────────────────────────
-
-/**
- * Shared sidebar for Admin and User layouts.
- */
 export function AppSidebar({
     user,
     navItems,
@@ -145,7 +142,6 @@ export function AppSidebar({
 }) {
     const { t } = useTranslation();
 
-    // ── Desktop sidebar ──────────────────────────────────────────────────────
     const desktopSidebar = (
         <motion.aside
             initial={{ x: -300 }}
@@ -153,7 +149,6 @@ export function AppSidebar({
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="hidden md:flex flex-col w-72 bg-white border-r border-slate-200/80 shadow-[4px_0_20px_rgba(0,0,0,0.02)] z-20"
         >
-            {/* Brand header */}
             <div className="h-20 flex items-center gap-3 px-6 border-b border-slate-200/80 relative">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent flex items-center justify-center text-white shadow-sm">
                     <BrandIcon className="w-5 h-5 text-white" />
@@ -169,24 +164,20 @@ export function AppSidebar({
                 </div>
             </div>
 
-            {/* Nav label */}
             <div className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">
                 {t('Menu Utama')}
             </div>
 
-            {/* Nav items */}
             <nav className="flex-1 overflow-y-auto px-4 space-y-1.5">
                 {navItems.map((item, index) => (
                     <NavItem key={item.name} item={item} index={index} />
                 ))}
             </nav>
 
-            {/* User footer */}
             <UserFooter user={user} t={t} />
         </motion.aside>
     );
 
-    // ── Mobile backdrop ──────────────────────────────────────────────────────
     const mobileOverlay = (
         <AnimatePresence>
             {isMobileOpen && (
@@ -201,7 +192,6 @@ export function AppSidebar({
         </AnimatePresence>
     );
 
-    // ── Mobile sidebar ───────────────────────────────────────────────────────
     const mobileSidebar = (
         <AnimatePresence>
             {isMobileOpen && (
@@ -212,13 +202,14 @@ export function AppSidebar({
                     transition={{ type: 'spring', bounce: 0, duration: 0.3 }}
                     className="fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-slate-200/80 shadow-2xl md:hidden flex flex-col"
                 >
-                    {/* Mobile header */}
                     <div className="h-20 flex items-center justify-between px-6 border-b border-slate-200/80">
                         <div className="flex items-center gap-2.5">
                             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-primary to-brand-accent flex items-center justify-center text-white">
                                 <BrandIcon className="w-5 h-5" />
                             </div>
-                            <span className="font-bold text-slate-900 tracking-tight">{mobileTitle}</span>
+                            <span className="font-bold text-slate-900 tracking-tight">
+                                {mobileTitle}
+                            </span>
                         </div>
                         <Button
                             variant="ghost"
@@ -230,14 +221,12 @@ export function AppSidebar({
                         </Button>
                     </div>
 
-                    {/* Mobile nav */}
                     <nav className="flex-1 px-4 py-4 space-y-1.5">
                         {navItems.map((item) => (
                             <NavItem key={item.name} item={item} mobile />
                         ))}
                     </nav>
 
-                    {/* Mobile footer */}
                     <MobileFooter t={t} />
                 </motion.aside>
             )}

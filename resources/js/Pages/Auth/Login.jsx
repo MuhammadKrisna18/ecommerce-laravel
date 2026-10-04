@@ -6,10 +6,9 @@ import { LoginForm } from '@/Features/Auth/LoginForm';
 import { RegisterForm } from '@/Features/Auth/RegisterForm';
 
 export default function Login({ status, canResetPassword }) {
-    const [authMode, setAuthMode] = useState('login'); // 'login' | 'register'
+    const [authMode, setAuthMode] = useState('login');
 
     useEffect(() => {
-        // Prevent Chrome / browser from preserving forward/back cache (bfcache)
         window.history.pushState(null, '', window.location.href);
         const handlePopState = () => {
             window.history.pushState(null, '', window.location.href);
@@ -42,4 +41,3 @@ export default function Login({ status, canResetPassword }) {
         </AuthLayout>
     );
 }
-

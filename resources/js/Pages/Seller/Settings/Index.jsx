@@ -92,7 +92,9 @@ export default function SellerSettingsIndex({ store }) {
         : 'nama-toko-anda';
 
     return (
-        <SellerLayout header={<h1 className="text-xl font-bold text-slate-800">{t('Pengaturan Toko')}</h1>}>
+        <SellerLayout
+            header={<h1 className="text-xl font-bold text-slate-800">{t('Pengaturan Toko')}</h1>}
+        >
             <Head title={t('Pengaturan Toko - Seller Center')} />
 
             <div className="max-w-5xl mx-auto space-y-6 pb-12">
@@ -102,7 +104,9 @@ export default function SellerSettingsIndex({ store }) {
                             {t('Pengaturan Toko')}
                         </h2>
                         <p className="text-xs text-slate-500 mt-1">
-                            {t('Kelola profil toko, alamat gudang penjemputan, kurir, dan rekening pencairan dana')}
+                            {t(
+                                'Kelola profil toko, alamat gudang penjemputan, kurir, dan rekening pencairan dana'
+                            )}
                         </p>
                     </div>
 
@@ -148,7 +152,9 @@ export default function SellerSettingsIndex({ store }) {
                                     />
                                 )}
                                 <span className="relative z-10 flex items-center gap-2">
-                                    <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-600' : 'text-slate-400'}`} />
+                                    <Icon
+                                        className={`w-4 h-4 ${isActive ? 'text-emerald-600' : 'text-slate-400'}`}
+                                    />
                                     <span>{tab.label}</span>
                                 </span>
                             </button>
@@ -161,14 +167,22 @@ export default function SellerSettingsIndex({ store }) {
                         {activeSection === 'profile' && (
                             <div className="space-y-6">
                                 <div className="space-y-1.5">
-                                    <Label htmlFor="st_name" className="text-xs font-semibold text-slate-700">
+                                    <Label
+                                        htmlFor="st_name"
+                                        className="text-xs font-semibold text-slate-700"
+                                    >
                                         {t('Nama Toko')}
                                     </Label>
                                     <Input
                                         id="st_name"
                                         type="text"
                                         value={settingsData.name}
-                                        onChange={(e) => setSettingsData({ ...settingsData, name: e.target.value })}
+                                        onChange={(e) =>
+                                            setSettingsData({
+                                                ...settingsData,
+                                                name: e.target.value,
+                                            })
+                                        }
                                         className="h-11 rounded-xl bg-white border-slate-200 text-xs"
                                     />
                                     <p className="text-[11px] text-slate-400">
@@ -180,14 +194,22 @@ export default function SellerSettingsIndex({ store }) {
                                 </div>
 
                                 <div className="space-y-1.5">
-                                    <Label htmlFor="st_desc" className="text-xs font-semibold text-slate-700">
+                                    <Label
+                                        htmlFor="st_desc"
+                                        className="text-xs font-semibold text-slate-700"
+                                    >
                                         {t('Deskripsi / Slogan Toko')}
                                     </Label>
                                     <textarea
                                         id="st_desc"
                                         rows={3}
                                         value={settingsData.description}
-                                        onChange={(e) => setSettingsData({ ...settingsData, description: e.target.value })}
+                                        onChange={(e) =>
+                                            setSettingsData({
+                                                ...settingsData,
+                                                description: e.target.value,
+                                            })
+                                        }
                                         className="w-full rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 shadow-sm"
                                     />
                                 </div>
@@ -198,7 +220,9 @@ export default function SellerSettingsIndex({ store }) {
                                     </Label>
                                     <div className="flex flex-wrap gap-2 pt-1">
                                         {categoryOptions.map((cat) => {
-                                            const isSelected = settingsData.categories.includes(cat.value);
+                                            const isSelected = settingsData.categories.includes(
+                                                cat.value
+                                            );
                                             return (
                                                 <button
                                                     key={cat.value}
@@ -228,8 +252,14 @@ export default function SellerSettingsIndex({ store }) {
 
                                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
                                     <div className="space-y-0.5">
-                                        <h4 className="text-xs font-bold text-slate-800">{t('Status Operasional Toko')}</h4>
-                                        <p className="text-[11px] text-slate-500">{t('Tutup toko sementara jika sedang berlibur atau tidak melayani pesanan')}</p>
+                                        <h4 className="text-xs font-bold text-slate-800">
+                                            {t('Status Operasional Toko')}
+                                        </h4>
+                                        <p className="text-[11px] text-slate-500">
+                                            {t(
+                                                'Tutup toko sementara jika sedang berlibur atau tidak melayani pesanan'
+                                            )}
+                                        </p>
                                     </div>
 
                                     <button
@@ -237,7 +267,10 @@ export default function SellerSettingsIndex({ store }) {
                                         onClick={() =>
                                             setSettingsData({
                                                 ...settingsData,
-                                                status: settingsData.status === 'active' ? 'closed' : 'active',
+                                                status:
+                                                    settingsData.status === 'active'
+                                                        ? 'closed'
+                                                        : 'active',
                                             })
                                         }
                                         className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
@@ -246,7 +279,9 @@ export default function SellerSettingsIndex({ store }) {
                                                 : 'bg-slate-200 text-slate-700 border-slate-300'
                                         }`}
                                     >
-                                        {settingsData.status === 'active' ? t('Toko Buka') : t('Toko Libur')}
+                                        {settingsData.status === 'active'
+                                            ? t('Toko Buka')
+                                            : t('Toko Libur')}
                                     </button>
                                 </div>
                             </div>
@@ -256,41 +291,65 @@ export default function SellerSettingsIndex({ store }) {
                             <div className="space-y-6">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div className="space-y-1.5">
-                                        <Label htmlFor="st_city" className="text-xs font-semibold text-slate-700">
+                                        <Label
+                                            htmlFor="st_city"
+                                            className="text-xs font-semibold text-slate-700"
+                                        >
                                             {t('Kota / Kabupaten Asal Pengiriman')}
                                         </Label>
                                         <Input
                                             id="st_city"
                                             type="text"
                                             value={settingsData.city}
-                                            onChange={(e) => setSettingsData({ ...settingsData, city: e.target.value })}
+                                            onChange={(e) =>
+                                                setSettingsData({
+                                                    ...settingsData,
+                                                    city: e.target.value,
+                                                })
+                                            }
                                             className="h-11 rounded-xl bg-white border-slate-200 text-xs"
                                         />
                                     </div>
 
                                     <div className="space-y-1.5">
-                                        <Label htmlFor="st_phone" className="text-xs font-semibold text-slate-700">
+                                        <Label
+                                            htmlFor="st_phone"
+                                            className="text-xs font-semibold text-slate-700"
+                                        >
                                             {t('Nomor Telepon Kontak Penjemputan')}
                                         </Label>
                                         <Input
                                             id="st_phone"
                                             type="tel"
                                             value={settingsData.phone}
-                                            onChange={(e) => setSettingsData({ ...settingsData, phone: e.target.value })}
+                                            onChange={(e) =>
+                                                setSettingsData({
+                                                    ...settingsData,
+                                                    phone: e.target.value,
+                                                })
+                                            }
                                             className="h-11 rounded-xl bg-white border-slate-200 text-xs"
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-1.5">
-                                    <Label htmlFor="st_addr" className="text-xs font-semibold text-slate-700">
+                                    <Label
+                                        htmlFor="st_addr"
+                                        className="text-xs font-semibold text-slate-700"
+                                    >
                                         {t('Alamat Lengkap Toko / Gudang')}
                                     </Label>
                                     <Input
                                         id="st_addr"
                                         type="text"
                                         value={settingsData.address}
-                                        onChange={(e) => setSettingsData({ ...settingsData, address: e.target.value })}
+                                        onChange={(e) =>
+                                            setSettingsData({
+                                                ...settingsData,
+                                                address: e.target.value,
+                                            })
+                                        }
                                         className="h-11 rounded-xl bg-white border-slate-200 text-xs"
                                     />
                                 </div>
@@ -301,7 +360,9 @@ export default function SellerSettingsIndex({ store }) {
                                     </Label>
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                         {courierOptions.map((courier) => {
-                                            const isSelected = settingsData.couriers.includes(courier.id);
+                                            const isSelected = settingsData.couriers.includes(
+                                                courier.id
+                                            );
                                             return (
                                                 <button
                                                     key={courier.id}
@@ -313,13 +374,19 @@ export default function SellerSettingsIndex({ store }) {
                                                             : 'bg-slate-50 border-slate-200 text-slate-600'
                                                     }`}
                                                 >
-                                                    <span className="text-xs font-semibold">{courier.name}</span>
+                                                    <span className="text-xs font-semibold">
+                                                        {courier.name}
+                                                    </span>
                                                     <span
                                                         className={`w-4 h-4 rounded-md flex items-center justify-center text-[10px] ${
-                                                            isSelected ? 'bg-emerald-600 text-white' : 'border border-slate-300'
+                                                            isSelected
+                                                                ? 'bg-emerald-600 text-white'
+                                                                : 'border border-slate-300'
                                                         }`}
                                                     >
-                                                        {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                                                        {isSelected && (
+                                                            <Check className="w-3 h-3 stroke-[3]" />
+                                                        )}
                                                     </span>
                                                 </button>
                                             );
@@ -334,49 +401,77 @@ export default function SellerSettingsIndex({ store }) {
                                 <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100 flex items-start gap-3">
                                     <CreditCard className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                                     <div className="space-y-1">
-                                        <h4 className="text-xs font-bold text-slate-800">{t('Rekening Pencairan Dana Penjualan')}</h4>
+                                        <h4 className="text-xs font-bold text-slate-800">
+                                            {t('Rekening Pencairan Dana Penjualan')}
+                                        </h4>
                                         <p className="text-[11px] text-slate-600 leading-relaxed">
-                                            {t('Seluruh hasil penjualan dari produk yang telah selesai dikirim akan dikreditkan ke saldo K-Tienda en Línea dan dapat ditarik ke rekening ini kapan saja.')}
+                                            {t(
+                                                'Seluruh hasil penjualan dari produk yang telah selesai dikirim akan dikreditkan ke saldo K-Tienda en Línea dan dapat ditarik ke rekening ini kapan saja.'
+                                            )}
                                         </p>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     <div className="space-y-1.5">
-                                        <Label htmlFor="bk_name" className="text-xs font-semibold text-slate-700">
+                                        <Label
+                                            htmlFor="bk_name"
+                                            className="text-xs font-semibold text-slate-700"
+                                        >
                                             {t('Nama Bank')}
                                         </Label>
                                         <Input
                                             id="bk_name"
                                             type="text"
                                             value={settingsData.bank_name}
-                                            onChange={(e) => setSettingsData({ ...settingsData, bank_name: e.target.value })}
+                                            onChange={(e) =>
+                                                setSettingsData({
+                                                    ...settingsData,
+                                                    bank_name: e.target.value,
+                                                })
+                                            }
                                             className="h-11 rounded-xl bg-white border-slate-200 text-xs"
                                         />
                                     </div>
 
                                     <div className="space-y-1.5">
-                                        <Label htmlFor="bk_acc" className="text-xs font-semibold text-slate-700">
+                                        <Label
+                                            htmlFor="bk_acc"
+                                            className="text-xs font-semibold text-slate-700"
+                                        >
                                             {t('Nomor Rekening')}
                                         </Label>
                                         <Input
                                             id="bk_acc"
                                             type="text"
                                             value={settingsData.bank_account}
-                                            onChange={(e) => setSettingsData({ ...settingsData, bank_account: e.target.value })}
+                                            onChange={(e) =>
+                                                setSettingsData({
+                                                    ...settingsData,
+                                                    bank_account: e.target.value,
+                                                })
+                                            }
                                             className="h-11 rounded-xl bg-white font-mono border-slate-200 text-xs"
                                         />
                                     </div>
 
                                     <div className="space-y-1.5">
-                                        <Label htmlFor="bk_hold" className="text-xs font-semibold text-slate-700">
+                                        <Label
+                                            htmlFor="bk_hold"
+                                            className="text-xs font-semibold text-slate-700"
+                                        >
                                             {t('Nama Pemilik Rekening')}
                                         </Label>
                                         <Input
                                             id="bk_hold"
                                             type="text"
                                             value={settingsData.bank_holder}
-                                            onChange={(e) => setSettingsData({ ...settingsData, bank_holder: e.target.value })}
+                                            onChange={(e) =>
+                                                setSettingsData({
+                                                    ...settingsData,
+                                                    bank_holder: e.target.value,
+                                                })
+                                            }
                                             className="h-11 rounded-xl bg-white border-slate-200 text-xs"
                                         />
                                     </div>

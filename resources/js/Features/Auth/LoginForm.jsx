@@ -49,14 +49,15 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                 return;
             }
 
-            // Send payload to backend session endpoint
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const csrfToken = document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute('content');
             const res = await fetch(route('auth.firebase'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken || '',
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                 },
                 body: JSON.stringify({
                     id_token: idToken,
@@ -72,30 +73,33 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
             try {
                 data = JSON.parse(rawText);
             } catch (parseError) {
-                throw new Error('Respons server bukan JSON (Status ' + res.status + '): ' + rawText.slice(0, 120));
+                throw new Error(
+                    'Respons server bukan JSON (Status ' +
+                        res.status +
+                        '): ' +
+                        rawText.slice(0, 120)
+                );
             }
 
             if (res.ok && data.redirect_url) {
                 window.location.href = data.redirect_url;
             } else {
-                setFirebaseError(data.message || 'Terjadi kesalahan saat memverifikasi sesi login.');
+                setFirebaseError(
+                    data.message || 'Terjadi kesalahan saat memverifikasi sesi login.'
+                );
                 setIsGoogleLoading(false);
             }
         } catch (err) {
             setFirebaseError('Koneksi ke Firebase gagal: ' + err.message);
             setIsGoogleLoading(false);
         }
-
     };
-
 
     return (
         <FadeInContainer className="w-full max-w-[440px]">
             <div className="relative rounded-2xl bg-white border border-slate-200/80 p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] transition-all duration-300">
-                {/* Top Header Accent */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[3px] bg-gradient-to-r from-transparent via-brand-primary to-transparent" />
 
-                {/* Brand / Title Icon */}
                 <div className="flex flex-col items-center text-center mb-8">
                     <motion.div
                         whileHover={{ scale: 1.05, rotate: 5 }}
@@ -104,7 +108,7 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                     >
                         <ShieldCheck className="w-7 h-7 text-white" />
                     </motion.div>
-                    
+
                     <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
                         Portal Admin
                         <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-brand-accent/20 text-brand-primary border border-brand-primary/20">
@@ -116,7 +120,6 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                     </p>
                 </div>
 
-                {/* Status Alert (misal setelah logout / password reset) */}
                 {status && (
                     <motion.div
                         initial={{ opacity: 0, height: 0 }}
@@ -129,7 +132,6 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                 )}
 
                 <form onSubmit={submit} className="space-y-5">
-                    {/* Email Input */}
                     <div className="space-y-2">
                         <Label htmlFor="email" className="text-xs font-semibold text-slate-700">
                             Alamat Email
@@ -161,7 +163,6 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                         )}
                     </div>
 
-                    {/* Password Input */}
                     <div className="space-y-2">
                         <Label htmlFor="password" className="text-xs font-semibold text-slate-700">
                             Kata Sandi
@@ -186,7 +187,11 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 transition-colors focus:outline-none"
                             >
-                                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                {showPassword ? (
+                                    <EyeOff className="w-4 h-4" />
+                                ) : (
+                                    <Eye className="w-4 h-4" />
+                                )}
                             </button>
                         </div>
                         {errors.password && (
@@ -200,7 +205,6 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                         )}
                     </div>
 
-                    {/* Remember Me Checkbox */}
                     <div className="flex items-center justify-between pt-1">
                         <label className="flex items-center gap-2.5 cursor-pointer select-none">
                             <input
@@ -217,7 +221,6 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                         </label>
                     </div>
 
-                    {/* Submit Button */}
                     <motion.div
                         whileHover={{ scale: 1.01 }}
                         whileTap={{ scale: 0.99 }}
@@ -243,11 +246,12 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                     </motion.div>
                 </form>
 
-                {/* Google Firebase Login Divider & Button */}
                 <div className="mt-5 space-y-4">
                     <div className="relative flex items-center justify-center">
                         <div className="border-t border-slate-200 w-full" />
-                        <span className="bg-white px-3 text-xs text-slate-400 font-medium">atau masuk dengan</span>
+                        <span className="bg-white px-3 text-xs text-slate-400 font-medium">
+                            atau masuk dengan
+                        </span>
                         <div className="border-t border-slate-200 w-full" />
                     </div>
 
@@ -289,7 +293,6 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
                     </button>
                 </div>
 
-                {/* Footer link to Register */}
                 <div className="mt-6 pt-5 border-t border-slate-100 text-center">
                     <p className="text-xs text-slate-500">
                         Belum punya akun?{' '}
@@ -310,4 +313,3 @@ export function LoginForm({ status, canResetPassword, onSwitchToRegister }) {
         </FadeInContainer>
     );
 }
-
